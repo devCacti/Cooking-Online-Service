@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cooking_Service.Models;
+using System.Web.Management;
 
 namespace Cooking_Service.Controllers
 {
@@ -269,6 +270,56 @@ namespace Cooking_Service.Controllers
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
+        }
+
+        //App Login
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Account/AppLogin")]
+        public async Task<ActionResult> AppLogin(LoginViewModel model)
+        {
+            var response = new
+            {
+                success = false,
+                message = new
+                {
+                    username = "",
+                    error = "unable to login"
+                }
+            };
+
+            var user = await UserManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                response = new
+                {
+                    success = false,
+                    message = new
+                    {
+                        username = "",
+                        error = "user not found"
+                    }
+                };
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+
+            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            
+            //Json Response
+            if (result == SignInStatus.Success)
+            {
+                response = new
+                {
+                    success = true,
+                    message = new
+                    {
+                        username = user.UserName,
+                        error = ""
+                    }
+                };
+            }
+            return Json(response, JsonRequestBehavior.AllowGet);
         }
 
         //
