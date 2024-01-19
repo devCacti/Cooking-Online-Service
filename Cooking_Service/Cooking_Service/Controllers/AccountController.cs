@@ -92,6 +92,7 @@ namespace Cooking_Service.Controllers
             }
         }
 
+
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -272,6 +273,10 @@ namespace Cooking_Service.Controllers
             return View();
         }
 
+
+
+        // Function that works for the app login and returns a json response with the username, if the login was
+        // successful or an error message if the login failed
         //App Login
         [HttpPost]
         [AllowAnonymous]

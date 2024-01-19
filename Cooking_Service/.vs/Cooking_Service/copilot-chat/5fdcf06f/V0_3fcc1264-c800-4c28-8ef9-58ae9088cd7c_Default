@@ -1,0 +1,380 @@
+†¨DateTime×ÿ‚Fpeª¿ªThreadNameÀ°CopilotSessionId‚¤GuidÙ$3fcc1264-c800-4c28-8ef9-58ae9088cd7c¨ClientId¢IdÙ4Microsoft.VisualStudio.Conversations.Chat.HelpWindow§Request§Request•Ù$c43f78cf-befc-4fac-bfdd-c53932dc1368Ù$f08ebe6c-8f96-4c39-a212-8aaf75d5cbcc’†¯ProviderMoniker‚¤NameÙ6Microsoft.VisualStudio.Copilot.DocumentContextProvider§Version£0.1¦Member¤file©CanReduceÃ©RequestIdÙ$c43f78cf-befc-4fac-bfdd-c53932dc1368©ReferenceÙ##file:'Cooking_Service\\Web.config'¥ValueÈdÙ‘Microsoft.VisualStudio.Copilot.DocumentContext, Microsoft.VisualStudio.Copilot, Version=0.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a…§ContentÚÔ<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Para obter mais informaÃ§Ãµes de como configurar seu aplicativo ASP.NET, visite
+  https://go.microsoft.com/fwlink/?LinkId=301880
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+  </configSections>
+  <connectionStrings>
+    <add name="DefaultConnection" connectionString="DESKTOP-T1CDB54\SQLEXPRESS;Database=master;Trusted_Connection=True;" providerName="System.Data.SqlClient" />
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+  </appSettings>
+  <system.web>
+    <authentication mode="None" />
+    <compilation debug="true" targetFramework="4.7.2" />
+    <httpRuntime targetFramework="4.7.2" />
+  </system.web>
+  <system.webServer>
+    <modules>
+      <remove name="FormsAuthentication" />
+    </modules>
+  <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers></system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Antlr3.Runtime" publicKeyToken="eb42632606e9261f" />
+        <bindingRedirect oldVersion="0.0.0.0-3.5.0.2" newVersion="3.5.0.2" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.6.5135.21930" newVersion="1.6.5135.21930" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" />
+        <bindingRedirect oldVersion="0.0.0.0-12.0.0.0" newVersion="12.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Web.Infrastructure" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-2.0.1.0" newVersion="2.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-5.3.0.0" newVersion="5.3.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <entityFramework>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701;612;618" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008,40000,40008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </compilers>
+  </system.codedom>
+</configuration>¯OriginalContentÀªSelections¨FilePathÙaC:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\Web.config¨LanguageÀ†¯ProviderMoniker‚¤NameÙ6Microsoft.VisualStudio.Copilot.DocumentContextProvider§Version£0.1¦Member¤file©CanReduceÃ©RequestIdÙ$c43f78cf-befc-4fac-bfdd-c53932dc1368©ReferenceÀ¥ValueÈdÙ‘Microsoft.VisualStudio.Copilot.DocumentContext, Microsoft.VisualStudio.Copilot, Version=0.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a…§ContentÚÔ<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Para obter mais informaÃ§Ãµes de como configurar seu aplicativo ASP.NET, visite
+  https://go.microsoft.com/fwlink/?LinkId=301880
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false" />
+  </configSections>
+  <connectionStrings>
+    <add name="DefaultConnection" connectionString="DESKTOP-T1CDB54\SQLEXPRESS;Database=master;Trusted_Connection=True;" providerName="System.Data.SqlClient" />
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0" />
+    <add key="webpages:Enabled" value="false" />
+    <add key="ClientValidationEnabled" value="true" />
+    <add key="UnobtrusiveJavaScriptEnabled" value="true" />
+  </appSettings>
+  <system.web>
+    <authentication mode="None" />
+    <compilation debug="true" targetFramework="4.7.2" />
+    <httpRuntime targetFramework="4.7.2" />
+  </system.web>
+  <system.webServer>
+    <modules>
+      <remove name="FormsAuthentication" />
+    </modules>
+  <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0" />
+      <remove name="OPTIONSVerbHandler" />
+      <remove name="TRACEVerbHandler" />
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0" />
+    </handlers></system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Antlr3.Runtime" publicKeyToken="eb42632606e9261f" />
+        <bindingRedirect oldVersion="0.0.0.0-3.5.0.2" newVersion="3.5.0.2" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.1.0.0" newVersion="1.1.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-1.6.5135.21930" newVersion="1.6.5135.21930" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" />
+        <bindingRedirect oldVersion="0.0.0.0-12.0.0.0" newVersion="12.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Web.Infrastructure" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="0.0.0.0-2.0.1.0" newVersion="2.0.1.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0" />
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35" />
+        <bindingRedirect oldVersion="1.0.0.0-5.3.0.0" newVersion="5.3.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <entityFramework>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
+    </providers>
+  </entityFramework>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701;612;618" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008,40000,40008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+    </compilers>
+  </system.codedom>
+</configuration>¯OriginalContentÀªSelections‘ƒ¥CaretÀ¥StartÍ^£EndÍş¨FilePathÙaC:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\Web.config¨LanguageÀ‘’“¥Value Ú#file:'Cooking_Service\\Web.config' 
+I have this connection string to my own machine, and I don't think it's working in IIS, what do you recommend changing, either here or in iis?
+
+In iis there is something about connection strings but I didn't pay attentionÀ¨Response…§ContentÚyA string de conexÃ£o que vocÃª forneceu estÃ¡ apontando para um banco de dados SQL Server local em sua mÃ¡quina. Se vocÃª estiver tentando implantar seu aplicativo em um servidor IIS, essa string de conexÃ£o provavelmente nÃ£o funcionarÃ¡, a menos que o servidor IIS esteja na mesma mÃ¡quina e tenha acesso ao SQL Server.
+
+Aqui estÃ£o algumas opÃ§Ãµes que vocÃª pode considerar:
+
+1. **Mudar a string de conexÃ£o para apontar para um banco de dados SQL Server acessÃ­vel pelo servidor IIS.** Isso pode ser um banco de dados SQL Server instalado no mesmo servidor que o IIS ou um banco de dados SQL Server em uma mÃ¡quina diferente, mas acessÃ­vel pela rede. A string de conexÃ£o seria algo como: `Data Source=ServerName;Database=DatabaseName;User Id=UserName;Password=Password;`.
+
+2. **Use um banco de dados SQL Server Azure.** Se vocÃª estiver implantando seu aplicativo na nuvem, pode ser mais fÃ¡cil usar um banco de dados SQL Server Azure. A string de conexÃ£o seria algo como: `Server=tcp:yourserver.database.windows.net,1433;Initial Catalog=yourdatabase;Persist Security Info=False;User ID=yourusername;Password=yourpassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;`.
+
+3. **Configure a string de conexÃ£o no IIS.** O IIS tem uma seÃ§Ã£o onde vocÃª pode definir strings de conexÃ£o que serÃ£o usadas pelo seu aplicativo. Isso pode ser Ãºtil se vocÃª quiser mudar a string de conexÃ£o sem ter que mudar o cÃ³digo do seu aplicativo. Para fazer isso, abra o IIS Manager, navegue atÃ© o seu site, abra a seÃ§Ã£o "Connection Strings" e adicione sua string de conexÃ£o.
+
+Lembre-se de que, ao mudar a string de conexÃ£o, vocÃª precisa garantir que o banco de dados esteja configurado corretamente, que o usuÃ¡rio especificado na string de conexÃ£o tenha as permissÃµes corretas e que a rede permita a conexÃ£o entre o servidor IIS e o banco de dados SQL Server.¤Type ¦Status¯FollowUpPrompts’ÙaComo posso configurar as permissÃµes corretas para o usuÃ¡rio especificado na string de conexÃ£o?ÙeComo posso garantir que a rede permita a conexÃ£o entre o servidor IIS e o banco de dados SQL Server?³CodeVulnerabilities¶LoggedSkillInvocationsÀ†¨DateTime×ÿMùö€eªÃ†ªThreadNameÀ°CopilotSessionId‚¤GuidÙ$3fcc1264-c800-4c28-8ef9-58ae9088cd7c¨ClientId¢IdÙ4Microsoft.VisualStudio.Conversations.Chat.HelpWindow§Request§Request•Ù$48eec04f-246d-49f0-a261-b79944deabdeÙ$a1e95400-cfc8-47de-b9cc-a1c425ce6e27‘†¯ProviderMoniker‚¤NameÙ6Microsoft.VisualStudio.Copilot.DocumentContextProvider§Version£0.1¦Member¤file©CanReduceÃ©RequestIdÙ$48eec04f-246d-49f0-a261-b79944deabde©ReferenceÙ##file:'Cooking_Service\\Web.config'¥ValueÈÆdÙ‘Microsoft.VisualStudio.Copilot.DocumentContext, Microsoft.VisualStudio.Copilot, Version=0.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a…§ContentÚ”<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Para obter mais informaÃ§Ãµes de como configurar seu aplicativo ASP.NET, visite
+  https://go.microsoft.com/fwlink/?LinkId=301880
+  -->
+<configuration>
+  <configSections>
+    <!-- For more information on Entity Framework configuration, visit http://go.microsoft.com/fwlink/?LinkID=237468 -->
+    <section name="entityFramework" type="System.Data.Entity.Internal.ConfigFile.EntityFrameworkSection, EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" requirePermission="false"/>
+  </configSections>
+  <connectionStrings>
+    <add name="DefaultConnection" connectionString="Server=DESKTOP-T1CDB54\SQLEXPRESS;Database=Cooking_Service;Integrated Security=true" providerName="System.Data.SqlClient"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="webpages:Version" value="3.0.0.0"/>
+    <add key="webpages:Enabled" value="false"/>
+    <add key="ClientValidationEnabled" value="true"/>
+    <add key="UnobtrusiveJavaScriptEnabled" value="true"/>
+  </appSettings>
+  <system.web>
+    <authentication mode="None"/>
+    <compilation debug="true" targetFramework="4.7.2"/>
+    <httpRuntime targetFramework="4.7.2"/>
+  </system.web>
+  <system.webServer>
+    <modules>
+      <remove name="FormsAuthentication"/>
+    </modules>
+  <handlers>
+      <remove name="ExtensionlessUrlHandler-Integrated-4.0"/>
+      <remove name="OPTIONSVerbHandler"/>
+      <remove name="TRACEVerbHandler"/>
+      <add name="ExtensionlessUrlHandler-Integrated-4.0" path="*." verb="*" type="System.Web.Handlers.TransferRequestHandler" preCondition="integratedMode,runtimeVersionv4.0"/>
+    </handlers></system.webServer>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+			<dependentAssembly>
+				<assemblyIdentity name="System.Runtime.CompilerServices.Unsafe" publicKeyToken="B03F5F7F11D50A3A" culture="neutral"/>
+				<bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0"/>
+			</dependentAssembly>
+			<dependentAssembly>
+				<assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30AD4FE6B2A6AEED" culture="neutral"/>
+				<bindingRedirect oldVersion="0.0.0.0-13.0.0.0" newVersion="13.0.0.0"/>
+			</dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.OAuth" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin.Security.Cookies" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Owin" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-4.2.2.0" newVersion="4.2.2.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Antlr3.Runtime" publicKeyToken="eb42632606e9261f"/>
+        <bindingRedirect oldVersion="0.0.0.0-3.5.0.2" newVersion="3.5.0.2"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Optimization" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-1.1.0.0" newVersion="1.1.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="WebGrease" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-1.6.5135.21930" newVersion="1.6.5135.21930"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed"/>
+        <bindingRedirect oldVersion="0.0.0.0-12.0.0.0" newVersion="12.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="Microsoft.Web.Infrastructure" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="0.0.0.0-2.0.1.0" newVersion="2.0.1.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Helpers" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.WebPages" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="1.0.0.0-3.0.0.0" newVersion="3.0.0.0"/>
+      </dependentAssembly>
+      <dependentAssembly>
+        <assemblyIdentity name="System.Web.Mvc" publicKeyToken="31bf3856ad364e35"/>
+        <bindingRedirect oldVersion="1.0.0.0-5.3.0.0" newVersion="5.3.0.0"/>
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  <entityFramework>
+    <providers>
+      <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer"/>
+    </providers>
+  </entityFramework>
+  <system.codedom>
+    <compilers>
+      <compiler language="c#;cs;csharp" extension=".cs" warningLevel="4" compilerOptions="/langversion:default /nowarn:1659;1699;1701;612;618" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.CSharpCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
+      <compiler language="vb;vbs;visualbasic;vbscript" extension=".vb" warningLevel="4" compilerOptions="/langversion:default /nowarn:41008,40000,40008 /define:_MYTYPE=\&quot;Web\&quot; /optionInfer+" type="Microsoft.CodeDom.Providers.DotNetCompilerPlatform.VBCodeProvider, Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=4.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"/>
+    </compilers>
+  </system.codedom>
+</configuration>
+¯OriginalContentÀªSelections¨FilePathÙaC:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\Web.config¨LanguageÀ‘’“¥Value Ú¥#file:'Cooking_Service\\Web.config' 
+With that connection I get an error saying:
+Cannot open database "Cooking_Service" requested by the login. The login failed.
+Login failed for user 'IIS APPPOOL\Cooking_Test'.
+
+with the default replacement, I get a error saying it couldn't find anything.
+
+Now, my problem is the first Why is it going for IIS APPPOOL/Cooking_Test instead of the propper Cooking_Service Database?À¨Response…§ContentÚÒO erro que vocÃª estÃ¡ recebendo indica que o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' nÃ£o tem permissÃ£o para acessar o banco de dados "Cooking_Service". Isso estÃ¡ acontecendo porque o IIS estÃ¡ tentando se conectar ao banco de dados usando a conta de pool de aplicativos do IIS, que Ã© 'IIS APPPOOL\Cooking_Test' neste caso.
+
+Aqui estÃ£o algumas soluÃ§Ãµes possÃ­veis para o problema:
+
+1. **Adicione o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' ao banco de dados "Cooking_Service".** VocÃª pode fazer isso usando o SQL Server Management Studio. Abra o SQL Server Management Studio, conecte-se ao servidor SQL, expanda o nÃ³ "Security", clique com o botÃ£o direito do mouse em "Logins" e escolha "New Login". No campo "Login name", digite 'IIS APPPOOL\Cooking_Test'. Em seguida, na guia "User Mapping", marque a caixa para o banco de dados "Cooking_Service" e escolha a funÃ§Ã£o de banco de dados apropriada, como "db_datareader" e "db_datawriter".
+
+2. **Mude a string de conexÃ£o para usar um nome de usuÃ¡rio e senha especÃ­ficos.** Em vez de usar a autenticaÃ§Ã£o integrada do Windows, vocÃª pode especificar um nome de usuÃ¡rio e senha na string de conexÃ£o. A string de conexÃ£o seria algo como: `Server=DESKTOP-T1CDB54\SQLEXPRESS;Database=Cooking_Service;User Id=UserName;Password=Password;`.
+
+3. **Mude o pool de aplicativos do IIS para usar uma conta que tenha acesso ao banco de dados.** No IIS Manager, vocÃª pode alterar a identidade do pool de aplicativos para uma conta que tenha permissÃ£o para acessar o banco de dados. Para fazer isso, abra o IIS Manager, expanda o nÃ³ "Application Pools", clique com o botÃ£o direito do mouse no pool de aplicativos "Cooking_Test" e escolha "Advanced Settings". Em seguida, altere a configuraÃ§Ã£o "Identity" para uma conta que tenha acesso ao banco de dados.
+
+Lembre-se de que, ao mudar a string de conexÃ£o ou a identidade do pool de aplicativos, vocÃª precisa garantir que o usuÃ¡rio especificado tenha as permissÃµes corretas para acessar o banco de dados.¤Type ¦Status¯FollowUpPrompts’ÙAComo posso adicionar um usuÃ¡rio ao SQL Server Management Studio?ÙFComo posso alterar a identidade do pool de aplicativos no IIS Manager?³CodeVulnerabilities¶LoggedSkillInvocationsÀ†¨DateTime×ÿfú×€eªÄ:ªThreadNameÀ°CopilotSessionId‚¤GuidÙ$3fcc1264-c800-4c28-8ef9-58ae9088cd7c¨ClientId¢IdÙ4Microsoft.VisualStudio.Conversations.Chat.HelpWindow§Request§Request•Ù$0d468257-cc0d-43f4-a47e-0dc1265d5ceaÙ$50c8b0d0-1b48-4a6e-a6c3-32a96d7302b7‘’“¥Value Ù-NÃ£o Consigo encontrar Security em lado algumÀ¨Response…§ContentÚPeÃ§o desculpas pela confusÃ£o. A opÃ§Ã£o "Security" a que me referi estÃ¡ no SQL Server Management Studio (SSMS), nÃ£o no IIS. 
+
+Aqui estÃ£o as etapas detalhadas para adicionar o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' ao banco de dados "Cooking_Service" usando o SSMS:
+
+1. Abra o SQL Server Management Studio.
+2. Conecte-se ao servidor SQL onde o banco de dados "Cooking_Service" estÃ¡ hospedado.
+3. No Object Explorer, expanda o nÃ³ do servidor.
+4. Expanda o nÃ³ "Security".
+5. Clique com o botÃ£o direito do mouse em "Logins" e escolha "New Login".
+6. No campo "Login name", digite 'IIS APPPOOL\Cooking_Test'.
+7. Na guia "User Mapping", marque a caixa para o banco de dados "Cooking_Service" e escolha a funÃ§Ã£o de banco de dados apropriada, como "db_datareader" e "db_datawriter".
+8. Clique em "OK" para criar o login.
+
+Se vocÃª nÃ£o vÃª a opÃ§Ã£o "Security" no SSMS, pode ser que vocÃª nÃ£o tenha permissÃµes suficientes no servidor SQL. Nesse caso, vocÃª precisarÃ¡ entrar em contato com o administrador do servidor SQL para obter ajuda.¤Type ¦Status¯FollowUpPrompts’ÙFComo posso verificar se tenho permissÃµes suficientes no servidor SQL?ÙfO que devo fazer se nÃ£o conseguir encontrar a opÃ§Ã£o "User Mapping" no SQL Server Management Studio?³CodeVulnerabilities¶LoggedSkillInvocationsÀ†¨DateTime×ÿä¡eªÆ#ªThreadNameÀ°CopilotSessionId‚¤GuidÙ$3fcc1264-c800-4c28-8ef9-58ae9088cd7c¨ClientId¢IdÙ4Microsoft.VisualStudio.Conversations.Chat.HelpWindow§Request§Request•Ù$5eacb54f-fa30-42fe-88e8-4cf5c88fbd3fÙ$dd1b7ac6-2d2d-4090-8faf-24e7273d1c44‘’“¥Value ÙqContinua a dar o mesmo erro
+Mesmo apÃ³s ter posto o tal login
+Login failed for user 'IIS APPPOOL\Cooking_Test'.À¨Response…§ContentÚ=Se vocÃª jÃ¡ adicionou o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' ao banco de dados "Cooking_Service" e ainda estÃ¡ recebendo o mesmo erro, pode ser que o usuÃ¡rio nÃ£o tenha as permissÃµes corretas para acessar o banco de dados.
+
+Aqui estÃ£o algumas coisas que vocÃª pode tentar:
+
+1. **Verifique as permissÃµes do usuÃ¡rio 'IIS APPPOOL\Cooking_Test'.** No SQL Server Management Studio, vocÃª pode verificar as permissÃµes do usuÃ¡rio 'IIS APPPOOL\Cooking_Test'. Expanda o nÃ³ "Security", clique com o botÃ£o direito do mouse em "Logins", escolha "Properties" e vÃ¡ para a guia "User Mapping". Verifique se o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' tem as permissÃµes corretas para o banco de dados "Cooking_Service".
+
+2. **Tente usar um nome de usuÃ¡rio e senha especÃ­ficos na string de conexÃ£o.** Em vez de usar a autenticaÃ§Ã£o integrada do Windows, vocÃª pode especificar um nome de usuÃ¡rio e senha na string de conexÃ£o. A string de conexÃ£o seria algo como: `Server=DESKTOP-T1CDB54\SQLEXPRESS;Database=Cooking_Service;User Id=UserName;Password=Password;`.
+
+3. **Verifique se o pool de aplicativos do IIS estÃ¡ configurado corretamente.** No IIS Manager, verifique se o pool de aplicativos "Cooking_Test" estÃ¡ configurado para usar a identidade 'IIS APPPOOL\Cooking_Test'. Se nÃ£o estiver, vocÃª pode alterar a identidade do pool de aplicativos para 'IIS APPPOOL\Cooking_Test'.
+
+Se nenhuma dessas soluÃ§Ãµes funcionar, pode ser que haja um problema com a configuraÃ§Ã£o do seu servidor SQL ou IIS. Nesse caso, vocÃª pode precisar entrar em contato com o administrador do servidor para obter ajuda.¤Type ¦Status¯FollowUpPrompts³CodeVulnerabilities¶LoggedSkillInvocationsÀ†¨DateTime×ÿ¥·0eªÇTªThreadNameÀ°CopilotSessionId‚¤GuidÙ$3fcc1264-c800-4c28-8ef9-58ae9088cd7c¨ClientId¢IdÙ4Microsoft.VisualStudio.Conversations.Chat.HelpWindow§Request§Request•Ù$2e145f08-45b8-4cd0-bc79-36f49727b5e9Ù$430ac8d9-acbf-4a3c-9f9d-cbf5e805bc81‘’“¥Value Ù™TEMOS PROGRESSOS, isto Ã© bom mas ainda tenho problemas
+
+CREATE TABLE permission denied in database 'Cooking_Service'.
+
+ESTÃ QUASE COPILOT vamos lÃ¡À¨Response…§ContentÚîÃ“timo, estamos progredindo!
+
+O erro "CREATE TABLE permission denied in database 'Cooking_Service'" indica que o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' nÃ£o tem permissÃ£o para criar tabelas no banco de dados 'Cooking_Service'.
+
+VocÃª pode conceder essa permissÃ£o ao usuÃ¡rio 'IIS APPPOOL\Cooking_Test' usando o SQL Server Management Studio. Aqui estÃ£o as etapas:
+
+1. Abra o SQL Server Management Studio.
+2. Conecte-se ao servidor SQL onde o banco de dados "Cooking_Service" estÃ¡ hospedado.
+3. No Object Explorer, expanda o nÃ³ do servidor.
+4. Expanda o nÃ³ "Databases".
+5. Expanda o nÃ³ "Cooking_Service".
+6. Expanda o nÃ³ "Security".
+7. Expanda o nÃ³ "Users".
+8. Clique com o botÃ£o direito do mouse no usuÃ¡rio 'IIS APPPOOL\Cooking_Test' e escolha "Properties".
+9. Na janela "Database User - IIS APPPOOL\Cooking_Test", vÃ¡ para a guia "Securables".
+10. Clique em "Search" para abrir a janela "Add Objects".
+11. Clique em "OK" para adicionar o banco de dados "Cooking_Service" Ã  lista de securables.
+12. Na lista de permissÃµes, marque a caixa "CREATE TABLE".
+13. Clique em "OK" para fechar a janela "Database User - IIS APPPOOL\Cooking_Test".
+
+Depois de seguir essas etapas, o usuÃ¡rio 'IIS APPPOOL\Cooking_Test' deve ter permissÃ£o para criar tabelas no banco de dados 'Cooking_Service'. Se vocÃª ainda estiver recebendo o mesmo erro, pode ser que haja um problema com a configuraÃ§Ã£o do seu servidor SQL ou IIS. Nesse caso, vocÃª pode precisar entrar em contato com o administrador do servidor para obter ajuda.¤Type ¦Status¯FollowUpPrompts³CodeVulnerabilities¶LoggedSkillInvocationsÀ
