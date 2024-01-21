@@ -10,6 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cooking_Service.Models;
 using System.Web.Management;
+using Antlr.Runtime.Tree;
 
 namespace Cooking_Service.Controllers
 {
@@ -283,16 +284,34 @@ namespace Cooking_Service.Controllers
         [Route("Account/AppLogin")]
         public async Task<ActionResult> AppLogin(LoginViewModel model)
         {
+            /// <summary>
+            /// List of errors:
+            ///     0 - Success
+            ///     1 - LockedOut
+            ///     2 - RequiresVerification
+            ///     3 - Failure
+            ///     4 - User not found
+            ///     5 - Something went horribly wrong
+            /// 
+            /// </summary>
+            
             var response = new
             {
                 success = false,
                 message = new
                 {
                     username = "",
-                    error = "unable to login"
+                    email = "",
+                    error = "5"
                 }
             };
 
+            if (!ModelState.IsValid)
+            {
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+
+            // Aqui o código tenta encontrar o utilizador pelo username, se não encontrar, significa que o utilizador não existe
             var user = await UserManager.FindByEmailAsync(model.Email);
 
             if (user == null)
@@ -303,14 +322,21 @@ namespace Cooking_Service.Controllers
                     message = new
                     {
                         username = "",
-                        error = "user not found"
+                        email = "",
+                        error = "4"
                     }
                 };
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
 
+            // Sendo que o shouldLockout é false, o usuário não será bloqueado consoante o código de acesso incorreto
+            // mas no segundo já sim porque significa que o utilizador não se lembra da password
             var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            
+            if (result != SignInStatus.Success)
+            {
+                result = await SignInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, shouldLockout: true);
+            }
+
             //Json Response
             if (result == SignInStatus.Success)
             {
@@ -320,10 +346,51 @@ namespace Cooking_Service.Controllers
                     message = new
                     {
                         username = user.UserName,
-                        error = ""
+                        email = user.Email,
+                        error = "0"
                     }
                 };
             }
+            else if (result == SignInStatus.LockedOut)
+            {
+                response = new
+                {
+                    success = false,
+                    message = new
+                    {
+                        username = "",
+                        email = "",
+                        error = "1"
+                    }
+                };
+            }
+            else if (result == SignInStatus.RequiresVerification)
+            {
+                response = new
+                {
+                    success = false,
+                    message = new
+                    {
+                        username = "",
+                        email = "",
+                        error = "2"
+                    }
+                };
+            }
+            else if (result == SignInStatus.Failure)
+            {
+                response = new
+                {
+                    success = false,
+                    message = new
+                    {
+                        username = "",
+                        email = "",
+                        error = "3"
+                    },
+                };
+            }
+
             return Json(response, JsonRequestBehavior.AllowGet);
         }
 
