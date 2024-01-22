@@ -1,0 +1,37 @@
+﻿/* My Custom CSS Styles */
+
+/* Text Alignment */
+.txt-justify { text-align: justify; }
+.txt-center { text-align: center; }
+
+/* Text Sizes - regular text */
+.txt-12 { font-size: 12px; }
+.txt-14 { font-size: 14px; }
+.txt-16 { font-size: 16px; }
+.txt-18 { font-size: 18px; }
+.txt-20 { font-size: 20px; }
+.txt-22 { font-size: 22px; }
+.txt-24 { font-size: 24px; }
+
+/* Text Weight */
+.txt-bold { font-weight: bold; }
+.txt-normal { font-weight: normal; }
+
+/* Text Colors */
+.txt-white { color: #fff; }
+.txt-black { color: #000; }
+.txt-red { color: #ff0000; }
+.txt-green { color: #00ff00; }
+.txt-blue { color: #0000ff; }
+
+/* Scroll related CSS */
+.scrollable-section {
+    height: 75vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.pad-sides {
+    padding-left: 15%;
+    padding-right: 15%;
+}

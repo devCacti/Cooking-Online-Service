@@ -11,7 +11,8 @@ namespace Cooking_Service.Models
     {
         Admin,
         User,
-        Cook
+        Cook,
+        Guest
     }
 
     public enum TypeRecipe

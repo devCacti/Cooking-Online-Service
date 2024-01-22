@@ -3,45 +3,50 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
-
+using Cooking_Service.Models;
 
 namespace Cooking_Service.DAL
 {
     public class CookingContext : DbContext
     {
-        public CookingContext() : base("CookingContext")
+        public CookingContext() : base("DefaultConnection")
         {
             Database.SetInitializer<CookingContext>(new DropCreateDatabaseIfModelChanges<CookingContext>());
         }
 
-        public DbSet<Models.UserInfo> Users { get; set; }
-        public DbSet<Models.Recipe> Recipes { get; set; }
+        public DbSet<UserInfo> Users { get; set; }
+        public DbSet<Recipe> Recipes { get; set; }
     }
 
     public class CookingInitializer : DropCreateDatabaseIfModelChanges<CookingContext>
     {
         protected override void Seed(CookingContext context)
         {
-            var users = new List<Models.UserInfo>
+            var users = new List<UserInfo>
             {
-                new Models.UserInfo { GUID = Guid.NewGuid().ToString(), Name = "Admin", Surname = "Administrator", Type = Models.TypeUser.Admin },
-                new Models.UserInfo { GUID = Guid.NewGuid().ToString(), Name = "User", Surname = "User Type", Type = Models.TypeUser.User },
-                new Models.UserInfo { GUID = Guid.NewGuid().ToString(), Name = "Cook", Surname = "Certified Cook", Type = Models.TypeUser.Cook }
+                new UserInfo { GUID = "6b547a86-c6ca-4ec0-b4a6-3e16baa22c74", Name = "Administrator", Surname = "Admin", Type = TypeUser.Admin },
+                new UserInfo { GUID = Guid.NewGuid().ToString(), Name = "User", Surname = "User Type", Type = TypeUser.User },
+                new UserInfo { GUID = Guid.NewGuid().ToString(), Name = "Cook", Surname = "Certified Cook", Type = TypeUser.Cook }
             };
 
             users.ForEach(s => context.Users.Add(s));
             context.SaveChanges();
 
-            var recipes = new List<Models.Recipe>
-            {
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Bolo de Chocolate", Description = "Bolo de chocolate com cobertura de chocolate", Type = Models.TypeRecipe.Bolos, User = users[0] },
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Bolo de Bolacha", Description = "Bolo de bolacha com café", Type = Models.TypeRecipe.Bolos, User = users[1] },
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Tarte de Maçã", Description = "Tarte de maçã com canela", Type = Models.TypeRecipe.Tartes, User = users[2] },
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Tarte de Limão", Description = "Tarte de limão com merengue", Type = Models.TypeRecipe.Tartes, User = users[0] },
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Mousse de Chocolate", Description = "Mousse de chocolate com natas", Type = Models.TypeRecipe.Sobremesas, User = users[1] },
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Mousse de Manga", Description = "Mousse de manga com natas", Type = Models.TypeRecipe.Sobremesas, User = users[2] },
-                new Models.Recipe { GUID = Guid.NewGuid().ToString(), Title = "Bacalhau com"}
+            var recipes = new List<Recipe>
+            { 
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Bolo de Chocolate", Description = "Bolo de chocolate com cobertura de chocolate", Type = TypeRecipe.Bolos, User = users[0] },
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Bolo de Bolacha", Description = "Bolo de bolacha com café", Type = TypeRecipe.Bolos, User = users[1] },
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Tarte de Maçã", Description = "Tarte de maçã com canela", Type = TypeRecipe.Tartes, User = users[2] },
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Tarte de Limão", Description = "Tarte de limão com merengue", Type = TypeRecipe.Tartes, User = users[0] },
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Mousse de Chocolate", Description = "Mousse de chocolate com natas", Type = TypeRecipe.Sobremesas, User = users[1] },
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Mousse de Manga", Description = "Mousse de manga com natas", Type = TypeRecipe.Sobremesas, User = users[2] },
+                new Recipe { GUID = Guid.NewGuid().ToString(), Title = "Bacalhau com Natas"}
             };
+
+            recipes.ForEach(s => context.Recipes.Add(s));
+            context.SaveChanges();
+
+
         }
     }
 }

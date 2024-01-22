@@ -2,32 +2,51 @@
     ViewBag.Title = "Home Page";
 }
 
-<main>
-    <section class="row" aria-labelledby="aspnetTitle">
-        <h1 id="title">ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-        <p><a href="https://asp.net" class="btn btn-primary btn-md">Learn more &raquo;</a></p>
-    </section>
+<!-- Import My CSS File -->
+<link rel="stylesheet" href="~/MyCSS/styles.css" />
 
+<main>
+    <!-- Com os estilos do Bootstrap, cada Página é constituida por, digamos, 12 espaços do mesmo tamanho. -->
+    <!-- Div para mostrar coisas no centro -->
+
+    <br />
     <div class="row">
-        <section class="col-md-4" aria-labelledby="gettingStartedTitle">
-            <h2 id="gettingStartedTitle">Getting started</h2>
-            <p>
-                ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-                enables a clean separation of concerns and gives you full control over markup
-                for enjoyable, agile development.
-            </p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="librariesTitle">
-            <h2 id="librariesTitle">Get more libraries</h2>
-            <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-        </section>
-        <section class="col-md-4" aria-labelledby="hostingTitle">
-            <h2 id="hostingTitle">Web Hosting</h2>
-            <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-            <p><a class="btn btn-outline-dark" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-        </section>
+
+        <div class="col-md-10">
+            <h1>Informações Úteis - Cargos</h1>
+            <hr />
+
+            <div class="row txt-18 txt-justify">
+                <div class="col-md-3">
+                    <h2>Utilizador</h2>
+                    <p>Caso pretenda ter conta neste serviço para poder guardar as suas receitas e listas de compras na núvem, registe-se para usufruir desses benifícios.</p>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <h2>Cozinheiro</h2>
+                    <p>Para ser um chefe de cozinha certificado nos nossos serviços, por favor, preencha este formulário para que lhe possamos dar os previlégios adequados.</p>
+                    <p>Um cozinheiro, aqui, é quase como uma celebridade que pode publicar as suas receitas para que todas as outras pessoas possam fazer também.</p>
+                    <p>Para mais informações, direja-se à página adequada.</p>
+                </div>
+                <div class="col-md-1"></div>
+                <div class="col-md-3">
+                    <h2>Administrador</h2>
+                    <p>Um utilizador com este cargo, tem permissões e deveres muito complicados, uma pessoa, para ter este cargo, terá que ter as competências necessárias para o mesmo, como também, tem que ser confiado pelos proprietários dos site.</p>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+        </div>
+
+        <!-- Div para mostrar coisas do lado direito -->
+        <div class="col-md-2">
+            <h1>Dúvidas?</h1>
+            <hr />
+            <div class="txt-justify txt-18">
+                <p>Caso tenha dúvidas sobre a aplicação para telemóvel ou acerca deste site, por favor, dirija-se à página 'Ajuda' ou por @Html.ActionLink("aqui", "About", "Home").</p>
+                <p>Esta aplicação ainda está a ser desenvolvida, por isso, é normal que tenha problemas frequentes.</p>
+
+            </div>
+        </div>
     </div>
+
 </main>

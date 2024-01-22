@@ -11,6 +11,7 @@ using Microsoft.Owin.Security;
 using Cooking_Service.Models;
 using System.Web.Management;
 using Antlr.Runtime.Tree;
+using Cooking_Service.DAL;
 
 namespace Cooking_Service.Controllers
 {
@@ -19,6 +20,7 @@ namespace Cooking_Service.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private CookingContext db = new CookingContext();
 
         public AccountController()
         {
@@ -274,7 +276,109 @@ namespace Cooking_Service.Controllers
             return View();
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Account/AppRegister")]
+        public async Task<ActionResult> AppRegister(RegisterViewModel model)
+        {
+            var response = new
+            {
+                success = false,
+                message = new
+                { uid = "", name = "", surname = "", username = "", email = "" },
+                error = new
+                {
+                    code = "5",
+                    description = "Something went horribly wrong"
+                }
+            };
 
+            if (!ModelState.IsValid)
+            {
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await UserManager.CreateAsync(user, model.Password);
+
+            db.Users.Add(new UserInfo
+            {
+                GUID = user.Id,
+                Name = model.Name,
+                Surname = model.Surname,
+                Type = model.Type
+            });
+            db.SaveChanges();
+
+            //Json Response
+            if (result.Succeeded)
+            {
+                response = new
+                {
+                    success = true,
+                    message = new
+                    {
+                        uid = user.Id,
+                        name = model.Name,
+                        surname = model.Surname,
+                        username = user.UserName,
+                        email = user.Email,
+                    },
+                    error = new
+                    {
+                        code = "0",
+                        description = "Success"
+                    }
+                };
+            }
+            else
+            {
+                response = new
+                {
+                    success = false,
+                    message = new
+                    { uid = "", name = "", surname = "", username = "", email = "" },
+                    error = new
+                    {
+                        code = "5",
+                        description = "Something went horribly wrong"
+                    }
+                };
+            }
+
+            return Json(response, JsonRequestBehavior.AllowGet);
+        }
+
+        //Função que devolve as receitas em JSON segundo o email/id do utilizador
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("Account/AppGetRecipes")]
+        public async Task<ActionResult> AppGetRecipes(GetRecipesViewModel model)
+        {
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                return Json(new 
+                    { success = false, message = "User not found" },
+                    JsonRequestBehavior.AllowGet
+                );
+            }
+            else
+            {
+                var recipes = db.Recipes.First(r => r.User.GUID == user.Id);
+                var response = new
+                {
+                    success = true,
+                    message = recipes,
+                    error = new
+                    {
+                        code = "0",
+                        description = "Success"
+                    }
+                };
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
 
         // Function that works for the app login and returns a json response with the username, if the login was
         // successful or an error message if the login failed
@@ -299,10 +403,10 @@ namespace Cooking_Service.Controllers
             {
                 success = false,
                 message = new
-                {
-                    username = "",
-                    email = "",
-                    error = "5"
+                { uid = "", name = "", surname = "", username = "", email = "" },
+                error = new {
+                    code = "5",
+                    description = "Something went horribly wrong"
                 }
             };
 
@@ -313,17 +417,16 @@ namespace Cooking_Service.Controllers
 
             // Aqui o código tenta encontrar o utilizador pelo username, se não encontrar, significa que o utilizador não existe
             var user = await UserManager.FindByEmailAsync(model.Email);
-
             if (user == null)
             {
                 response = new
                 {
                     success = false,
                     message = new
-                    {
-                        username = "",
-                        email = "",
-                        error = "4"
+                    { uid = "", name = "", surname = "", username = "", email = "" },
+                    error = new {
+                        code = "4",
+                        description = "User not found"
                     }
                 };
                 return Json(response, JsonRequestBehavior.AllowGet);
@@ -336,20 +439,48 @@ namespace Cooking_Service.Controllers
             {
                 result = await SignInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, shouldLockout: true);
             }
-
-            //Json Response
             if (result == SignInStatus.Success)
             {
-                response = new
+                var userInfo = db.Users.FirstOrDefault(u => u.GUID == user.Id);
+                if (userInfo != null)
                 {
-                    success = true,
-                    message = new
+                    response = new
                     {
-                        username = user.UserName,
-                        email = user.Email,
-                        error = "0"
-                    }
-                };
+                        success = true,
+                        message = new
+                        {
+                            uid = user.Id,
+                            name = userInfo.Name,
+                            surname = userInfo.Surname,
+                            username = user.UserName,
+                            email = user.Email,
+                        },
+                        error = new
+                        {
+                            code = "0",
+                            description = "Success"
+                        }
+                    };
+                }
+                else {
+                    response = new
+                    {
+                        success = true,
+                        message = new
+                        {
+                            uid = "", 
+                            name = "No Name",
+                            surname = "No Surnames", 
+                            username = user.UserName, 
+                            email = user.Email
+                        },
+                        error = new
+                        {
+                            code = "0",
+                            description = "Success, but the user does not have user information."
+                        }
+                    };
+                }
             }
             else if (result == SignInStatus.LockedOut)
             {
@@ -357,10 +488,10 @@ namespace Cooking_Service.Controllers
                 {
                     success = false,
                     message = new
-                    {
-                        username = "",
-                        email = "",
-                        error = "1"
+                    { uid = "", name = "", surname = "", username = "", email = "" },
+                    error = new {
+                        code = "1",
+                        description = "LockedOut"
                     }
                 };
             }
@@ -370,10 +501,10 @@ namespace Cooking_Service.Controllers
                 {
                     success = false,
                     message = new
-                    {
-                        username = "",
-                        email = "",
-                        error = "2"
+                    { uid = "", name = "", surname = "", username = "", email = "" },
+                    error = new {
+                        code = "2",
+                        description = "RequiresVerification"
                     }
                 };
             }
@@ -383,11 +514,11 @@ namespace Cooking_Service.Controllers
                 {
                     success = false,
                     message = new
-                    {
-                        username = "",
-                        email = "",
-                        error = "3"
-                    },
+                    { uid = "", name = "", surname = "", username = "", email = "" },
+                    error = new {
+                        code = "3",
+                        description = "Failure"
+                    }
                 };
             }
 

@@ -62,6 +62,14 @@ namespace Cooking_Service.Models
         public bool RememberMe { get; set; }
     }
 
+    public class GetRecipesViewModel
+    {
+        [Required]
+        [Display(Name = "Email")]
+        [EmailAddress]
+        public string Email { get; set; }
+    }
+
     public class RegisterViewModel
     {
         [Required]
@@ -79,6 +87,15 @@ namespace Cooking_Service.Models
         [Display(Name = "Confirmar senha")]
         [Compare("Password", ErrorMessage = "A senha e a senha de confirmação não coincidem.")]
         public string ConfirmPassword { get; set; }
+
+        [Display(Name = "Nome")]
+        public string Name { get; set; }
+
+        [Display(Name = "Sobrenome")]
+        public string Surname { get; set; }
+
+        [Display(Name = "Tipo de Utilizador")]
+        public TypeUser Type { get; set; }
     }
 
     public class ResetPasswordViewModel
