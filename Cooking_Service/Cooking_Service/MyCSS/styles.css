@@ -12,13 +12,22 @@
 .txt-20 { font-size: 20px; }
 .txt-22 { font-size: 22px; }
 .txt-24 { font-size: 24px; }
+.txt-26 { font-size: 26px; }
+.txt-28 { font-size: 28px; }
+.txt-30 { font-size: 30px; }
+.txt-32 { font-size: 32px; }
+.txt-34 { font-size: 34px; }
+.txt-36 { font-size: 36px; }
 
 /* Text Weight */
 .txt-bold { font-weight: bold; }
 .txt-normal { font-weight: normal; }
 
 /* Text Colors */
-.txt-white { color: #fff; }
+.txt-white { color: white; }
+.txt-light-grey { color: #eee; }
+.txt-grey { color: #ccc; }
+.txt-dark-grey { color: #666; }
 .txt-black { color: #000; }
 .txt-red { color: #ff0000; }
 .txt-green { color: #00ff00; }
@@ -35,3 +44,44 @@
     padding-left: 15%;
     padding-right: 15%;
 }
+
+
+center { align-content: center; }
+contents { height: 95vh; }
+
+/* <hr /> */
+.div-hr {
+    border-radius: 5px;
+}
+
+/* Background color */
+.div-hr-bg { background-color: black; }
+/* Outline color */
+.div-hr-ol { border-color: grey; }
+
+/* Width */
+.div-50 { width: 50%; }
+.div-75 { width: 75%; }
+.div-85 { width: 85%; }
+.div-90 { width: 90%; }
+.div-95 { width: 95%; }
+.div-100 {width: 100%;}
+
+/* Height */
+.div-h-50 { height: 50%; }
+.div-h-75 { height: 75%; }
+.div-h-85 { height: 85%; }
+.div-h-90 { height: 90%; }
+.div-h-95 { height: 95%; }
+.div-h-100 {height: 100%;}
+
+.hr-higher { elevation: higher; }
+.hr-1 { height: 1px; }
+.hr-2 { height: 2px; }
+.hr-3 { height: 3px; }
+.hr-4 { height: 4px; }
+.hr-5 { height: 5px; }
+.hr-10 { height: 10px; }
+.hr-12 { height: 12px; }
+.hr-15 { height: 15px; }
+.hr-20 { height: 20px; }

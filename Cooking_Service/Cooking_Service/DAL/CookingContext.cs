@@ -14,19 +14,20 @@ namespace Cooking_Service.DAL
             Database.SetInitializer<CookingContext>(new DropCreateDatabaseIfModelChanges<CookingContext>());
         }
 
-        public DbSet<UserInfo> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
+        public DbSet<Flag> Flags { get; set; }
     }
 
     public class CookingInitializer : DropCreateDatabaseIfModelChanges<CookingContext>
     {
         protected override void Seed(CookingContext context)
         {
-            var users = new List<UserInfo>
+            var users = new List<User>
             {
-                new UserInfo { GUID = "6b547a86-c6ca-4ec0-b4a6-3e16baa22c74", Name = "Administrator", Surname = "Admin", Type = TypeUser.Admin },
-                new UserInfo { GUID = Guid.NewGuid().ToString(), Name = "User", Surname = "User Type", Type = TypeUser.User },
-                new UserInfo { GUID = Guid.NewGuid().ToString(), Name = "Cook", Surname = "Certified Cook", Type = TypeUser.Cook }
+                new User { GUID = "6b547a86-c6ca-4ec0-b4a6-3e16baa22c74", Name = "Administrator", Surname = "Admin", Type = TypeUser.Admin },
+                new User { GUID = Guid.NewGuid().ToString(), Name = "Albert", Surname = "The Racist One", Type = TypeUser.User },
+                new User { GUID = Guid.NewGuid().ToString(), Name = "Cook", Surname = "Certified Cook", Type = TypeUser.Cook }
             };
 
             users.ForEach(s => context.Users.Add(s));
@@ -46,6 +47,12 @@ namespace Cooking_Service.DAL
             recipes.ForEach(s => context.Recipes.Add(s));
             context.SaveChanges();
 
+            var flags = new List<Flag>
+            {
+                new Flag { GUID = Guid.NewGuid().ToString(), Description = "Ban: Wrong usage of the service.", Type = FlagType.Ban },
+                new Flag { GUID = Guid.NewGuid().ToString(), Description = "Racism: Wrong usage of the service.", Type = FlagType.Racism },
+                new Flag { GUID = Guid.NewGuid().ToString(), Description = "Bullying: Mistreating other users.", Type = FlagType.Cyberbullying },
+            };
 
         }
     }

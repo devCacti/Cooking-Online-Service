@@ -5,17 +5,26 @@
 <!-- Import My CSS File -->
 <link rel="stylesheet" href="~/MyCSS/styles.css" />
 
+<br />
+<h1>Bem-Vindo(a) ao Cooking Service</h1>
+<hr />
 <main>
     <!-- Com os estilos do Bootstrap, cada Página é constituida por, digamos, 12 espaços do mesmo tamanho. -->
     <!-- Div para mostrar coisas no centro -->
-
+    
+    <div class="row">
+        <div class="col-md-12">
+            <p>Este é um serviço de receitas e listas de compras, onde pode guardar as suas receitas e listas de compras na núvem.</p>
+            <p>Este serviço é para todos os tipos de pessoas, desde cozinheiros profissionais a pessoas que estão a começar a cozinhar.</p>
+        </div>
+    </div>
+    <br />
     <br />
     <div class="row">
 
         <div class="col-md-10">
             <h1>Informações Úteis - Cargos</h1>
-            <hr />
-
+            <hr /><br />
             <div class="row txt-18 txt-justify">
                 <div class="col-md-3">
                     <h2>Utilizador</h2>
@@ -26,7 +35,6 @@
                     <h2>Cozinheiro</h2>
                     <p>Para ser um chefe de cozinha certificado nos nossos serviços, por favor, preencha este formulário para que lhe possamos dar os previlégios adequados.</p>
                     <p>Um cozinheiro, aqui, é quase como uma celebridade que pode publicar as suas receitas para que todas as outras pessoas possam fazer também.</p>
-                    <p>Para mais informações, direja-se à página adequada.</p>
                 </div>
                 <div class="col-md-1"></div>
                 <div class="col-md-3">
@@ -44,9 +52,14 @@
             <div class="txt-justify txt-18">
                 <p>Caso tenha dúvidas sobre a aplicação para telemóvel ou acerca deste site, por favor, dirija-se à página 'Ajuda' ou por @Html.ActionLink("aqui", "About", "Home").</p>
                 <p>Esta aplicação ainda está a ser desenvolvida, por isso, é normal que tenha problemas frequentes.</p>
-
             </div>
         </div>
+    </div>
+
+    <br />
+    
+    <div class="txt-18">
+        <p>Para mais informações, direja-se à página adequada.</p>
     </div>
 
 </main>

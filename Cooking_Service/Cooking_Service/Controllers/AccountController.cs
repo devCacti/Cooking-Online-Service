@@ -154,9 +154,15 @@ namespace Cooking_Service.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            model.Type = TypeUser.User;
+            model.UserName = model.Email;
+            model.Name = "No Name";
+            model.Surname = "No Surnames";
+
+
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -281,6 +287,7 @@ namespace Cooking_Service.Controllers
         [Route("Account/AppRegister")]
         public async Task<ActionResult> AppRegister(RegisterViewModel model)
         {
+            var errors = new { };
             var response = new
             {
                 success = false,
@@ -289,49 +296,21 @@ namespace Cooking_Service.Controllers
                 error = new
                 {
                     code = "5",
-                    description = "Something went horribly wrong"
+                    description = "ModelState not valid",
+                    model = new
+                    {
+                        name = model.Name,
+                        surname = model.Surname,
+                        email = model.Email,
+                        username = model.UserName,
+                        password = model.Password,
+                        confPass = model.ConfirmPassword,
+                        type = model.Type
+                    }
                 }
             };
 
-            if (!ModelState.IsValid)
-            {
-                return Json(response, JsonRequestBehavior.AllowGet);
-            }
-
-            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-            var result = await UserManager.CreateAsync(user, model.Password);
-
-            db.Users.Add(new UserInfo
-            {
-                GUID = user.Id,
-                Name = model.Name,
-                Surname = model.Surname,
-                Type = model.Type
-            });
-            db.SaveChanges();
-
-            //Json Response
-            if (result.Succeeded)
-            {
-                response = new
-                {
-                    success = true,
-                    message = new
-                    {
-                        uid = user.Id,
-                        name = model.Name,
-                        surname = model.Surname,
-                        username = user.UserName,
-                        email = user.Email,
-                    },
-                    error = new
-                    {
-                        code = "0",
-                        description = "Success"
-                    }
-                };
-            }
-            else
+            if (ModelState.IsValid)
             {
                 response = new
                 {
@@ -341,9 +320,113 @@ namespace Cooking_Service.Controllers
                     error = new
                     {
                         code = "5",
-                        description = "Something went horribly wrong"
+                        description = "Something went wrong, but the modelstate is valid.",
+                        model = new
+                        {
+                            name = model.Name,
+                            surname = model.Surname,
+                            email = model.Email,
+                            username = model.UserName,
+                            password = model.Password,
+                            confPass = model.ConfirmPassword,
+                            type = model.Type
+                        }
                     }
                 };
+
+                try
+                {
+                    var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                    var result = await UserManager.CreateAsync(user, model.Password);
+
+                    //Json Response
+                    if (result.Succeeded)
+                    {
+                        db.Users.Add(new User
+                        {
+                            GUID = user.Id,
+                            Name = model.Name,
+                            Surname = model.Surname,
+                            Type = model.Type
+                        });
+                        db.SaveChanges();
+
+                        response = new
+                        {
+                            success = true,
+                            message = new
+                            {
+                                uid = user.Id,
+                                name = model.Name,
+                                surname = model.Surname,
+                                username = user.UserName,
+                                email = user.Email,
+                            },
+                            error = new
+                            {
+                                code = "0",
+                                description = "Success",
+                                model = new
+                                {
+                                    name = model.Name,
+                                    surname = model.Surname,
+                                    email = model.Email,
+                                    username = model.UserName,
+                                    password = model.Password,
+                                    confPass = model.ConfirmPassword,
+                                    type = model.Type,
+                                }
+                            }
+                        };
+                    }
+                    else if (result.Errors != null)
+                    {
+                        response = new
+                        {
+                            success = false,
+                            message = new
+                            { uid = "", name = "", surname = "", username = "", email = "" },
+                            error = new
+                            {
+                                code = "5",
+                                description = "Could not save user, there are errors... { " + result.Errors.ToList()[0] +"}",
+                                model = new
+                                {
+                                    name = model.Name,
+                                    surname = model.Surname,
+                                    email = model.Email,
+                                    username = model.UserName,
+                                    password = model.Password,
+                                    confPass = model.ConfirmPassword,
+                                    type = model.Type
+                                }
+                            }
+                        };
+                    }
+                }
+                catch (Exception e) {
+                    response = new
+                    {
+                        success = false,
+                        message = new
+                        { uid = "", name = "", surname = "", username = "", email = "" },
+                        error = new
+                        {
+                            code = "6",
+                            description = e.Message,
+                            model = new
+                            {
+                                name = model.Name,
+                                surname = model.Surname,
+                                email = model.Email,
+                                username = model.UserName,
+                                password = model.Password,
+                                confPass = model.ConfirmPassword,
+                                type = model.Type
+                            }
+                        }
+                    };
+                }
             }
 
             return Json(response, JsonRequestBehavior.AllowGet);
