@@ -155,7 +155,6 @@ namespace Cooking_Service.Controllers
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             model.Type = TypeUser.User;
-            model.UserName = model.Email;
             model.Name = "No Name";
             model.Surname = "No Surnames";
 

@@ -24,7 +24,7 @@
 .txt-normal { font-weight: normal; }
 
 /* Text Colors */
-.txt-white { color: white; }
+.txt-white { color: white !important; }
 .txt-light-grey { color: #eee; }
 .txt-grey { color: #ccc; }
 .txt-dark-grey { color: #666; }

@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="pt-pt">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta charset="utf-8" />
@@ -11,7 +11,7 @@
 
 </head>
 <body class="bg-dark txt-white">
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark" id="navbar">
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
         <div class="container">
             @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
@@ -21,18 +21,6 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Início", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li class="nav-item dropdown" >
-                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                            Receitas
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item">Todas</a></li>
-                            <li><hr class="dropdown-divider" /></li>
-                            <li><a class="dropdown-item">Favoritas</a></li>
-                            <li><a class="dropdown-item">Públicas</a></li>
-                            <li><a class="dropdown-item">Privadas</a></li>
-                        </ul>
-                    </li>
                     <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contato", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Ajuda", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
@@ -41,9 +29,8 @@
             </div>
         </div>
     </nav>
-    <hr />
     <contents>
-        <div class="pad-sides txt-white">
+        <div class="container txt-white">
             @RenderBody()
             <hr />
             <footer>

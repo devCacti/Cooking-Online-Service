@@ -1,10 +1,12 @@
 ﻿@model Cooking_Service.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Registre-se";
+    ViewBag.Title = "Registar";
 }
 
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+    <p></p>
+    <h2 id="title">@ViewBag.Title</h2>
+    <br />
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
@@ -15,24 +17,37 @@
         <div class="row">
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
             <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control txt-white bg-dark" })
             </div>
         </div>
+        <p></p>
+        <div class="row">
+            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 col-form-label"})
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control txt-white bg-dark" })
+            </div>
+        </div>
+        <br />
         <div class="row">
             @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
             <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                @Html.PasswordFor(m => m.Password, new { @class = "form-control txt-white bg-dark" })
             </div>
         </div>
+        <p></p>
         <div class="row">
             @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
             <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control txt-white bg-dark" })
             </div>
         </div>
+        <p></p>
         <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Registrar" class="btn btn-outline-dark" />
+            <div class="offset-md-2 col-md-1">
+                <input type="submit" value="Registar" class="btn btn-outline-light" />
+            </div>
+            <div class="offeset-md-2 col-md-2 btn btn-link">
+                <a>Já tem uma conta?</a>
             </div>
         </div>
     }

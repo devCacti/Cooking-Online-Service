@@ -22,7 +22,7 @@ namespace Cooking_Service.Controllers
 
         public ActionResult Contact()
         {
-            ViewBag.Message = "Your contact page.";
+            ViewBag.Message = "Como podes falar connosco";
 
             return View();
         }

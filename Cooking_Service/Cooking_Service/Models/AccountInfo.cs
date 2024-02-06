@@ -63,6 +63,11 @@ namespace Cooking_Service.Models
         [MaxLength(256)]
         public string Bio { get; set; }
 
+        //This makes it so that other users can, or not, see this user's profile.
+        //However, they can still report. Admins can see either way.
+        [Required]
+        public bool isPrivate { get; set; }
+
         [Required]
         public TypeUser Type { get; set; }
 

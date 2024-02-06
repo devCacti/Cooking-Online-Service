@@ -1,4 +1,16 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Cooking_Service.Models
+@using Cooking_Service.DAL
+
+@{
+    var ctx = new ApplicationDbContext();
+    var user = ctx.Users.Find(User.Identity.GetUserId());
+    string userName = "No user";
+    if (user != null)
+    {
+        userName = user.UserName;
+    }
+}
 @if (Request.IsAuthenticated)
 {
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
@@ -7,16 +19,16 @@
 
     <ul class="navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Olá " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class="nav-link" })
+            @Html.ActionLink("Olá " + userName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class="nav-link" })
         </li>
-        <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Fazer logoff</a></li>
+        <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Sair</a></li>
     </ul>
     }
 }
 else
 {
     <ul class="navbar-nav navbar-right">
-        <li>@Html.ActionLink("Registre-se", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-link" })</li>
-        <li>@Html.ActionLink("Logon", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="nav-link" })</li>
+        <li>@Html.ActionLink("Registar", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-link" })</li>
+        <li>@Html.ActionLink("Entrar", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="nav-link" })</li>
     </ul>
 }
