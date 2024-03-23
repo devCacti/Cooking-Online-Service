@@ -79,7 +79,7 @@ namespace Cooking_Service.Models
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} caracteres.", MinimumLength = 4)]
+        [StringLength(100, ErrorMessage = "O {0} deve ter pelo menos {2} caracteres.", MinimumLength = 6)]
         [DisplayName("Username")]
         public string UserName { get; set; }
 

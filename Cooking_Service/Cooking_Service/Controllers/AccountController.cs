@@ -12,6 +12,7 @@ using Cooking_Service.Models;
 using System.Web.Management;
 using Antlr.Runtime.Tree;
 using Cooking_Service.DAL;
+using Cooking_Service.Logging;
 
 namespace Cooking_Service.Controllers
 {
@@ -69,28 +70,41 @@ namespace Cooking_Service.Controllers
         // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            Logger.Log("Login attempt from " + model.Email);
             if (!ModelState.IsValid)
             {
+                Logger.Log("Login attempt failed from " + model.Email);
                 return View(model);
             }
 
             // Isso não conta falhas de login em relação ao bloqueio de conta
             // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
+                    Logger.Log("Login attempt successful with user " + user.UserName);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
+                    Logger.Log("Login attempt failed from " + model.Email + " - LockedOut");
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
+                    Logger.Log("Login attempt failed from " + model.Email + " - RequiresVerification");
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
+                    Logger.Log("Login attempt failed from " + model.Email + " - Failure\n" +
+                        "\t username: " + user.UserName + "\n" +
+                        "\t email   : " + user.Email + "\n" +
+                        "\t password: " + model.Password + "\n" +
+                        "\t remember: " + model.RememberMe + "\n"
+                    );
+                    ModelState.AddModelError("", "Tentativa de login inválida e desconhecida.");
+                    return View(model);
                 default:
-                    ModelState.AddModelError("", "Tentativa de login inválida.");
+                    ModelState.AddModelError("", "Tentativa de login inválida. " + result);
                     return View(model);
             }
         }
@@ -154,10 +168,21 @@ namespace Cooking_Service.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
+            Logger.Log("Register attempt from " + model.Email);
+            //User is preset to User - this is the default value, even if the http post contains a different value
             model.Type = TypeUser.User;
-            model.Name = "No Name";
-            model.Surname = "No Surnames";
+            
+            if (model.Name == null)
+            {
+                Logger.Log("Register attempt info: Name is null");
+                model.Name = "No Name";
+            }
 
+            if (model.Surname == null)
+            {
+                Logger.Log("Register attempt info: Surname is null");
+                model.Surname = "No Surnames";
+            }
 
             if (ModelState.IsValid)
             {
@@ -165,8 +190,20 @@ namespace Cooking_Service.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    Logger.Log("Register attempt successful with user " + user.UserName);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+
+                    var uInfo = new User
+                    {
+                        GUID = user.Id,
+                        Name = model.Name,
+                        Surname = model.Surname,
+                        Type = model.Type
+                    };
+
+                    db.Users.Add(uInfo);
+                    db.SaveChanges();
+
                     // Para obter mais informações sobre como habilitar a confirmação da conta e redefinição de senha, visite https://go.microsoft.com/fwlink/?LinkID=320771
                     // Enviar um email com este link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);

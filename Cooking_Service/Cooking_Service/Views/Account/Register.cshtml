@@ -13,6 +13,21 @@
         @Html.AntiForgeryToken()
         <h4>Criar uma nova conta.</h4>
         <hr />
+        <div class="row">
+            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control txt-white bg-dark" })
+            </div>
+        </div>
+        <p></p>
+        <div class="row">
+            @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 col-form-label" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(m => m.Surname, new { @class = "form-control txt-white bg-dark" })
+            </div>
+        </div>
+        <br />
+        <br />
         @Html.ValidationSummary("", new { @class = "text-danger" })
         <div class="row">
             @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })

@@ -4,11 +4,19 @@
 
 @{
     var ctx = new ApplicationDbContext();
-    var user = ctx.Users.Find(User.Identity.GetUserId());
+    ApplicationUser user = ctx.Users.Find(User.Identity.GetUserId());
+    var userC = new CookingContext();
+
     string userName = "No user";
+
     if (user != null)
     {
-        userName = user.UserName;
+        userName = User.Identity.GetUserId();
+
+        if (userC.Users.Find(user.Id) != null)
+        {
+            userName = userC.Users.Find(user.Id).Name;
+        }
     }
 }
 @if (Request.IsAuthenticated)

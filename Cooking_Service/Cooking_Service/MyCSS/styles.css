@@ -19,11 +19,12 @@
 .txt-34 { font-size: 34px; }
 .txt-36 { font-size: 36px; }
 
-/* Text Weight */
 .txt-bold { font-weight: bold; }
 .txt-normal { font-weight: normal; }
+.txt-italic { font-style: italic; }
+.txt-underline { text-decoration: underline; }
+.txt-line-through { text-decoration: line-through; }
 
-/* Text Colors */
 .txt-white { color: white !important; }
 .txt-light-grey { color: #eee; }
 .txt-grey { color: #ccc; }
@@ -85,3 +86,41 @@ contents { height: 95vh; }
 .hr-12 { height: 12px; }
 .hr-15 { height: 15px; }
 .hr-20 { height: 20px; }
+
+/*Custom Buttons*/
+.lnk-n { 
+    text-decoration: none; 
+    margin: 5px;
+    padding: 7px 10px;
+}
+.lnk-n:link, .lnk-n:visited { color: white; }
+.lnk-n:hover { color: lightgrey; }
+
+.lnk-n:active {
+    border: 1px solid grey;
+    border-radius: 5px;
+    color: lightgrey;
+}
+
+
+/* Containers and Cards */
+.card-cont {
+    padding: 16px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}
+
+vr {
+    border-left: 1px solid grey; 
+    height: inherit;
+    width: 1px;
+}
+
+.r-1 { border-radius: 1px; }
+.r-2 { border-radius: 2px; }
+.r-3 { border-radius: 3px; }
+.r-4 { border-radius: 4px; }
+.r-5 { border-radius: 5px; }
+.r-10 { border-radius: 10px; }
+.r-15 { border-radius: 15px; }
