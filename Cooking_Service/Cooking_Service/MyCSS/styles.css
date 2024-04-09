@@ -26,7 +26,7 @@
 .txt-line-through { text-decoration: line-through; }
 
 .txt-white { color: white !important; }
-.txt-light-grey { color: #eee; }
+.txt-light-grey { color: lightgray; }
 .txt-grey { color: #ccc; }
 .txt-dark-grey { color: #666; }
 .txt-black { color: #000; }
@@ -97,9 +97,7 @@ contents { height: 95vh; }
 .lnk-n:hover { color: lightgrey; }
 
 .lnk-n:active {
-    border: 1px solid grey;
-    border-radius: 5px;
-    color: lightgrey;
+    color: grey;
 }
 
 

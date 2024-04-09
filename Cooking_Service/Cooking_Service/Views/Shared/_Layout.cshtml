@@ -1,13 +1,25 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNet.Identity
+@using Cooking_Service.Models
+@using Cooking_Service.DAL
+
+@{
+    var ctx = new ApplicationDbContext();
+    var ctxC = new CookingContext();
+    ApplicationUser user = ctx.Users.Find(User.Identity.GetUserId());
+    User userI = ctxC.Users.Find(User.Identity.GetUserId());
+}
+
+<!DOCTYPE html>
 <html lang="pt-pt">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Cooking</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <link rel="stylesheet" href="~/MyCSS/styles.css"/>
+    <link rel="stylesheet" href="~/MyCSS/styles.css" />
+    <script src="~/MyScripts/htmlJS.js"></script>
 
 </head>
 <body class="bg-dark txt-white">
@@ -21,26 +33,43 @@
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
                     <li>@Html.ActionLink("Início", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    @if (user != null)
+                    {
+                        <li>@Html.ActionLink("Receitas", "Index", "Recipes", new { area = "" }, new { @class = "nav-link" })</li>
+                    } else {
+                        <li class="nav-link disabled" id="loginFirst" alt="Faça login para aceder">Receitas</li>
+                    }
+                    <li class="nav-link disabled txt-light-grey">•</li>
                     <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Contato", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     <li>@Html.ActionLink("Ajuda", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    @if (user != null)
+                    {
+                        if (userI.Type == TypeUser.Admin)
+                        {
+                            <!-- Little sperator icon to separate the admin button from the rest of the navbar -->
+                            <li class="nav-link disabled">•</li>
+                            <li>@Html.ActionLink("Administrate", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                        }
+                    }
                 </ul>
+                
                 @Html.Partial("_LoginPartial")
+                </div>
             </div>
-        </div>
-    </nav>
-    <contents>
-        <div class="container txt-white">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
-            </footer>
-        </div>
-    </contents>
+        </nav>
+        <contents>
+            <div class="container txt-white">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
+                </footer>
+            </div>
+        </contents>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
-</body>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
+    </body>
 </html>
