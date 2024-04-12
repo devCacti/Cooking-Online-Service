@@ -7,6 +7,8 @@
 @Html.AntiForgeryToken()
 
 @{
+    ViewBag.Title = "Receitas";
+
     CookingContext db = new CookingContext();
 
     User _user = new User();
@@ -27,54 +29,88 @@
     }
 }
 
-<!DOCTYPE html>
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
-    <p>
-        @Html.ActionLink("Create New", "Create")
-    </p>
-    <table class="table bg-black txt-white">
-        <tr class="txt-white">
-            <th>@Html.DisplayNameFor(model => model.Image)         </th>
-            <th>@Html.DisplayNameFor(model => model.Title)         </th>
-            <th>@Html.DisplayNameFor(model => model.Description)   </th>
-            <th>@Html.DisplayNameFor(model => model.Ingredients)   </th>
-            <th>@Html.DisplayNameFor(model => model.IngrTypes)     </th>
-            <th>@Html.DisplayNameFor(model => model.IngrAmount)    </th>
-            <th>@Html.DisplayNameFor(model => model.Steps)         </th>
-            <th>@Html.DisplayNameFor(model => model.Time)          </th>
-            <th>@Html.DisplayNameFor(model => model.Portions)      </th>
-            <th>@Html.DisplayNameFor(model => model.Type)          </th>
-            <th>@Html.DisplayNameFor(model => model.isFavorite)    </th>
-            <th></th>
-        </tr>
-    
-    @foreach (var item in recipes) {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.Image)       </td>
-            <td>@Html.DisplayFor(modelItem => item.Title)       </td>
-            <td>@Html.DisplayFor(modelItem => item.Description) </td>
-            <td>@Html.DisplayFor(modelItem => item.Ingredients) </td>
-            <td>@Html.DisplayFor(modelItem => item.IngrTypes)   </td>
-            <td>@Html.DisplayFor(modelItem => item.IngrAmount)  </td>
-            <td>@Html.DisplayFor(modelItem => item.Steps)       </td>
-            <td>@Html.DisplayFor(modelItem => item.Time)        </td>
-            <td>@Html.DisplayFor(modelItem => item.Portions)    </td>
-            <td>@Html.DisplayFor(modelItem => item.Type)        </td>
-            <td>@Html.DisplayFor(modelItem => item.isFavorite)  </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id=item.GUID }) |
-                @Html.ActionLink("Details", "Details", new { id=item.GUID }) |
-                @Html.ActionLink("Delete", "Delete", new { id=item.GUID })
-            </td>
-        </tr>
-    }
-    
-    </table>
-</body>
-</html>
+<main>
+    <br />
+    <div class="card text-center">
+        <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="my-recipes-tab" data-bs-toggle="tab" href="#myRecipes" role="tab" aria-controls="myRecipes" aria-selected="true">
+                        Pessoal
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="online-tab" data-bs-toggle="tab" href="#online" role="tab" aria-controls="online" aria-selected="false">
+                        Online
+                    </a>
+                </li>
+                <li class="nav-item" title="Para publicar é necessário ter uma conta Premium, dirija-se à página de informações para saber mais.">
+                    <a class="nav-link disabled" id="publish-tab" data-bs-toggle="tab" href="#publish" role="tab" aria-controls="publish" aria-disabled="true">
+                        Publicar
+                    </a>
+                </li>
+                <li class="nav-item" title="Para receber pedidos é necessário ter uma conta Premium, dirija-se à página de informações para saber mais.">
+                    <a class="nav-link disabled" id="requests-tab" data-bs-toggle="tab" href="#pedidos" role="tab" aria-controls="requests" aria-disabled="true">
+                        Pedidos
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+
+                <!--Parte pessoal fica aqui, ou seja, todas as receitas ficam aqui-->
+                <div class="tab-pane fade show active" id="myRecipes" role="tabpanel" aria-labelledby="my-recipes-tab">
+                    <h5 class="card-title">As suas receitas aparecem aqui!</h5>
+                    <br />
+                    <hr />
+                    <br />
+                    <div>
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Exemplo de receita
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">#1 Cartão de Receita</h5>
+                                <p class="card-text">
+                                    #2 As suas receitas apareceram aqui, sendo o #1 o Título da receita, o #2 a descrição da receita e o #3 o botão para abrir a receita.
+                                    Em baixo de tudo, aparecerá há quanto tempo fez a última mudança.
+                                    O cartão de receita terá um indicador de que a receita é favorita ou normal.
+                                </p>
+                                <!-- Example split danger button -->
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary">Action</button>
+                                    <button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <span class="visually-hidden">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Action</a></li>
+                                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="#">Separated link</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-footer text-body-secondary">
+                                2 days ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="online" role="tabpanel" aria-labelledby="online-tab">
+                    <h5 class="card-title">Aqui aparecem as receitas de todos os utilizadores!</h5>
+                </div>
+
+                <div class="tab-pane fade" id="publish" role="tabpanel" aria-labelledby="publish-tab">
+                </div>
+
+                <div class="tab-pane fade" id="pedidos" role="tabpanel" aria-labelledby="pedidos-tab">
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>

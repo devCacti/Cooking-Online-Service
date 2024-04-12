@@ -10,19 +10,22 @@
 }
 
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-pt" data-bs-theme="dark">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>@ViewBag.Title - Cooking</title>
+    <!-- Load Popper.js -->
+    <!-- Load Bootstrap.js -->
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <link rel="stylesheet" href="~/MyCSS/styles.css" />
-    <script src="~/MyScripts/htmlJS.js"></script>
+    <script src="~/Scripts/umd/popper.js"></script>
+
 
 </head>
-<body class="bg-dark txt-white">
+<body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
         <div class="container">
             @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
@@ -36,8 +39,15 @@
                     @if (user != null)
                     {
                         <li>@Html.ActionLink("Receitas", "Index", "Recipes", new { area = "" }, new { @class = "nav-link" })</li>
-                    } else {
-                        <li class="nav-link disabled" id="loginFirst" alt="Faça login para aceder">Receitas</li>
+                    }
+                    else
+                    {
+                        <li title="Entre com a sua conta para aceder">
+                            <a href="#" class="nav-link disabled">
+                                Receitas
+                            </a>
+                        </li>
+
                     }
                     <li class="nav-link disabled txt-light-grey">•</li>
                     <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
@@ -53,23 +63,24 @@
                         }
                     }
                 </ul>
-                
-                @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </nav>
-        <contents>
-            <div class="container txt-white">
-                @RenderBody()
-                <hr />
-                <footer>
-                    <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
-                </footer>
-            </div>
-        </contents>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)
-    </body>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+    <contents>
+        <div class="container">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
+            </footer>
+        </div>
+    </contents>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
 </html>

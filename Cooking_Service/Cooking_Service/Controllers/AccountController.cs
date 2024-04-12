@@ -82,30 +82,49 @@ namespace Cooking_Service.Controllers
             // Isso não conta falhas de login em relação ao bloqueio de conta
             // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
             var user = await UserManager.FindByEmailAsync(model.Email);
-            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            switch (result)
+
+            //Para evitar erros server side, se o utilizador não for encontrado, é retornado um erro
+            if (user == null)
             {
-                case SignInStatus.Success:
-                    Logger.Log("Login attempt successful with user " + user.UserName);
-                    return RedirectToLocal(returnUrl);
-                case SignInStatus.LockedOut:
-                    Logger.Log("Login attempt failed from " + model.Email + " - LockedOut");
-                    return View("Lockout");
-                case SignInStatus.RequiresVerification:
-                    Logger.Log("Login attempt failed from " + model.Email + " - RequiresVerification");
-                    return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                case SignInStatus.Failure:
-                    Logger.Log("Login attempt failed from " + model.Email + " - Failure\n" +
-                        "\t username: " + user.UserName + "\n" +
-                        "\t email   : " + user.Email + "\n" +
-                        "\t password: " + model.Password + "\n" +
-                        "\t remember: " + model.RememberMe + "\n"
-                    );
-                    ModelState.AddModelError("", "Tentativa de login inválida e desconhecida.");
-                    return View(model);
-                default:
-                    ModelState.AddModelError("", "Tentativa de login inválida. " + result);
-                    return View(model);
+                Logger.Log("Login attempt failed from " + model.Email + " - User not found");
+                ModelState.AddModelError("", "Utilizador não encontrado.");
+                return View(model);
+            }
+
+            try
+            {
+                var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+                switch (result)
+                {
+                    case SignInStatus.Success:
+                        Logger.Log("Login attempt successful with user " + user.UserName);
+                        return RedirectToLocal(returnUrl);
+                    case SignInStatus.LockedOut:
+                        Logger.Log("Login attempt failed from " + model.Email + " - LockedOut");
+                        return View("Lockout");
+                    case SignInStatus.RequiresVerification:
+                        Logger.Log("Login attempt failed from " + model.Email + " - RequiresVerification");
+                        return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
+                    case SignInStatus.Failure:
+                        Logger.Log("Login attempt failed from " + model.Email + " - Failure\n" +
+                            "\t username: " + user.UserName + "\n" +
+                            "\t email   : " + user.Email + "\n" +
+                            "\t password: " + model.Password + "\n" +
+                            "\t remember: " + model.RememberMe + "\n"
+                        );
+                        ModelState.AddModelError("", "Tentativa de login inválida e desconhecida.");
+                        return View(model);
+                    default:
+                        ModelState.AddModelError("", "Tentativa de login inválida. " + result);
+                        return View(model);
+                }
+
+            }
+            catch (Exception e)
+            {
+                Logger.Log("Login attempt failed from " + model.Email + " - " + e.Message);
+                ModelState.AddModelError("", "Algo correu mal, por favor contacte a equipa de suporte caso receba este erro.");
+                return View(model);
             }
         }
 
