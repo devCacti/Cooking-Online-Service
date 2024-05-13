@@ -15,14 +15,6 @@ namespace Cooking_Service.Models
         Guest
     }
 
-    public enum TypePreviledge
-    {
-        FullUnlock,
-        _5Recipes,
-        _10Recipes,
-        _20Recipes,
-    }
-
     public enum TypeRecipe
     {
         Geral,
@@ -74,7 +66,7 @@ namespace Cooking_Service.Models
         //This makes it so that other users can, or not, see this user's profile.
         //However, they can still report. Admins can see either way.
         [Required]
-        public bool IsPrivate { get; set; }
+        public bool isPrivate { get; set; }
 
         [Required]
         public TypeUser Type { get; set; }
@@ -91,28 +83,13 @@ namespace Cooking_Service.Models
 
     }
 
-    public class Previledge
-    {
-        [Key, Required, MaxLength(128)]
-        public string GUID { get; set; }
-
-        [Required]
-        public TypePreviledge Type { get; set; }
-
-        [Required]
-        public DateTime ExpirationDate { get; set; }
-
-        [Required]
-        public virtual User User { get; set; }
-    }
-
     public class Recipe
     {
         [Key, Required, MaxLength(128)]
         public string GUID { get; set; }
 
         // The image has to be a string because it will be translated to base64
-        [MaxLength(4096)]
+        [MaxLength(2048)]
         public string Image { get; set; }
 
         [Required, MaxLength(64)]
@@ -121,10 +98,16 @@ namespace Cooking_Service.Models
         [MaxLength(512)]
         public string Description { get; set; }
 
+        // Saves a JSON string that is decoded before being shown
+        // on the user interface, either the website or the app.
         [MaxLength(1024)]
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
-
-        public virtual ICollection<Steps> Steps { get; set; }
+        public string Ingredients { get; set; }
+        [MaxLength(1024)]
+        public string IngrTypes { get; set; }
+        [MaxLength(1024)]
+        public string IngrAmount { get; set; }
+        [MaxLength(2048)]
+        public string Steps { get; set; }
 
         // Small number with decimal places
         public double Time { get; set; }
@@ -132,40 +115,9 @@ namespace Cooking_Service.Models
 
         public TypeRecipe Type { get; set; }
 
-        public bool IsFavorite { get; set; }
+        public bool isFavorite { get; set; }
 
         public virtual User User { get; set; }
-    }
-
-    public class Ingredient
-    {
-        [Key, Required, MaxLength(128)]
-        public string GUID { get; set; }
-
-        [Required, MaxLength(64)]
-        public string Name { get; set; }
-
-        [MaxLength(64)]
-        public string Type { get; set; }
-
-        [MaxLength(64)]
-        public string Amount { get; set; }
-
-        public virtual Recipe Recipes { get; set; }
-    }
-
-    public class Steps
-    {
-        [Key, Required, MaxLength(128)]
-        public string GUID { get; set; }
-
-        [Required, MaxLength(64)]
-        public string Title { get; set; }
-
-        [MaxLength(512)]
-        public string Description { get; set; }
-
-        public virtual Recipe Recipes { get; set; }
     }
 
     // Shopping list is a no go because of the amount of space
