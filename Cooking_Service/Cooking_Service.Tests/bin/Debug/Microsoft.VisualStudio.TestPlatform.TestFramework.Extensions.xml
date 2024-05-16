@@ -608,11 +608,6 @@
             Binds to everything.
             </summary>
         </member>
-        <member name="F:Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType._type">
-            <summary>
-            The wrapped type.
-            </summary>
-        </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType.#ctor(System.String,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.PrivateType"/> class that contains the private type.

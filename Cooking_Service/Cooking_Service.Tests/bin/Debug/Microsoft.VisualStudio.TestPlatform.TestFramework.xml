@@ -207,6 +207,78 @@
             <paramref name="actual"/>.
             </exception>
         </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual``1(System.IEquatable{``0},System.IEquatable{``0})">
+            <summary>
+            Tests whether the specified values are equal and throws an exception
+            if the two values are not equal.
+            The equality is computed using the default <see cref="T:System.Collections.Generic.EqualityComparer`1"/>.
+            </summary>
+            <typeparam name="T">
+            The type of values to compare.
+            </typeparam>
+            <param name="expected">
+            The first value to compare. This is the value the tests expects.
+            </param>
+            <param name="actual">
+            The second value to compare. This is the value produced by the code under test.
+            </param>
+            <exception cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException">
+            Thrown if <paramref name="expected"/> is not equal to <paramref name="actual"/>.
+            </exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual``1(System.IEquatable{``0},System.IEquatable{``0},System.String)">
+            <summary>
+            Tests whether the specified values are equal and throws an exception
+            if the two values are not equal.
+            The equality is computed using the default <see cref="T:System.Collections.Generic.EqualityComparer`1"/>.
+            </summary>
+            <typeparam name="T">
+            The type of values to compare.
+            </typeparam>
+            <param name="expected">
+            The first value to compare. This is the value the tests expects.
+            </param>
+            <param name="actual">
+            The second value to compare. This is the value produced by the code under test.
+            </param>
+            <param name="message">
+            The message to include in the exception when <paramref name="actual"/>
+            is not equal to <paramref name="expected"/>. The message is shown in
+            test results.
+            </param>
+            <exception cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException">
+            Thrown if <paramref name="expected"/> is not equal to
+            <paramref name="actual"/>.
+            </exception>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreEqual``1(System.IEquatable{``0},System.IEquatable{``0},System.String,System.Object[])">
+            <summary>
+            Tests whether the specified values are equal and throws an exception
+            if the two values are not equal.
+            The equality is computed using the default <see cref="T:System.Collections.Generic.EqualityComparer`1"/>.
+            </summary>
+            <typeparam name="T">
+            The type of values to compare.
+            </typeparam>
+            <param name="expected">
+            The first value to compare. This is the value the tests expects.
+            </param>
+            <param name="actual">
+            The second value to compare. This is the value produced by the code under test.
+            </param>
+            <param name="message">
+            The message to include in the exception when <paramref name="actual"/>
+            is not equal to <paramref name="expected"/>. The message is shown in
+            test results.
+            </param>
+            <param name="parameters">
+            An array of parameters to use when formatting <paramref name="message"/>.
+            </param>
+            <exception cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.AssertFailedException">
+            Thrown if <paramref name="expected"/> is not equal to
+            <paramref name="actual"/>.
+            </exception>
+        </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.Assert.AreNotEqual``1(``0,``0)">
             <summary>
             Tests whether the specified values are unequal and throws an exception
@@ -3766,15 +3838,22 @@
             Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class.
             </summary>
         </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class with an array of object arguments.
+            </summary>
+            <param name="data"> The data. </param>
+            <remarks>This constructor is only kept for CLS compliant tests.</remarks>
+        </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute.#ctor(System.String[])">
             <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class.
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class with an array of string arguments.
             </summary>
             <param name="stringArrayData"> The string array data. </param>
         </member>
         <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute.#ctor(System.Object[])">
             <summary>
-            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class which takes in an array of arguments.
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataRowAttribute"/> class with an array of object arguments.
             </summary>
             <param name="data"> The data. </param>
         </member>
@@ -3882,6 +3961,19 @@
             <summary>
             Attribute for data driven test where data can be specified in-line.
             </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute"/> class.
+            </summary>
+        </member>
+        <member name="M:Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Microsoft.VisualStudio.TestTools.UnitTesting.DataTestMethodAttribute"/> class.
+            </summary>
+            <param name="displayName">
+            Display name for the test.
+            </param>
         </member>
         <member name="T:Microsoft.VisualStudio.TestTools.UnitTesting.DynamicDataSourceType">
             <summary>
@@ -5201,7 +5293,7 @@
         </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.DynamicDataIEnumerableNull">
             <summary>
-              Looks up a localized string similar to Property or method {0} on {1} does not return IEnumerable&lt;object[]&gt;..
+              Looks up a localized string similar to Property or method {0} on {1} return type is not assignable to &apos;IEnumerable&lt;object[]&gt;&apos; (nor &apos;IEnumerable&lt;ITuple&gt;&apos; for .NET Core)..
             </summary>
         </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.DynamicDataValueNull">
@@ -5224,34 +5316,9 @@
               Looks up a localized string similar to Element at index {1} is not of expected type. Expected type:&lt;{2}&gt;. Actual type:&lt;{3}&gt;.{0}.
             </summary>
         </member>
-        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.ElementTypesAtIndexDontMatch2">
-            <summary>
-              Looks up a localized string similar to Element at index {1} is (null). Expected type:&lt;{2}&gt;.{0}.
-            </summary>
-        </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.EndsWithFail">
             <summary>
               Looks up a localized string similar to String &apos;{0}&apos; does not end with string &apos;{1}&apos;. {2}..
-            </summary>
-        </member>
-        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.EqualsTesterInvalidArgs">
-            <summary>
-              Looks up a localized string similar to Invalid argument- EqualsTester can&apos;t use nulls..
-            </summary>
-        </member>
-        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.ErrorInvalidCast">
-            <summary>
-              Looks up a localized string similar to Cannot convert object of type {0} to {1}..
-            </summary>
-        </member>
-        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.InternalObjectNotValid">
-            <summary>
-              Looks up a localized string similar to The internal object referenced is no longer valid..
-            </summary>
-        </member>
-        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.InvalidParameterToAssert">
-            <summary>
-              Looks up a localized string similar to The parameter &apos;{0}&apos; is invalid. {1}..
             </summary>
         </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.InvalidPropertyType">
@@ -5277,11 +5344,6 @@
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.IsNotMatchFail">
             <summary>
               Looks up a localized string similar to String &apos;{0}&apos; matches pattern &apos;{1}&apos;. {2}..
-            </summary>
-        </member>
-        <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.NoDataRow">
-            <summary>
-              Looks up a localized string similar to No test data source specified. Atleast one TestDataSource is required with DataTestMethodAttribute..
             </summary>
         </member>
         <member name="P:Microsoft.VisualStudio.TestTools.UnitTesting.FrameworkMessages.NoExceptionThrown">
@@ -5411,6 +5473,47 @@
             Test cannot be executed.
             </summary>
         </member>
+        <member name="F:Microsoft.VisualStudio.TestTools.UnitTesting.UnitTestOutcome.NotFound">
+            <summary>
+            The specific test cannot be found.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute">
+            <summary>
+            Indicates that compiler support for a particular feature is required for the location where this attribute is applied.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RefStructs">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the ref structs C# feature.
+            </summary>
+        </member>
+        <member name="F:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.RequiredMembers">
+            <summary>
+            The <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/> used for the required members C# feature.
+            </summary>
+        </member>
+        <member name="M:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute"/> class.
+            </summary>
+            <param name="featureName">The name of the feature to indicate.</param>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName">
+            <summary>
+            Gets the name of the compiler feature.
+            </summary>
+        </member>
+        <member name="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.IsOptional">
+            <summary>
+            Gets or sets a value indicating whether if true, the compiler can choose to allow access to the location where this attribute is applied if it does not understand <see cref="P:System.Runtime.CompilerServices.CompilerFeatureRequiredAttribute.FeatureName"/>.
+            </summary>
+        </member>
+        <member name="T:System.Runtime.CompilerServices.RequiredMemberAttribute">
+            <summary>
+            Specifies that a type has required members or that a member is required.
+            </summary>
+        </member>
         <member name="T:System.Diagnostics.CodeAnalysis.AllowNullAttribute">
             <summary>Specifies that null is allowed as an input even if the corresponding type disallows it.</summary>
         </member>
@@ -5427,31 +5530,31 @@
             <summary>Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue"/>, the parameter may be null even if the corresponding type disallows it.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.#ctor(System.Boolean)">
-            <summary>Initializes the attribute with the specified return value condition.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute"/> class.Initializes the attribute with the specified return value condition.</summary>
             <param name="returnValue">
             The return value condition. If the method returns this value, the associated parameter may be null.
             </param>
         </member>
         <member name="P:System.Diagnostics.CodeAnalysis.MaybeNullWhenAttribute.ReturnValue">
-            <summary>Gets the return value condition.</summary>
+            <summary>Gets a value indicating whether gets the return value condition.</summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute">
             <summary>Specifies that when a method returns <see cref="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue"/>, the parameter will not be null even if the corresponding type allows it.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.#ctor(System.Boolean)">
-            <summary>Initializes the attribute with the specified return value condition.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute"/> class.Initializes the attribute with the specified return value condition.</summary>
             <param name="returnValue">
             The return value condition. If the method returns this value, the associated parameter will not be null.
             </param>
         </member>
         <member name="P:System.Diagnostics.CodeAnalysis.NotNullWhenAttribute.ReturnValue">
-            <summary>Gets the return value condition.</summary>
+            <summary>Gets a value indicating whether gets the return value condition.</summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute">
             <summary>Specifies that the output will be non-null if the named parameter is non-null.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute.#ctor(System.String)">
-            <summary>Initializes the attribute with the associated parameter name.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.NotNullIfNotNullAttribute"/> class.Initializes the attribute with the associated parameter name.</summary>
             <param name="parameterName">
             The associated parameter name.  The output will be non-null if the argument to the parameter specified is non-null.
             </param>
@@ -5466,26 +5569,26 @@
             <summary>Specifies that the method will not return if the associated Boolean parameter is passed the specified value.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.#ctor(System.Boolean)">
-            <summary>Initializes the attribute with the specified parameter value.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute"/> class.Initializes the attribute with the specified parameter value.</summary>
             <param name="parameterValue">
             The condition parameter value. Code after the method will be considered unreachable by diagnostics if the argument to
             the associated parameter matches this value.
             </param>
         </member>
         <member name="P:System.Diagnostics.CodeAnalysis.DoesNotReturnIfAttribute.ParameterValue">
-            <summary>Gets the condition parameter value.</summary>
+            <summary>Gets a value indicating whether gets the condition parameter value.</summary>
         </member>
         <member name="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute">
             <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String)">
-            <summary>Initializes the attribute with a field or property member.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute"/> class.Initializes the attribute with a field or property member.</summary>
             <param name="member">
             The field or property member that is promised to be not-null.
             </param>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute.#ctor(System.String[])">
-            <summary>Initializes the attribute with the list of field and property members.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.MemberNotNullAttribute"/> class.Initializes the attribute with the list of field and property members.</summary>
             <param name="members">
             The list of field and property members that are promised to be not-null.
             </param>
@@ -5497,7 +5600,7 @@
             <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values when returning with the specified return value condition.</summary>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String)">
-            <summary>Initializes the attribute with the specified return value condition and a field or property member.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute"/> class.Initializes the attribute with the specified return value condition and a field or property member.</summary>
             <param name="returnValue">
             The return value condition. If the method returns this value, the associated parameter will not be null.
             </param>
@@ -5506,7 +5609,7 @@
             </param>
         </member>
         <member name="M:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.#ctor(System.Boolean,System.String[])">
-            <summary>Initializes the attribute with the specified return value condition and list of field and property members.</summary>
+            <summary>Initializes a new instance of the <see cref="T:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute"/> class.Initializes the attribute with the specified return value condition and list of field and property members.</summary>
             <param name="returnValue">
             The return value condition. If the method returns this value, the associated parameter will not be null.
             </param>
@@ -5515,10 +5618,16 @@
             </param>
         </member>
         <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.ReturnValue">
-            <summary>Gets the return value condition.</summary>
+            <summary>Gets a value indicating whether gets the return value condition.</summary>
         </member>
         <member name="P:System.Diagnostics.CodeAnalysis.MemberNotNullWhenAttribute.Members">
             <summary>Gets field or property member names.</summary>
+        </member>
+        <member name="T:System.Diagnostics.CodeAnalysis.SetsRequiredMembersAttribute">
+            <summary>
+            Specifies that this constructor sets all required members for the current type,
+            and callers do not need to set any required members themselves.
+            </summary>
         </member>
     </members>
 </doc>

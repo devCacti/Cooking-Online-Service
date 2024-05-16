@@ -26,17 +26,25 @@
     @Html.AntiForgeryToken()
 
     <ul class="navbar-nav navbar-right">
-        <li>
-            @Html.ActionLink("Olá " + userName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage", @class="nav-link" })
+        <li class="custom-nav-link dropdown">
+            <a class="lnk-n nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Olá @userName!
+            </a>
+            <!-- Dropdown options-->
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="@Url.Action("Index", "Manage")">Gerir Conta</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="javascript:document.getElementById('logoutForm').submit()">Sair</a>
+            </div>
+            
         </li>
-        <li><a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Sair</a></li>
     </ul>
     }
 }
 else
 {
     <ul class="navbar-nav navbar-right">
-        <li>@Html.ActionLink("Registar", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="nav-link" })</li>
-        <li>@Html.ActionLink("Entrar", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="nav-link" })</li>
+        <li class="custom-nav-link">@Html.ActionLink("Registar", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink", @class="lnk-n nav-link" })</li>
+        <li class="custom-nav-link">@Html.ActionLink("Entrar", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink", @class="lnk-n nav-link" })</li>
     </ul>
 }

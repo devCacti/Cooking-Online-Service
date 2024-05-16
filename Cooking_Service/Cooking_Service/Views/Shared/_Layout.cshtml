@@ -10,66 +10,82 @@
 }
 
 <!DOCTYPE html>
-<html lang="pt-pt">
+<html lang="pt-pt" data-bs-theme="dark">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Cooking</title>
+
+
+    <link rel="stylesheet" href="~/MyCSS/main-styles.css" />
+
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <link rel="stylesheet" href="~/MyCSS/styles.css" />
-    <script src="~/MyScripts/htmlJS.js"></script>
 
 </head>
 <body class="bg-dark txt-white">
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
         <div class="container">
-            @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "custom-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Início", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
                     @if (user != null)
                     {
-                        <li>@Html.ActionLink("Receitas", "Index", "Recipes", new { area = "" }, new { @class = "nav-link" })</li>
-                    } else {
-                        <li class="nav-link disabled" id="loginFirst" alt="Faça login para aceder">Receitas</li>
+                        <li class="custom-nav-link">@Html.ActionLink("Receitas", "Index", "Recipes", new { area = "" }, new { @class = "lnk-n nav-link" })</li>
                     }
-                    <li class="nav-link disabled txt-light-grey">•</li>
-                    <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contato", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Ajuda", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+                    else
+                    {
+                        <li class="custom-nav-link disabled" id="loginFirst" title="Faça login para aceder"><a class=" nav-link">Receitas</a></li>
+                    }
+                    <li class="dropdown-center custom-nav-link">
+                        <a class="lnk-n nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Ajuda
+                        </a>                            
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="#">FAQ</a>
+                            <a class="dropdown-item" href="@Url.Action("About", "Home")">Sobre</a>
+                            <a class="dropdown-item" href="@Url.Action("Contact", "Home")">Contacto</a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">Termos de Utilização</a>
+                        </div>
+                    </li>
+                    <!--Navbar dropdown-->
+                    <li class="nav-item dropdown">
+ 
+                    </li>
                     @if (user != null)
                     {
                         if (userI.Type == TypeUser.Admin)
                         {
                             <!-- Little sperator icon to separate the admin button from the rest of the navbar -->
                             <li class="nav-link disabled">•</li>
-                            <li>@Html.ActionLink("Administrate", "Index", "Admin", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li class="custom-nav-link">@Html.ActionLink("Administrate", "Index", "Admin", new { area = "" }, new { @class = "lnk-n" })</li>
                         }
                     }
                 </ul>
-                
-                @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </nav>
-        <contents>
-            <div class="container txt-white">
-                @RenderBody()
-                <hr />
-                <footer>
-                    <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
-                </footer>
-            </div>
-        </contents>
 
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)
-    </body>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </nav>
+    <contents>
+        <div class="container txt-white">
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
+            </footer>
+        </div>
+    </contents>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
+    @Scripts.Render("~/bundles/jquery")
+    <!--Poopper.js-->
+    @RenderSection("scripts", required: false)
+</body>
 </html>
