@@ -116,8 +116,6 @@ namespace Cooking_Service.Models
         public TypeRecipe Type { get; set; }
 
         public bool isFavorite { get; set; }
-
-        public virtual User User { get; set; }
     }
 
     // Shopping list is a no go because of the amount of space
