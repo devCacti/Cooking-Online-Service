@@ -45,7 +45,7 @@ namespace Cooking_Service.Models
         [MaxLength(128)]
         public string Description { get; set; }
 
-        public virtual ICollection<User> User { get; set; }
+        public virtual User User { get; set; }
     }
 
     public class User
@@ -116,6 +116,10 @@ namespace Cooking_Service.Models
         public TypeRecipe Type { get; set; }
 
         public bool isFavorite { get; set; }
+        public bool isAllowed { get; set; }
+
+        // Foreign key
+        public virtual User Author { get; set; }
     }
 
     // Shopping list is a no go because of the amount of space

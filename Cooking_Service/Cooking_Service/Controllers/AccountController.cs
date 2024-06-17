@@ -484,7 +484,7 @@ namespace Cooking_Service.Controllers
             }
             else
             {
-                var recipes = db.Recipes.First(r => r.User.GUID == user.Id);
+                var recipes = db.Recipes.All(r => r.Author.GUID == user.Id);
                 var response = new
                 {
                     success = true,
