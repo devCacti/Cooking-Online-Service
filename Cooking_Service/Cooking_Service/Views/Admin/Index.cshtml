@@ -2,10 +2,109 @@
 @using Cooking_Service.Models;
 @using Microsoft.AspNet.Identity;
 
+@{
+    ViewBag.Title = "Administração";
+    var ctx = new ApplicationDbContext();
+    var ctxC = new CookingContext();
+    ApplicationUser user = ctx.Users.Find(User.Identity.GetUserId());
+    User userC = ctxC.Users.Find(User.Identity.GetUserId());
+}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
 <main>
     <br />
-    <h1>This is the Administrator Control Center</h1>
-    <br />
-    <hr />
-    <br />
+    <h1>Administration</h1>
+    <h3> Control Center</h3>
+    <br /><hr /><br />
+    <div class="txt-justify txt-18 card-cont">
+        <!--Search bar-->
+        <div class="form-group">
+            <div><h3>Users</h3></div>
+            <div><input type="text" class="form-control" id="search" placeholder="Search for users..."></div>
+            <div><button class="btn btn-outline-primary" onclick="fetchResults('Users', 1, $('#search').val())">Find</button></div>
+        </div>
+        <table class="t-search" id="users_table">
+            <tr>
+                <th>User GUID</th>
+                <th>Username</th>
+                <th>Name</th>
+            </tr>
+        </table>
+
+    </div>
+
 </main>
+
+
+<style>
+    .find-btn {
+        width: 100%;
+    }
+
+    .form-group {
+        display: flex;
+        justify-content: left;
+        padding-bottom: 10px;
+    }
+
+    .form-group div {
+        padding-right: 20px;
+    }
+
+    .t-search {
+        width: 100%;
+        border-radius: 5px;
+    }
+
+    .t-search tr th, td {
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid grey;
+        width: 33.33%;
+    }
+</style>
+
+
+<script>
+    /*
+    * Type: 'User' 'Recipe' 'Other'
+    * Page: 1, 2, 3, ...
+    * Search: '89S8GAASS7877DAG87' 'John' 'False Information'
+    */
+    function fetchResults(type, page, search) {
+        if (search == '') {
+            return;
+        }
+        $.ajax({
+            url: '/Admin/GetResult',
+            type: 'GET',
+            data: {
+                type: type,
+                page: page,
+                search: search
+            },
+            success: function (data) {
+                console.log(data);
+                $('#users_table').empty();
+                $('#users_table').append('<tr><th>User GUID</th><th>Username</th><th>Name</th></tr>');
+
+                if (data.users) {
+                    data.users.forEach(user => {
+                        $('#users_table').append('<tr><td>' + user.GUID + '</td><td>' + user.UserName + '</td><td>' + user.Name + '</td></tr>');
+                    });
+                }
+
+                if (data.error) {
+                    $('#users_table').append('<tr><td style="color: red;">No Matches Found</td><tr>');
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+</script>
