@@ -10,21 +10,24 @@ using Cooking_Service.Models;
 using Cooking_Service.DAL;
 using System.Collections.Generic;
 using Microsoft.Ajax.Utilities;
+using System.Web.WebPages;
 namespace Cooking_Service.Controllers
 {
     public class SearchViewModel
     {
-        public string Type;
-        public string GUID;
-        public string UserName;
-        public string Name;
+        public string Type;     // Request Type
+        public string UEmail;   // User Email
+        public string UUserName;// User UserName
+        public string EName;    // Element Name (Can be Recipe Title, User Name, Flag Description)
+        public string EType;    // Element Type
 
-        public SearchViewModel(string t,  string guid, string username, string name)
+        public SearchViewModel(string t,  string email, string username, string name, string type)
         {
             Type = t;
-            GUID = guid;
-            UserName = username;
-            Name = name;
+            UEmail = email;
+            UUserName = username;
+            EName = name;
+            EType = type;
         }
 
         public SearchViewModel()
@@ -139,7 +142,7 @@ namespace Cooking_Service.Controllers
                 var f_users = new List<SearchViewModel>();
 
                 // If there is a search query
-                if (r_search != "")
+                if (r_search != "" && r_search != null && !r_search.IsEmpty())
                 {
                     // Filter the users by the search query
                     try
@@ -155,7 +158,7 @@ namespace Cooking_Service.Controllers
                             //users_info = users_info.Where(u => u.UserName.ToLower().Contains(r_search.ToLower())).ToList();
                             foreach (var user in users_info)
                             {
-                                if (user.UserName.Contains(r_search))
+                                if (user.UserName.Contains(r_search) || user.Email.Contains(r_search))
                                 {
                                     var t_user = Cooking_Context.Users.FirstOrDefault(u => u.GUID == user.Id);
                                     if (t_user != null && !users.Contains(t_user))
@@ -186,9 +189,10 @@ namespace Cooking_Service.Controllers
                             f_users.Add(
                                 new SearchViewModel(
                                     "User",
-                                    user.GUID,
+                                    t_user.Email,
                                     t_user.UserName,
-                                    user.Name + ' ' + user.Surname
+                                    user.Name + ' ' + user.Surname,
+                                    user.Type.ToString()
                                 )
                             );
                         }
@@ -196,11 +200,27 @@ namespace Cooking_Service.Controllers
                 }
                 else
                 {
-                    users = users.ToList();
+                    foreach (var user in users)
+                    {
+                        // Temporary User Instance
+                        var t_user = users_info.First(u => u.Id == user.GUID);
+                        if (t_user != null)
+                        {
+                            f_users.Add(
+                                new SearchViewModel(
+                                    "User",
+                                    t_user.Email,
+                                    t_user.UserName,
+                                    user.Name + ' ' + user.Surname,
+                                    user.Type.ToString()
+                                )
+                            );
+                        }
+                    }
                 }
 
                 // Get the total number of users
-                int total = users.Count();
+                int total = f_users.Count();
 
                 // Get the number of pages
                 int pages = (int)Math.Ceiling((double)total / 10);
@@ -208,8 +228,11 @@ namespace Cooking_Service.Controllers
                 // Get the users for the current page
                 if (total >= 10)
                 {
-                    users = users.Skip((r_page - 1) * 10).Take(10).ToList();
+                    f_users = f_users.Skip((r_page - 1) * 10).Take(10).ToList();
                 }
+
+                //Organize the users by name
+                f_users = f_users.OrderBy(u => u.EName).ToList();
 
                 // Return the JSON object with the users
                 return Json(new { users = f_users, total = total, pages = pages }, JsonRequestBehavior.AllowGet);
@@ -236,9 +259,10 @@ namespace Cooking_Service.Controllers
                             f_recipes.Add(
                                 new SearchViewModel(
                                     "Recipe",
-                                    recipe.GUID,
+                                    t_user.Email,
                                     t_user.UserName,
-                                    recipe.Title
+                                    recipe.Title,
+                                    recipe.Type.ToString()
                                 )
                             );
                         }
@@ -257,6 +281,9 @@ namespace Cooking_Service.Controllers
 
                 // Get the recipes for the current page
                 recipes = recipes.Skip((r_page - 1) * 10).Take(10).ToList();
+
+                //Organize the recipes by name
+                f_recipes = f_recipes.OrderBy(r => r.EName).ToList();
 
                 // Return the JSON object with the recipes
                 return Json(new { recipes = f_recipes, total = total, pages = pages }, JsonRequestBehavior.AllowGet);
@@ -298,9 +325,10 @@ namespace Cooking_Service.Controllers
                             f_results.Add(
                             new SearchViewModel(
                                 "User",
-                                user.GUID,
+                                t_user.Email,
                                 t_user.UserName,
-                                user.Name
+                                user.Name,
+                                user.Type.ToString()
                             ));
                         }
                     }
@@ -316,9 +344,10 @@ namespace Cooking_Service.Controllers
                             f_results.Add(
                             new SearchViewModel(
                                 "Recipe",
-                                recipe.GUID,
+                                t_user.Email,
                                 t_user.UserName,
-                                recipe.Title
+                                recipe.Title,
+                                recipe.Type.ToString()
                             ));
                         }
                     }
@@ -334,9 +363,10 @@ namespace Cooking_Service.Controllers
                             f_results.Add(
                             new SearchViewModel(
                                 "Flag",
-                                flag.GUID,
+                                t_user.Email,
                                 t_user.UserName,
-                                flag.Description.Length > 10 ? flag.Description.Substring(0, 10) : flag.Description
+                                flag.Description.Length > 10 ? flag.Description.Substring(0, 10) : flag.Description,
+                                flag.Type.ToString()
                             ));
                         }
                     }
@@ -352,6 +382,9 @@ namespace Cooking_Service.Controllers
 
                     // Get the results for the current page
                     f_results = f_results.Skip((r_page - 1) * 10).Take(10).ToList();
+
+                    // Order Results by Type
+                    f_results = f_results.OrderBy(r => r.Type).ToList();
 
                     // Return the JSON object with the results
                     return Json(new { results = f_results, total = total, pages = pages }, JsonRequestBehavior.AllowGet);
@@ -371,9 +404,10 @@ namespace Cooking_Service.Controllers
                         f_results.Add(
                             new SearchViewModel(
                             "User",
-                            user.GUID,
+                            users_info.First(u => u.Id == user.GUID).Email,
                             users_info.First(u => u.Id == user.GUID).UserName,
-                            user.Name
+                            user.Name,
+                            user.Type.ToString()
                         ));
                     }
 
@@ -383,9 +417,10 @@ namespace Cooking_Service.Controllers
                         f_results.Add(
                             new SearchViewModel(
                             "Recipe",
-                            recipe.GUID,
+                            users_info.First(u => u.Id == recipe.GUID).Email,
                             users_info.First(u => u.Id == recipe.GUID).UserName,
-                            recipe.Title
+                            recipe.Title,
+                            recipe.Type.ToString()
                         ));
                     }                    
                     
@@ -395,9 +430,10 @@ namespace Cooking_Service.Controllers
                         f_results.Add(
                             new SearchViewModel(
                             "Flag",
-                            flag.GUID,
+                            users_info.First(u => u.Id == flag.GUID).Email,
                             users_info.First(u => u.Id == flag.User.GUID).UserName,
-                            flag.Description.Length > 10 ? flag.Description.Substring(0, 10) : flag.Description
+                            flag.Description.Length > 10 ? flag.Description.Substring(0, 10) : flag.Description,
+                            flag.Type.ToString()
                         ));
                     }
 
@@ -412,6 +448,9 @@ namespace Cooking_Service.Controllers
 
                     // Get the results for the current page
                     f_results = f_results.Skip((r_page - 1) * 10).Take(10).ToList();
+
+                    // Order Results by Type
+                    f_results = f_results.OrderBy(r => r.Type).ToList();
 
                     // Return the JSON object with the results
                     return Json(new { results = f_results, total = total, pages = pages }, JsonRequestBehavior.AllowGet);

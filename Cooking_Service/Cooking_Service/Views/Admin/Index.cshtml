@@ -14,7 +14,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
-<main>
+<main onload="fetchResults('Users', 1, '', true)">
     <br />
     <h1>Administration</h1>
     <h3> Control Center</h3>
@@ -22,15 +22,16 @@
     <div class="txt-justify txt-18 card-cont">
         <!--Search bar-->
         <div class="form-group">
-            <div><h3>Users</h3></div>
+            <div><h3 onclick="fetchResults('Users', 1, '', true)" style="cursor: pointer">Users</h3></div>
             <div><input type="text" class="form-control" id="search" placeholder="Search for users..."></div>
-            <div><button class="btn btn-outline-primary" onclick="fetchResults('Users', 1, $('#search').val())">Find</button></div>
+            <div><button class="btn btn-outline-primary" onclick="fetchResults('Users', 1, $('#search').val(), false)">Find</button></div>
         </div>
         <table class="t-search" id="users_table">
             <tr>
-                <th>User GUID</th>
-                <th>Username</th>
-                <th>Name</th>
+                <th>User Email</th>
+                <th>User Name</th>
+                <th>Full Name</th>
+                <th>User Type</th>
             </tr>
         </table>
 
@@ -40,9 +41,6 @@
 
 
 <style>
-    .find-btn {
-        width: 100%;
-    }
 
     .form-group {
         display: flex;
@@ -63,21 +61,30 @@
         border-radius: 5px;
         text-align: center;
         border: 1px solid grey;
-        width: 33.33%;
+        background-color: #00000000;
+        transition: background-color 0.5s ease-in-out;
+    }
+
+    .t-search tr th:hover, td:hover {
+        background-color: #00000055;
     }
 </style>
 
 
 <script>
+
     /*
     * Type: 'User' 'Recipe' 'Other'
     * Page: 1, 2, 3, ...
     * Search: '89S8GAASS7877DAG87' 'John' 'False Information'
     */
-    function fetchResults(type, page, search) {
-        if (search == '') {
+    function fetchResults(type, page, search, isOnLoad) {
+        if (search == '' && !isOnLoad) {
             return;
         }
+        var index = 0;
+        // Disable the find button
+        $('#find_button').prop('disabled', true);
         $.ajax({
             url: '/Admin/GetResult',
             type: 'GET',
@@ -89,11 +96,12 @@
             success: function (data) {
                 console.log(data);
                 $('#users_table').empty();
-                $('#users_table').append('<tr><th>User GUID</th><th>Username</th><th>Name</th></tr>');
+                $('#users_table').append('<tr><th>...</th><th>User Email</th><th>User Name</th><th>Full Name</th><th>User Type</th></tr>');
 
                 if (data.users) {
                     data.users.forEach(user => {
-                        $('#users_table').append('<tr><td>' + user.GUID + '</td><td>' + user.UserName + '</td><td>' + user.Name + '</td></tr>');
+                        index += 1;
+                        $('#users_table').append('<tr><td>' + index + '</td><td>' + user.UEmail + '</td><td>' + user.UUserName + '</td><td>' + user.EName + '</td><td>' + user.EType + '</td></tr>');
                     });
                 }
 
@@ -103,8 +111,18 @@
             },
             error: function (error) {
                 console.log(error);
+            },
+            complete: function () {
+                // Enable the find button after the response is received
+                $('#find_button').prop('disabled', false);
             }
         });
     }
+
+
+    // Fetch results for the first page of users
+    $(document).ready(function () {
+        fetchResults('Users', 1, '', true)
+    })
 
 </script>
