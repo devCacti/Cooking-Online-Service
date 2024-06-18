@@ -146,27 +146,37 @@ namespace Cooking_Service.Controllers
                     {
                         users = users.Where(u => 
                                             u.Name.ToLower().Contains(r_search.ToLower()) ||
+                                            u.Surname.ToLower().Contains(r_search.ToLower()) ||
                                             u.GUID.Equals(r_search) ||
                                             u.Type.ToString().Equals(r_search, StringComparison.OrdinalIgnoreCase))
-                                .OrderBy(u => u.Name).ToList() ?? users.ToList();
+                                .OrderBy(u => u.Name).ToList();
                         try
                         {
-                            var t_user = users_info.Where(u => u.UserName.ToLower().Contains(r_search.ToLower()));
-                            var t_user2 = users.Where(u => t_user.Any(t => t.Id == u.GUID)).ToList();
-                            foreach (var user in t_user2)
+                            //users_info = users_info.Where(u => u.UserName.ToLower().Contains(r_search.ToLower())).ToList();
+                            foreach (var user in users_info)
                             {
-                                if (!users.Contains(user))
+                                if (user.UserName.Contains(r_search))
                                 {
-                                    users.Add(user);
+                                    var t_user = Cooking_Context.Users.FirstOrDefault(u => u.GUID == user.Id);
+                                    if (t_user != null && !users.Contains(t_user))
+                                    {
+                                        users.Add(t_user);
+                                    }
+                                    break;
                                 }
                             }
-                        } catch { }
+                        }
+                        catch
+                        {
+                            return Json(new { error = "No Matches Found" }, JsonRequestBehavior.AllowGet);
+                        }
                     }
                     catch
                     {
                         //Return JSON object with error
                         return Json(new { error = "No Matches Found" }, JsonRequestBehavior.AllowGet);
                     }
+
                     foreach (var user in users)
                     {
                         // Temporary User Instance
@@ -178,7 +188,7 @@ namespace Cooking_Service.Controllers
                                     "User",
                                     user.GUID,
                                     t_user.UserName,
-                                    user.Name
+                                    user.Name + ' ' + user.Surname
                                 )
                             );
                         }
