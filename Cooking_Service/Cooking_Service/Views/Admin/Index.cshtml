@@ -18,7 +18,7 @@
     <br />
     <h1>Administration</h1>
     <h3> Control Center</h3>
-    <br /><hr /><br />
+    <hr /><br />
     <div class="txt-justify txt-18 card-cont">
         <!--Search bar-->
         <div class="form-group">
@@ -35,6 +35,34 @@
             </tr>
         </table>
 
+    </div>
+
+    <div class="modal" id="userModal">
+        <!--Modal-->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--Modal Header-->
+                <div class="modal-header">
+                    <h4 class="modal-title">User Information</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!--Modal Body-->
+                <div class="modal-body">
+                    <!--The information is altered in the js-->
+                    <div id="email"></div> <!--Email of the user-->
+                    <br />
+                    <div id="username"></div> <!--The unique username-->
+                    <br />
+                    <div id="fullname"></div> <!--The full name of the user First + (Middle + Last)-->
+                    <br />
+                    <div id="usertype"></div> <!--The type of user (Admin, User, etc) This will have a tiny description of what the user is capable of doing-->
+                    <br />
+                    <div id="recipes"></div> <!--The recipes that the user has created or participated in-->
+                    <br />
+                    <div id="flags"></div> <!--The flags that the user has received if banned it doesn't matter if it's a admin or not-->
+                </div>
+            </div>
+        </div>
     </div>
 
 </main>
@@ -54,7 +82,8 @@
 
     .t-search {
         width: 100%;
-        border-radius: 5px;
+        border-radius: 15px;
+        overflow: hidden;
     }
 
     .t-search tr th, td {
@@ -68,10 +97,58 @@
     .t-search tr th:hover, td:hover {
         background-color: #00000055;
     }
+    
+
+    .oU {
+        /* Open User */
+        cursor: pointer;
+    }
 </style>
 
 
 <script>
+    var users = [];
+
+    // Open a modal with the user's information (use the user's email to fetch the information)
+
+    $(document).on('click', '.oU', function () {
+        var email = $(this).parent().find('td').eq(1).text();
+        var _userText = "<h6>This user can post and view recipes.</h6>";
+        var _adminText = "<h6>This is a user that can manage everything from recipes to users. We call them admins (Of course)</h6>"
+        console.log(email);
+
+        // Fetch the user's information
+        user = users.find(user => user.UEmail == email);
+        console.log(users);
+
+        // Alter the information in the modal
+        var emailDiv = document.getElementById('email');
+        var usernameDiv = document.getElementById('username');
+        var fullnameDiv = document.getElementById('fullname');
+        var usertypeDiv = document.getElementById('usertype');
+        var recipesDiv = document.getElementById('recipes');
+        var flagsDiv = document.getElementById('flags');
+
+        emailDiv.innerHTML = '<h4>Email</h4><h5><a href="mailto:'+ user.UEmail + '">' + user.UEmail + '</a></h6>';
+        usernameDiv.innerHTML = '<h4>Username</h4><h6>' + user.UUserName + '</h6>';
+        fullnameDiv.innerHTML = '<h4>Full Name</h4><h6>' + user.EName + '</h6>';
+        if (user.EType == 'User') {
+            usertypeDiv.innerHTML = '<h4>User Type</h4><h5 style="color: yellow">' + user.EType + '</h5>' + _userText;
+        }
+        else if (user.EType == 'Admin') {
+            usertypeDiv.innerHTML = '<h4>User Type</h4><h5 style="color: lime">' + user.EType + '</h5>' + _adminText;
+        }
+        else {
+            usertypeDiv.innerHTML = '<h4>User Type</h4><h6 style="color: red">' + user.EType + '</h6> <h6>Unkown Permissions...</h6>';
+        }
+        recipesDiv.innerHTML = '<h4>Recipes</h4><h6>Unkown for now</h6>';
+        flagsDiv.innerHTML = '<h4>Flags</h4><h6>Unkown for now</h6>';
+
+
+        // Open the modal
+        $('#userModal').modal('show');
+
+    });
 
     /*
     * Type: 'User' 'Recipe' 'Other'
@@ -99,9 +176,10 @@
                 $('#users_table').append('<tr><th>...</th><th>User Email</th><th>User Name</th><th>Full Name</th><th>User Type</th></tr>');
 
                 if (data.users) {
+                    users = data.users;
                     data.users.forEach(user => {
                         index += 1;
-                        $('#users_table').append('<tr><td>' + index + '</td><td>' + user.UEmail + '</td><td>' + user.UUserName + '</td><td>' + user.EName + '</td><td>' + user.EType + '</td></tr>');
+                        $('#users_table').append('<tr><td class="oU">' + index + '</td><td class="oU">' + user.UEmail + '</td><td class="oU">' + user.UUserName + '</td><td class="oU">' + user.EName + '</td><td class="oU">' + user.EType + '</td></tr>');
                     });
                 }
 
