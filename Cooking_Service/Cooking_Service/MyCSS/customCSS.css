@@ -109,6 +109,19 @@
     justify-content: center;
 }
 
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    align-content: center;
+}
+.footer-div {
+    align-self: center;
+    max-width: 1120px;
+    border-color: #00000050;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
 .footer-body {
     width: 1000px;
     border-radius: 25px;
@@ -443,8 +456,7 @@
 
 .username {
     text-align: center;
-    right: 200px;
-    top: 110px;
+    margin-top: 9px;
     scale: 1;
     justify-content: center;
     display: flex;
@@ -456,7 +468,7 @@
 }
 .heyuser {
     text-align: center;
-    font-size: 18px;
+    font-size: 20px;
     color: #00000090;
     text-decoration: underline #00000000;
     transition: color 0.5s, text-decoration 0.5s;
@@ -504,3 +516,40 @@
         scale: 1.075;
         text-decoration: underline #000000;
     }
+
+
+.niceLink {
+    text-align: center;
+    color: #00000090;
+    transition: scale 0.5s, color 0.5s, text-decoration 0.5s;
+    text-decoration: underline #00000000;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    scale: 1;
+}
+
+    .niceLink a {
+        font-size: 26px;
+        color: inherit;
+        text-decoration: inherit;
+        cursor: pointer;
+    }
+
+    .niceLink:hover {
+        color: #000000;
+        scale: 1.1;
+        text-decoration: underline #000000;
+    }
+
+    .niceLink:active {
+        color: #000000;
+        scale: 1.075;
+        text-decoration: underline #000000;
+    }
+
+.div-200px {
+    width: 250px;
+    border-color: #00000050;
+    border-width: 1px;
+}

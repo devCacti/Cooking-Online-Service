@@ -42,6 +42,7 @@
             {
                 <div class="nav-item">
                     <div class="username">
+                        <a class="heyuser" href="@Url.Action("Index", "Manage")">@user.UserName</a>
                     </div>
                 </div>
                 <div class="nav-item">
@@ -50,7 +51,6 @@
                             <path fill="currentColor" d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
                             <path fill="currentColor" d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
                         </svg>
-                        <a class="heyuser" href="@Url.Action("Index", "Manage")">@user.UserName</a>
                     </a>
 
                 </div>
@@ -79,7 +79,6 @@
     </div>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
         <div class="container">
-            @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "custom-brand" })
             <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -112,9 +111,18 @@
                         </a>
                     </div>
                 }
+                <br />
+                <hr class="div-200px"/>
+                <br />
+                <div class="niceLink">
+                    <a href="@Url.Action("Index", "Receitas")">Receitas</a>
+                </div>
             }
             @RenderBody()
-            <hr />
+            
+            <div class="center footer-div">
+                <hr />
+            </div>
 
             <footer style="justify-content:space-around; display:flex">
                 <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
