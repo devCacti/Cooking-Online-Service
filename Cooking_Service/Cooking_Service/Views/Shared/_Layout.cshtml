@@ -10,7 +10,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="pt-pt" data-bs-theme="dark">
+<html lang="pt-pt">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -19,12 +19,64 @@
 
 
     <link rel="stylesheet" href="~/MyCSS/main-styles.css" />
+    <link rel="stylesheet" href="~/MyCSS/customCSS.css" />
 
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+    <!--
+    @@ Styles.Render("~/Content/css")
+    @@ Scripts.Render("~/bundles/modernizr")    
+    -->
 
 </head>
-<body class="bg-dark txt-white">
+<body>
+    <div class="my-navbar">
+        <div class="nav-center">
+            <div class="navbar-item nav-logo">
+                <a href="@Url.Action("Index", "Home")">
+                    <h1 class="pretty">Cooking</h1>
+                </a>
+                <!--img src="icons/cooking.png" alt="Cooking" class="navbar-logo"-->
+            </div>
+        </div>
+        <div class="nav-right">
+            @if (user != null)
+            {
+                <div class="nav-item">
+                    <div class="username">
+                    </div>
+                </div>
+                <div class="nav-item">
+                    <a href="@Url.Action("Index", "Manage")">
+                        <svg class="img profile" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                            <path fill="currentColor" d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
+                            <path fill="currentColor" d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
+                        </svg>
+                        <a class="heyuser" href="@Url.Action("Index", "Manage")">@user.UserName</a>
+                    </a>
+
+                </div>
+            }
+            else
+            {
+                <div class="nav-item">
+                    <a href="@Url.Action("Login", "Account")">
+                        <svg class="img profile" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                            <path fill="currentColor" d="M12,12A6,6,0,1,0,6,6,6.006,6.006,0,0,0,12,12ZM12,2A4,4,0,1,1,8,6,4,4,0,0,1,12,2Z" />
+                            <path fill="currentColor" d="M12,14a9.01,9.01,0,0,0-9,9,1,1,0,0,0,2,0,7,7,0,0,1,14,0,1,1,0,0,0,2,0A9.01,9.01,0,0,0,12,14Z" />
+                        </svg>
+                    </a>
+                </div>
+            }
+            <div class="nav-item">
+                <a>
+                    <svg class="img settings" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                        <path fill="currentColor" d="M12,8a4,4,0,1,0,4,4A4,4,0,0,0,12,8Zm0,6a2,2,0,1,1,2-2A2,2,0,0,1,12,14Z" />
+                        <path fill="currentColor" d="M21.294,13.9l-.444-.256a9.1,9.1,0,0,0,0-3.29l.444-.256a3,3,0,1,0-3-5.2l-.445.257A8.977,8.977,0,0,0,15,3.513V3A3,3,0,0,0,9,3v.513A8.977,8.977,0,0,0,6.152,5.159L5.705,4.9a3,3,0,0,0-3,5.2l.444.256a9.1,9.1,0,0,0,0,3.29l-.444.256a3,3,0,1,0,3,5.2l.445-.257A8.977,8.977,0,0,0,9,20.487V21a3,3,0,0,0,6,0v-.513a8.977,8.977,0,0,0,2.848-1.646l.447.258a3,3,0,0,0,3-5.2Zm-2.548-3.776a7.048,7.048,0,0,1,0,3.75,1,1,0,0,0,.464,1.133l1.084.626a1,1,0,0,1-1,1.733l-1.086-.628a1,1,0,0,0-1.215.165,6.984,6.984,0,0,1-3.243,1.875,1,1,0,0,0-.751.969V21a1,1,0,0,1-2,0V19.748a1,1,0,0,0-.751-.969A6.984,6.984,0,0,1,7.006,16.9a1,1,0,0,0-1.215-.165l-1.084.627a1,1,0,1,1-1-1.732l1.084-.626a1,1,0,0,0,.464-1.133,7.048,7.048,0,0,1,0-3.75A1,1,0,0,0,4.79,8.992L3.706,8.366a1,1,0,0,1,1-1.733l1.086.628A1,1,0,0,0,7.006,7.1a6.984,6.984,0,0,1,3.243-1.875A1,1,0,0,0,11,4.252V3a1,1,0,0,1,2,0V4.252a1,1,0,0,0,.751.969A6.984,6.984,0,0,1,16.994,7.1a1,1,0,0,0,1.215.165l1.084-.627a1,1,0,1,1,1,1.732l-1.084.626A1,1,0,0,0,18.746,10.125Z" />
+                    </svg>
+                </a>
+            </div>
+
+        </div>
+    </div>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
         <div class="container">
             @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "custom-brand" })
@@ -42,31 +94,6 @@
                     {
                         <li class="custom-nav-link disabled" id="loginFirst" title="Faça login para aceder"><a class=" nav-link">Receitas</a></li>
                     }
-                    <li class="dropdown-center custom-nav-link">
-                        <a class="lnk-n nav-link dropdown-toggle" id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Ajuda
-                        </a>                            
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">FAQ</a>
-                            <a class="dropdown-item" href="@Url.Action("About", "Home")">Sobre</a>
-                            <a class="dropdown-item" href="@Url.Action("Contact", "Home")">Contacto</a>
-
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Termos de Utilização</a>
-                        </div>
-                    </li>
-                    <!--Navbar dropdown-->
-                    <li class="nav-item dropdown">
- 
-                    </li>
-                    @if (user != null)
-                    {
-                        if (userI.Type == TypeUser.Admin)
-                        {
-                            <!-- Little sperator icon to separate the admin button from the rest of the navbar -->
-                            <li class="custom-nav-link" title="Admin Control Center">@Html.ActionLink("Admin CC", "Index", "Admin", new { area = "" }, new { @class = "lnk-n"})</li>
-                        }
-                    }
                 </ul>
 
                 @Html.Partial("_LoginPartial")
@@ -74,11 +101,26 @@
         </div>
     </nav>
     <contents>
-        <div class="container txt-white">
+        <div class="container">
+            @if (user != null)
+            {
+                if (userI.Type == TypeUser.Admin)
+                {
+                    <div class="admin">
+                        <a href="@Url.Action("Index", "Admin")">
+                            Admin Control Center
+                        </a>
+                    </div>
+                }
+            }
             @RenderBody()
             <hr />
-            <footer>
+
+            <footer style="justify-content:space-around; display:flex">
                 <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
+                <a href="@Url.Action("Contact", "Home")" class="pretty">
+                    Contactos
+                </a>
             </footer>
         </div>
     </contents>
