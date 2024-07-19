@@ -79,24 +79,8 @@
     </div>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
         <div class="container">
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    @if (user != null)
-                    {
-                        <li class="custom-nav-link">@Html.ActionLink("Receitas", "Index", "Recipes", new { area = "" }, new { @class = "lnk-n nav-link" })</li>
-                    }
-                    else
-                    {
-                        <li class="custom-nav-link disabled" id="loginFirst" title="Faça login para aceder"><a class=" nav-link">Receitas</a></li>
-                    }
-                </ul>
 
                 @Html.Partial("_LoginPartial")
-            </div>
         </div>
     </nav>
     <contents>
@@ -110,16 +94,21 @@
                             Admin Control Center
                         </a>
                     </div>
+                    <br />
+                    <hr class="div-200px" />
+                    <br />
                 }
-                <br />
-                <hr class="div-200px"/>
-                <br />
-                <div class="niceLink">
-                    <a href="@Url.Action("Index", "Receitas")">Receitas</a>
+            }
+
+            @if (ViewBag.Title == "Home Page")
+            {
+                <div class="info-start">
+                    <h1>Bem-Vindo(a) ao Cooking Service</h1>
                 </div>
+                <br />
             }
             @RenderBody()
-            
+
             <div class="center footer-div">
                 <hr />
             </div>
