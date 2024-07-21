@@ -6,20 +6,24 @@
 
 <br />
 <main>
-    <!-- Com os estilos do Bootstrap, cada Página é constituida por, digamos, 12 espaços do mesmo tamanho. -->
-    <!-- Div para mostrar coisas no centro -->
-    <div class="info-start">
-        <h1>Bem-Vindo(a) ao Cooking Service</h1>
-    </div>
-    <br />
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="niceLink">
+            <a href="@Url.Action("Index", "Recipes")">
+                Receitas
+            </a>
+        </div>
+    }
     
     <p><br /><br /><br /></p>
     <!-- Div para mostrar coisas do lado direito -->
 
     <div class="info-help">
-        <a href="@Url.Action("About","Home")">
-            <h2>Dúvidas?</h2>
-        </a>
+        <div class="niceLink">
+            <a href="@Url.Action("About","Home")">
+                Dúvidas?
+            </a>
+        </div>
         <p>Caso tenha dúvidas, por favor, dirija-se a <a href="@Url.Action("About", "Home")">esta página</a>, onde poderá obter as informações que procura.</p>
     </div>
     <div class="spacer"></div>

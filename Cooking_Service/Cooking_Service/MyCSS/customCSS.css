@@ -1,7 +1,6 @@
 ﻿body {
     color: black;
-    background: #fff6c0;
-    background: linear-gradient(to right, #fae898 0%, white 100%);
+    background: #ffe2a7;
     font-family: 'Roboto', sans-serif;
     cursor: default;
 }
@@ -408,7 +407,7 @@
     text-align: center;
     margin-left: auto;
     margin-right: auto;
-    max-width: 80%;
+    max-width: max-content;
 }
 .info-help h2 {
     font-size: 25px;
@@ -529,6 +528,10 @@
     scale: 1;
 }
 
+    .niceLink.small a {
+        font-size: 18px;
+    }
+
     .niceLink a {
         font-size: 26px;
         color: inherit;
@@ -552,4 +555,117 @@
     width: 250px;
     border-color: #00000050;
     border-width: 1px;
+}
+
+hr {
+    border-color: #00000070;
+}
+
+
+/*Login Form*/
+.form {
+    text-align: center;
+    margin: auto;
+    max-width: max-content;
+}
+
+.form #title {
+    font-size: 35px;
+    font-weight: bold;
+    color: #00000090;
+    transition: all 0.5s;
+}
+
+    .form #title:hover {
+        color: #000000;
+        scale: 1.1;
+    }
+
+.form #subtitle {
+    font-size: 20px;
+    color: #00000090;
+    transition: all 0.5s;
+}
+
+    .form #subtitle:hover {
+        color: #000000;
+        scale: 1.1;
+    }
+
+.text-danger {
+    color: red;
+    font-weight: bold;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 500px;
+}
+
+.input-group div {
+    margin: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.input-field {
+    width: 300px;
+    height: 12.5px;
+    border-radius: 50px;
+    border: 1px solid #00000050;
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    background-color: #ffffff90;
+    transition: all 0.5s;
+}
+
+    .input-field:hover {
+        scale: 1.05;
+        border: 1px solid #000000;
+        transition: all 0.5s;
+    }
+
+    .input-field:focus {
+        scale: 1.075;
+        border: 1px solid #000000;
+        transition: all 0.5s;
+    }
+
+.input-label {
+    font-size: 20px;
+    color: #00000090;
+    transition: all 0.5s;
+}
+
+    .input-label:hover {
+        color: #000000;
+        scale: 1.1;
+    }
+
+
+.btn {
+    width: min-content;
+    padding: 5px 20px;
+    border-radius: 25px;
+    background-color: #00000000;
+    border: none;
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    transition: all 0.5s;
+}
+
+    .btn:hover {
+        scale: 1.1;
+        background-color: #00000020;
+        transition: all 0.5s;
+    }
+
+    .btn:active {
+        scale: 1.05;
+        background-color: #00000010;
+        transition: all 0.5s;
 }

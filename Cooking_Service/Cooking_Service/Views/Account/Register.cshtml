@@ -3,57 +3,69 @@
     ViewBag.Title = "Registar";
 }
 
-<main aria-labelledby="title">
+<main aria-labelledby="title" class="form">
     <p></p>
     <h2 id="title">@ViewBag.Title</h2>
-    <br />
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Criar uma nova conta.</h4>
+        <h4 id="subtitle">Criar uma nova conta</h4>
         <hr />
-        <div class="row">
-            @Html.LabelFor(m => m.Name, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Name, new { @class = "form-control txt-white bg-dark" })
+        <br />
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Name, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.Name, new { @class = "input-field" })
             </div>
         </div>
         <p></p>
-        <div class="row">
-            @Html.LabelFor(m => m.Surname, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Surname, new { @class = "form-control txt-white bg-dark" })
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Surname, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.Surname, new { @class = "input-field" })
             </div>
         </div>
         <br />
         <br />
         @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="row">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control txt-white bg-dark" })
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Email, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.Email, new { @class = "input-field" })
             </div>
         </div>
         <p></p>
-        <div class="row">
-            @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 col-form-label"})
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.UserName, new { @class = "form-control txt-white bg-dark" })
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.UserName, new { @class = "input-label"})
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.UserName, new { @class = "input-field" })
             </div>
         </div>
         <br />
-        <div class="row">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control txt-white bg-dark" })
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Password, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.PasswordFor(m => m.Password, new { @class = "input-field" })
             </div>
         </div>
         <p></p>
-        <div class="row">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control txt-white bg-dark" })
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "input-field" })
             </div>
         </div>
         <p></p>
@@ -61,7 +73,8 @@
             <div class="offset-md-2 col-md-1">
                 <input type="submit" value="Registar" class="btn btn-outline-light" />
             </div>
-            <div class="offeset-md-2 col-md-2 btn btn-link">
+            <br />
+            <div class="niceLink small">
                 <a>Já tem uma conta?</a>
             </div>
         </div>
