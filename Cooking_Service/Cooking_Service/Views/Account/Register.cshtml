@@ -44,19 +44,19 @@
         <p></p>
         <div class="input-group">
             <div>
-                @Html.LabelFor(m => m.UserName, new { @class = "input-label"})
+                @Html.LabelFor(m => m.UserName, new { @class = "input-label" })
             </div>
             <div>
                 @Html.TextBoxFor(m => m.UserName, new { @class = "input-field" })
             </div>
         </div>
-        <br />
+        <br /><br />
         <div class="input-group">
             <div>
                 @Html.LabelFor(m => m.Password, new { @class = "input-label" })
             </div>
             <div>
-                @Html.PasswordFor(m => m.Password, new { @class = "input-field" })
+                @Html.PasswordFor(m => m.Password, new { @class = "input-field password" })
             </div>
         </div>
         <p></p>
@@ -65,18 +65,17 @@
                 @Html.LabelFor(m => m.ConfirmPassword, new { @class = "input-label" })
             </div>
             <div>
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "input-field" })
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "input-field password" })
             </div>
         </div>
-        <p></p>
-        <div class="row">
-            <div class="offset-md-2 col-md-1">
-                <input type="submit" value="Registar" class="btn btn-outline-light" />
-            </div>
-            <br />
-            <div class="niceLink small">
-                <a>Já tem uma conta?</a>
-            </div>
+        <br />
+        <div>
+            <button type="submit" class="btn">Registar</button>
+        </div>
+
+        <br />
+        <div class="niceLink small">
+            <a>Já tem uma conta?</a>
         </div>
     }
 </main>
