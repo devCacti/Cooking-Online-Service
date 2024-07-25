@@ -40,6 +40,7 @@
         <div class="nav-right">
             @if (user != null)
             {
+                @Html.Partial("_LoginPartial")
                 <div class="nav-item">
                     <div class="username">
                         <a class="heyuser" for="Account" href="@Url.Action("Index", "Manage")">@user.UserName</a>
@@ -74,15 +75,8 @@
                     </svg>
                 </a>
             </div>
-
         </div>
     </div>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-black" id="navbar">
-        <div class="container">
-
-                @Html.Partial("_LoginPartial")
-        </div>
-    </nav>
     <contents>
         <div class="container">
             @if (user != null)
@@ -108,9 +102,9 @@
                 <br />
             }
             @RenderBody()
-
-            <div class="center footer-div">
-                <hr />
+            <br />
+            <div class="footer-div">
+                <div></div>
             </div>
 
             <footer style="justify-content:space-around; display:flex">

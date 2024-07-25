@@ -4,7 +4,7 @@
     ViewBag.Title = "Login";
 }
 
-<main aria-labelledby="title">
+<main style="font-family: 'Roboto', sans-serif;">
     <div class="form">
         <p></p>
         <h2 id="title">@ViewBag.Title</h2>
@@ -20,7 +20,7 @@
                 <div>
                     @Html.LabelFor(m => m.Email, new { @class = "input-label" })
                 </div>
-                <div>
+                <div style="font-family: 'Roboto', sans-serif;">
                     @Html.TextBoxFor(m => m.Email, new { @class = "input-field" })
                 </div>
                 <div>
