@@ -23,91 +23,92 @@
 
 <main aria-labelledby="title">
     <p></p>
-    <h2 id="title">@ViewBag.Title</h2>
+    <h2 class="title">@ViewBag.Title</h2>
 
     <p class="text-success">@ViewBag.StatusMessage</p>
     <div>
-        <h4>Informações gerais da conta</h4>
-        <hr />
+        <h4 class="subtitle">Informações gerais da conta</h4>
         <br />
-        <div class="row">
-            <div class="col-md-4">
-                <h6>UserName</h6>
-                <p class="text-info">@userName</p>
-                <hr />
-            </div>
-            <div class="col-md-4">
-                <h6>Email</h6>
-                <address>
-                    <a href="mailto:@userA.Email">> @userA.Email <</a>
-                </address>
-                <hr />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-5"><h6>Nome</h6></div>
-                    <div class="col-md-1">
-                        <a href="#" class="lnk-n">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-                    </div>
+        <br />
+        <div class="margin50">
+            <div class="row">
+                <div class="element">
+                    <h4>UserName</h4>
+                    <p class="text-info">@userName</p>
+                    <hr />
                 </div>
-                @if (user == null)
-                {
-                    <p class="text-white txt-grey">Sem Nome</p>
-                }
-                else
-                {
-                    <p class="text-white txt-underline">@user.Name</p>
-                }
-                <hr />
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-5">
-                        <h6>Apelido (s)</h6>
-                    </div>
-                    <div class="col-md-1">
-                        <a href="#" class="lnk-n">
-                            <i class="bi bi-pencil-fill"></i>
-                        </a>
-                    </div>
+                <div class="element">
+                    <h4>Email</h4>
+                    <address>
+                        <p class="text-info-lnk" href="mailto:@userA.Email">@userA.Email</p>
+                    </address>
+                    <hr />
                 </div>
-                @if (user == null)
-                {
-                    <p class="text-white txt-grey">Sem Apelido</p>
-                }
-                else
-                {
-                    <p class="text-white txt-underline">@user.Surname</p>
-                }
-                <hr />
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-md-5">
-                        <h6>Telefone</h6>
-                    </div>
-                    <div class="col-md-1">
+            <div class="row">
+                <div class="element">
+                    <div class="row">
+                        <h4>Nome</h4>
                         <a href="#" class="lnk-n">
                             <i class="bi bi-pencil-fill"></i>
                         </a>
                     </div>
+                    @if (user == null)
+                    {
+                        <p class="text-white txt-grey">Sem Nome</p>
+                    }
+                    else
+                    {
+                        <p class="text-white txt-underline">@user.Name</p>
+                    }
+                    <hr />
                 </div>
-                @if (userA.PhoneNumber == null)
-                {
-                    <p class="text-white">Sem Telefone</p>
-                }
-                else
-                {
-                    <p class="text-white">@userA.PhoneNumber</p>
-                }
-                <hr />
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <h4>Apelido (s)</h4>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="lnk-n">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                    @if (user == null)
+                    {
+                        <p class="text-white txt-grey">Sem Apelido</p>
+                    }
+                    else
+                    {
+                        <p class="text-white txt-underline">@user.Surname</p>
+                    }
+                    <hr />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <h6>Telefone</h6>
+                        </div>
+                        <div class="col-md-1">
+                            <a href="#" class="lnk-n">
+                                <i class="bi bi-pencil-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                    @if (userA.PhoneNumber == null)
+                    {
+                        <p class="text-white">Sem Telefone</p>
+                    }
+                    else
+                    {
+                        <p class="text-white">@userA.PhoneNumber</p>
+                    }
+                    <hr />
+                </div>
             </div>
         </div>
         <hr /> <br />

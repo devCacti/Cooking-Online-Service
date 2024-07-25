@@ -1,6 +1,6 @@
 ﻿body {
     color: black;
-    background: #ffe2a7;
+    background: #ffc65575;
     font-family: 'Roboto', sans-serif;
     cursor: default;
 }
@@ -114,12 +114,23 @@
     align-content: center;
 }
 .footer-div {
-    align-self: center;
-    max-width: 1120px;
-    border-color: #00000050;
-    margin-left: 50px;
-    margin-right: 50px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 50px;
+    padding-right: 50px;
+    justify-content: center;
+    align-content: center;
+    display: flex;
 }
+
+    .footer-div div {
+        width: 1000px;
+        border-color: #00000050;
+        height: 0px;
+        border-width: 1px;
+        border-style: solid;
+    }
 
 .footer-body {
     width: 1000px;
@@ -443,14 +454,12 @@
     .info-help a:hover {
         color: #000000;
         text-decoration: underline #000000;
-        text-decoration-thickness: 1px;
         cursor: pointer;
     }
 
     .info-help a:active {
         color: #000000;
         text-decoration: underline #000000;
-        text-decoration-thickness: 1px;
     }
 
 .username {
@@ -476,14 +485,12 @@
 .heyuser:hover {
     color: #000000;
     text-decoration: underline #000000;
-    text-decoration-thickness: 1px;
     cursor: pointer;
 }
 
 .heyuser:active {
     color: #000000;
     text-decoration: underline #000000;
-    text-decoration-thickness: 1px;
 }
 
 .admin {
@@ -672,6 +679,7 @@ hr {
     .btn:hover {
         scale: 1.1;
         background-color: #00000020;
+        box-shadow: 0px 0px 10px 1px #00000020;
         transition: all 0.5s;
     }
 
@@ -679,4 +687,93 @@ hr {
         scale: 1.05;
         background-color: #00000010;
         transition: all 0.5s;
+    }
+
+
+.title, .subtitle {
+    text-align: center;
+    margin: auto;
+    max-width: max-content;
 }
+
+.title {
+    font-size: 40px;
+    font-weight: bold;
+    color: #00000080;
+    transition: all 0.5s;
+}
+
+.title:hover {
+    scale: 1.05;
+    color: #000000;
+}
+
+.subtitle {
+    font-size: 20px;
+    color: #00000080;
+    transition: all 0.5s;
+}
+
+.subtitle:hover {
+    scale: 1.05;
+    color: #000000;
+}
+.margin50 {
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.element {
+    width: 350px;
+}
+
+.element h4 {
+    font-size: 22px;
+    color: #00000090;
+    text-align: center;
+    transition: all 0.5s;
+}
+   
+    .element h4:hover {
+        color: #000000;
+        scale: 1.1;
+    }
+
+p.text-info {
+    color: #00000090;
+    font-size: 18px;
+    text-align: center;
+    margin: auto;
+    max-width: max-content;
+    transition: all 0.5s;
+}
+
+    p.text-info:hover {
+        color: #000000;
+        scale: 1.1;
+    }
+
+.text-info-lnk {
+    color: #00000090;
+    font-size: 18px;
+    text-align: center;
+    margin: auto;
+    max-width: max-content;
+    text-decoration: underline #00000000;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+    .text-info-lnk:hover {
+        color: #000000;
+        scale: 1.1;
+        text-decoration: underline #000000;
+    }
