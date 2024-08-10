@@ -33,14 +33,26 @@
         <div class="margin50">
             <div class="row">
                 <div class="element">
-                    <h4>UserName</h4>
+                    <div class="row">
+                        <h4>UserName</h4>
+                        <a href="#" class="lnk-n">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </div>
                     <p class="text-info">@userName</p>
                     <hr />
                 </div>
                 <div class="element">
                     <h4>Email</h4>
                     <address>
-                        <p class="text-info-lnk" href="mailto:@userA.Email">@userA.Email</p>
+                        <!--Show only first 2 letters of the email and the .com or .pt-->
+                        @if (userA.Email != null) { 
+                            <p class="text-info">
+                                @userA.Email.Substring(0, 2)*****@userA.Email.Substring(userA.Email.Length - 4)
+                            </p>
+                        } else { 
+                            <p class="text-info"> No email </p>
+                        }
                     </address>
                     <hr />
                 </div>
@@ -54,63 +66,56 @@
                             <i class="bi bi-pencil-fill"></i>
                         </a>
                     </div>
-                    @if (user == null)
+                    @if (user.Name == null || user.Name.IsEmpty())
                     {
-                        <p class="text-white txt-grey">Sem Nome</p>
+                        <p class="text-info">Sem Nome</p>
                     }
                     else
                     {
-                        <p class="text-white txt-underline">@user.Name</p>
+                        <p class="text-info">@user.Name</p>
                     }
                     <hr />
                 </div>
-                <div class="col-md-4">
+                <div class="element">
                     <div class="row">
-                        <div class="col-md-5">
-                            <h4>Apelido (s)</h4>
-                        </div>
-                        <div class="col-md-1">
-                            <a href="#" class="lnk-n">
-                                <i class="bi bi-pencil-fill"></i>
-                            </a>
-                        </div>
+                        <h4>Apelido (s)</h4>
+                        <a href="#" class="lnk-n">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
                     </div>
-                    @if (user == null)
+                    @if (user.Surname == null || user.Surname.IsEmpty())
                     {
-                        <p class="text-white txt-grey">Sem Apelido</p>
+                        <p class="text-info">Sem Apelido</p>
                     }
                     else
                     {
-                        <p class="text-white txt-underline">@user.Surname</p>
-                    }
-                    <hr />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-5">
-                            <h6>Telefone</h6>
-                        </div>
-                        <div class="col-md-1">
-                            <a href="#" class="lnk-n">
-                                <i class="bi bi-pencil-fill"></i>
-                            </a>
-                        </div>
-                    </div>
-                    @if (userA.PhoneNumber == null)
-                    {
-                        <p class="text-white">Sem Telefone</p>
-                    }
-                    else
-                    {
-                        <p class="text-white">@userA.PhoneNumber</p>
+                        <p class="text-info">@user.Surname</p>
                     }
                     <hr />
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="element">
+                <div class="row">
+                    <h4>Telefone</h4>
+                    <a href="#" class="lnk-n">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                </div>
+                @if (userA.PhoneNumber == null)
+                {
+                    <p class="text-info">Sem Telefone</p>
+                }
+                else
+                {
+                    <p class="text-info">@userA.PhoneNumber</p>
+                }
+                <hr />
+            </div>
+        </div>
+
         <hr /> <br />
         <h4>Alterar as configurações de conta</h4>
         <p></p>
@@ -162,14 +167,14 @@
                         <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
                     }
                 </dd>
-            *@
+            
             <dt>Autenticação de dois fatores:</dt>
             <dd>
                 <p>
                     Não há provedores de autenticação de dois fatores configurados. Consulte <a href="https://go.microsoft.com/fwlink/?LinkId=403804">esse artigo</a>
                     para obter detalhes sobre como configurar este aplicativo ASP.NET para dar suporte à autenticação de dois fatores.
                 </p>
-                @*@if (Model.TwoFactor)
+                @if (Model.TwoFactor)
                     {
                         using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { role = "form" }))
                         {
@@ -188,8 +193,9 @@
                             <input type="submit" value="Habilitar" class="btn btn-link" />
                             </text>
                         }
-                    }*@
+                    }
             </dd>
+                *@
         </dl>
     </div>
 </main>
