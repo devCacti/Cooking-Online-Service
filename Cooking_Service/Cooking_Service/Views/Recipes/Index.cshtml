@@ -28,27 +28,9 @@
     }
 }
 
-<p>
+<p class="text-info btn disabled" title="Utilize a aplicação para telemóvel">
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table bg-black txt-white">
-    <tr class="txt-white">
-        <th>@Html.DisplayNameFor(model => model.Image)         </th>
-        <th>@Html.DisplayNameFor(model => model.Title)         </th>
-        <th>@Html.DisplayNameFor(model => model.Description)   </th>
-        <th>@Html.DisplayNameFor(model => model.Ingredients)   </th>
-        <th>@Html.DisplayNameFor(model => model.IngrTypes)     </th>
-        <th>@Html.DisplayNameFor(model => model.IngrAmount)    </th>
-        <th>@Html.DisplayNameFor(model => model.Steps)         </th>
-        <th>@Html.DisplayNameFor(model => model.Time)          </th>
-        <th>@Html.DisplayNameFor(model => model.Portions)      </th>
-        <th>@Html.DisplayNameFor(model => model.Type)          </th>
-        <th>@Html.DisplayNameFor(model => model.isFavorite)    </th>
-        <th></th>
-    </tr>
-
-
-</table>
 @foreach (var item in recipes)
 {
     <div class="card">

@@ -664,7 +664,7 @@ hr {
 
 
 .btn {
-    width: min-content;
+    width: max-content;
     padding: 5px 20px;
     border-radius: 25px;
     background-color: #00000000;
@@ -777,3 +777,19 @@ p.text-info {
         scale: 1.1;
         text-decoration: underline #000000;
     }
+
+.disabled {
+    text-decoration: line-through;
+    color: #00000050;
+}
+
+.disabled a {
+    text-decoration: line-through;
+    color: #00000050;
+    pointer-events: none;
+}
+
+.logoff {
+    /*Rotate 180 degrees*/
+    transform: rotate(180deg);
+}
