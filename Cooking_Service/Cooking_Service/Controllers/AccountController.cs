@@ -13,6 +13,8 @@ using System.Web.Management;
 using Antlr.Runtime.Tree;
 using Cooking_Service.DAL;
 using Cooking_Service.Logging;
+using Microsoft.Ajax.Utilities;
+using System.Web.Http.Results;
 
 namespace Cooking_Service.Controllers
 {
@@ -522,42 +524,64 @@ namespace Cooking_Service.Controllers
             {
                 success = false,
                 message = new
-                { uid = "", name = "", surname = "", username = "", email = "" },
+                { uid = "", name = "", surname = "", username = ""},
                 error = new {
                     code = "5",
                     description = "Something went horribly wrong"
                 }
             };
 
-            if (!ModelState.IsValid)
+            //This bool will be changed if the user is found by username
+            bool isFoundByUserName = false;
+            bool aUserExists = false;
+
+            // Attempts to find the user by email
+            var user = await UserManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                return Json(response, JsonRequestBehavior.AllowGet);
+                // Here we try to find the user by username (The username can be put in the email field)
+                user = await UserManager.FindByNameAsync(model.Email);
+
+                if (user != null)
+                {
+                    isFoundByUserName = true;
+                }
             }
 
-            // Aqui o código tenta encontrar o utilizador pelo username, se não encontrar, significa que o utilizador não existe
-            var user = await UserManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 response = new
                 {
                     success = false,
                     message = new
-                    { uid = "", name = "", surname = "", username = "", email = "" },
-                    error = new {
+                    { uid = "", name = "", surname = "", username = "" },
+                    error = new
+                    {
                         code = "4",
                         description = "User not found"
                     }
                 };
+                // Returns a response saying it could not find a user with the email provided
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                aUserExists = true;
+            }
+
+            // Checks if the request has the required fields if the user hasn't been found yet
+            if (!ModelState.IsValid && !aUserExists)
+            {
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
 
-            // Sendo que o shouldLockout é false, o usuário não será bloqueado consoante o código de acesso incorreto
-            // mas no segundo já sim porque significa que o utilizador não se lembra da password
-            var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
-            if (result != SignInStatus.Success)
-            {
-                result = await SignInManager.PasswordSignInAsync(user.Email, model.Password, model.RememberMe, shouldLockout: true);
-            }
+            // This attempt is not to sign in the use but to build the result structure,
+            // This way we wont have to repeat the 100 lines of code for each case,
+            // Therefore the shouldLockout is set to false, so it doesn't affect the ammount of tries the user has done
+
+            var result = await SignInManager.PasswordSignInAsync(user.UserName , model.Password, model.RememberMe, shouldLockout: false);
+
+
             if (result == SignInStatus.Success)
             {
                 var userInfo = db.Users.FirstOrDefault(u => u.GUID == user.Id);
@@ -571,8 +595,7 @@ namespace Cooking_Service.Controllers
                             uid = user.Id,
                             name = userInfo.Name,
                             surname = userInfo.Surname,
-                            username = user.UserName,
-                            email = user.Email,
+                            username = user.UserName
                         },
                         error = new
                         {
@@ -581,17 +604,17 @@ namespace Cooking_Service.Controllers
                         }
                     };
                 }
-                else {
+                else
+                {
                     response = new
                     {
                         success = true,
                         message = new
                         {
-                            uid = "", 
+                            uid = "",
                             name = "No Name",
-                            surname = "No Surnames", 
-                            username = user.UserName, 
-                            email = user.Email
+                            surname = "No Surnames",
+                            username = user.UserName
                         },
                         error = new
                         {
@@ -607,8 +630,9 @@ namespace Cooking_Service.Controllers
                 {
                     success = false,
                     message = new
-                    { uid = "", name = "", surname = "", username = "", email = "" },
-                    error = new {
+                    { uid = "", name = "", surname = "", username = "" },
+                    error = new
+                    {
                         code = "1",
                         description = "LockedOut"
                     }
@@ -620,8 +644,9 @@ namespace Cooking_Service.Controllers
                 {
                     success = false,
                     message = new
-                    { uid = "", name = "", surname = "", username = "", email = "" },
-                    error = new {
+                    { uid = "", name = "", surname = "", username = "" },
+                    error = new
+                    {
                         code = "2",
                         description = "RequiresVerification"
                     }
@@ -633,8 +658,9 @@ namespace Cooking_Service.Controllers
                 {
                     success = false,
                     message = new
-                    { uid = "", name = "", surname = "", username = "", email = "" },
-                    error = new {
+                    { uid = "", name = "", surname = "", username = "" },
+                    error = new
+                    {
                         code = "3",
                         description = "Failure"
                     }
