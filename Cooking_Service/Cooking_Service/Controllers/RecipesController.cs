@@ -14,6 +14,13 @@ namespace Cooking_Service.Controllers
             return View();
         }
 
+        // PUT: Recipes/NewRecipe
+        [HttpPut]
+        [AllowAnonymous]
+        public ActionResult NewRecipe()
+        {
+            return View();
+        }
 
     }
 }
