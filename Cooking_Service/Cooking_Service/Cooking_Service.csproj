@@ -314,6 +314,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="Views\ApiAccount\" />
+    <Folder Include="Views\Api\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
