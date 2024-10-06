@@ -62,15 +62,7 @@ namespace Cooking_Service.Models
         [Display(Name = "Lembrar-me?")]
         public bool RememberMe { get; set; }
     }
-
-    public class GetRecipesViewModel
-    {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
-    }
-
+    
     public class RegisterViewModel
     {
         [Required]

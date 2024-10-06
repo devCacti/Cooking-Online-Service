@@ -85,14 +85,24 @@ namespace Cooking_Service.Models
 
     public class Recipe
     {
+        private string guid;
         [Key, Required, MaxLength(128)]
-        public string GUID { get; set; }
+        public string GUID {
+            get { return guid; }
+            set {
+                if (value == null || string.IsNullOrEmpty(value))
+                {
+                    value = Guid.NewGuid().ToString();
+                }
+                guid = value;
+            } 
+        }
 
         // The image has to be a string because it will be translated to base64
         [MaxLength(4096)]
         public string Image { get; set; }
 
-        [Required, MaxLength(64)]
+        [Required, MaxLength(80)]
         public string Title { get; set; }
 
         [MaxLength(512)]
@@ -100,13 +110,13 @@ namespace Cooking_Service.Models
 
         // Saves a JSON string that is decoded before being shown
         // on the user interface, either the website or the app.
-        [MaxLength(1024)]
+        [MaxLength(4096)]
         public string Ingredients { get; set; }
-        [MaxLength(1024)]
-        public string IngrTypes { get; set; }
-        [MaxLength(1024)]
-        public string IngrAmount { get; set; }
         [MaxLength(2048)]
+        public string IngrTypes { get; set; }
+        [MaxLength(2048)]
+        public string IngrAmount { get; set; }
+        [MaxLength(4096)]
         public string Steps { get; set; }
 
         // Small number with decimal places
@@ -115,8 +125,9 @@ namespace Cooking_Service.Models
 
         public TypeRecipe Type { get; set; }
 
-        public bool isFavorite { get; set; }
         public bool isAllowed { get; set; }
+        public bool isPublic { get; set; }
+
 
         // Foreign key
         public virtual User Author { get; set; }

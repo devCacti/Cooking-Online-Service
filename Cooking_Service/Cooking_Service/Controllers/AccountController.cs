@@ -82,6 +82,12 @@ namespace Cooking_Service.Controllers
             // Isso não conta falhas de login em relação ao bloqueio de conta
             // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
             var user = await UserManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Tentativa de login inválida.");
+                return View(model);
+            }
             var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
@@ -159,19 +165,16 @@ namespace Cooking_Service.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            Logger.Log("Register attempt from " + model.Email);
             //User is preset to User - this is the default value, even if the http post contains a different value
             model.Type = TypeUser.User;
             
             if (model.Name == null)
             {
-                Logger.Log("Register attempt info: Name is null");
                 model.Name = "";
             }
 
             if (model.Surname == null)
             {
-                Logger.Log("Register attempt info: Surname is null");
                 model.Surname = "";
             }
 
@@ -181,7 +184,6 @@ namespace Cooking_Service.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    Logger.Log("Register attempt successful with user " + user.UserName);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     var uInfo = new User
