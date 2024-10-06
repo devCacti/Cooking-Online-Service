@@ -16,6 +16,13 @@ namespace Cooking_Service.DAL
 
         public DbSet<User> Users { get; set; }
         public DbSet<Recipe> Recipes { get; set; }
+
+        // Ingredient Related
+        public DbSet<RecipeIngredient> Ingredients { get; set; }
+        public DbSet<IngredientBridge> IngBridges { get; set; }
+        public DbSet<IngTag> IngTags { get; set; }
+
+        // Flag Related
         public DbSet<Flag> Flags { get; set; }
     }
 }

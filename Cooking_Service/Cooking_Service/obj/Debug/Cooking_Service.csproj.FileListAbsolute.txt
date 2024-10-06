@@ -237,6 +237,6 @@ C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_S
 C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\Microsoft.AspNet.Identity.EntityFramework.resources.dll
 C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\obj\Debug\Cooking_Service.csproj.AssemblyReference.cache
 C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\obj\Debug\Cooking_Service.csproj.CoreCompileInputs.cache
-C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\obj\Debug\Cooking_Service.csproj.CopyComplete
 C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\obj\Debug\Cooking_Service.dll
 C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\obj\Debug\Cooking_Service.pdb
+C:\Users\tiago\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\obj\Debug\Cooking_.C63D36E4.Up2Date

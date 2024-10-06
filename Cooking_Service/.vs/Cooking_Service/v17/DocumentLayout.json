@@ -1,0 +1,325 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\models\\recipeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\models\\recipeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|c:\\users\\tiago\\documents\\github\\cooking-online-service\\cooking_service\\cooking_service\\models\\accountinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\models\\accountinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\dal\\cookingcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\dal\\cookingcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\models\\accountviewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\models\\accountviewmodels.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\manage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\manage\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\recipes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\recipes\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\shared\\_loginpartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\admin\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\views\\home\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\views\\home\\about.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 424,
+          "SelectedChildIndex": 6,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{de1fc918-f32e-4dd7-a915-1792a051f26b}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CookingContext.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\DAL\\CookingContext.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\DAL\\CookingContext.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\DAL\\CookingContext.cs",
+              "RelativeToolTip": "Cooking_Service\\DAL\\CookingContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T17:03:42.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "RecipeViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\RecipeViewModel.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Models\\RecipeViewModel.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\RecipeViewModel.cs",
+              "RelativeToolTip": "Cooking_Service\\Models\\RecipeViewModel.cs",
+              "ViewState": "AgIAAAYAAABAmZmZmZkuwA4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:24.711Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\AccountController.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\AccountController.cs",
+              "RelativeToolTip": "Cooking_Service\\Controllers\\AccountController.cs",
+              "ViewState": "AgIAADoAAAAAAAAAAAAIwFQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:24.752Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "RecipesController.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\RecipesController.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Controllers\\RecipesController.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\RecipesController.cs",
+              "RelativeToolTip": "Cooking_Service\\Controllers\\RecipesController.cs",
+              "ViewState": "AgIAADcAAADAmZmZmZkawEoAAAA4AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:24.873Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Cooking_Service\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:25.145Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABMAAACAmZmZmRkmwCMAAACGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.146Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "_LoginPartial.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Shared\\_LoginPartial.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Shared\\_LoginPartial.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Shared\\_LoginPartial.cshtml",
+              "ViewState": "AgIAAAQAAADgzMzMzMwXwBcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.149Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "AdminController.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\AdminController.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Controllers\\AdminController.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\AdminController.cs",
+              "RelativeToolTip": "Cooking_Service\\Controllers\\AdminController.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAkwMQBAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:25.15Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Manage\\Index.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Manage\\Index.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Manage\\Index.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Manage\\Index.cshtml",
+              "ViewState": "AgIAAEoAAAAAMDMzMzP7v8UAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.152Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Home\\Index.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.154Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAB8AAAAAZWZmZqYowDAAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.156Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Web.config",
+              "RelativeDocumentMoniker": "Cooking_Service\\Web.config",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Web.config",
+              "RelativeToolTip": "Cooking_Service\\Web.config",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAkwDQAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-10-06T16:51:25.157Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Recipes\\Index.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Recipes\\Index.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Recipes\\Index.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Recipes\\Index.cshtml",
+              "ViewState": "AgIAAA0AAADAMjMzMzMrwB8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.159Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Account\\Register.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Account\\Register.cshtml",
+              "ViewState": "AgIAADAAAACAZGZmZiYwwEUAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.16Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Admin\\Index.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Admin\\Index.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Admin\\Index.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Admin\\Index.cshtml",
+              "ViewState": "AgIAAA0AAABAzczMzAwswIcAAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.162Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AccountViewModels.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\AccountViewModels.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Models\\AccountViewModels.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\AccountViewModels.cs",
+              "RelativeToolTip": "Cooking_Service\\Models\\AccountViewModels.cs",
+              "ViewState": "AgIAAFgAAAAAlpmZmZkNwEAAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:25.163Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "About.cshtml",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Home\\About.cshtml",
+              "RelativeDocumentMoniker": "Cooking_Service\\Views\\Home\\About.cshtml",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Views\\Home\\About.cshtml",
+              "RelativeToolTip": "Cooking_Service\\Views\\Home\\About.cshtml",
+              "ViewState": "AgIAABYAAAAAMjMzMzMLwFYAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-06T16:51:25.165Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AccountInfo.cs",
+              "DocumentMoniker": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\AccountInfo.cs",
+              "RelativeDocumentMoniker": "Cooking_Service\\Models\\AccountInfo.cs",
+              "ToolTip": "C:\\Users\\tiago\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\AccountInfo.cs",
+              "RelativeToolTip": "Cooking_Service\\Models\\AccountInfo.cs",
+              "ViewState": "AgIAAJwAAABAyMzMzMwkwLIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-06T16:51:25.166Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
