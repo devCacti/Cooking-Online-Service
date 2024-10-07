@@ -85,18 +85,13 @@ namespace Cooking_Service.Models
 
     public class Recipe
     {
-        private string guid;
-        [Key, Required, MaxLength(128)]
-        public string GUID {
-            get { return guid; }
-            set {
-                if (value == null || string.IsNullOrEmpty(value))
-                {
-                    value = Guid.NewGuid().ToString();
-                }
-                guid = value;
-            } 
+        public Recipe()
+        {
+            GUID = Guid.NewGuid().ToString();
         }
+
+        [Key, Required, MaxLength(128)]
+        public string GUID { get; set; }
 
         // The image has to be a string because it will be translated to base64
         [MaxLength(4096)]
@@ -109,7 +104,7 @@ namespace Cooking_Service.Models
         public string Description { get; set; }
 
         // The ingredients of the recipe
-        public virtual ICollection<RecipeIngredient> Ingredients { get; set; }
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
 
         [MaxLength(4096)]
         public string Steps { get; set; }
@@ -152,7 +147,7 @@ namespace Cooking_Service.Models
         [Required, MaxLength(64)]
         public string Name { get; set; }
 
-        public virtual ICollection<RecipeIngredient> Ingredients { get; set; }
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
 
         public static IngTag NewTag(string name)
         {
@@ -170,24 +165,37 @@ namespace Cooking_Service.Models
 
     public class IngredientBridge
     {
-        [Key]
-        public int GUID { get; set; }
+        public IngredientBridge()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
 
+        [Key, Required, MaxLength(128)]
+        public string GUID { get; set; }
+
+        [Required]
+        public double Amount { get; set; }
+
+        // Many to many relation
+        [Required]
         public virtual Recipe Recipe { get; set; }
-        public virtual RecipeIngredient Ingredient { get; set; }
+        [Required]
+        public virtual Ingredient Ingredient { get; set; }
     }
 
-    public class RecipeIngredient
+    public class Ingredient
     {
+        public Ingredient()
+        {
+            GUID = Guid.NewGuid().ToString();
+            isVerified = false;
+        }
+
         [Key, Required, MaxLength(128)]
         public string GUID { get; set; }
 
         [Required, MaxLength(64)]
         public string Name { get; set; }
-
-        // The amount of the ingredient, related to the unit if this value is 1.3 and the unit is grams, it means 1.3 grams
-        [MaxLength(64)]
-        public double Amount { get; set; }
 
         // The measuring unit of the ingredient, like grams, liters, etc.
         [MaxLength(16)]
@@ -196,6 +204,10 @@ namespace Cooking_Service.Models
         // The type of the ingredient
         public IngTag Tag { get; set; }
 
+        // Verified, without this, only admins can see the ingredient or the recipes that use it
+        // For example, if a user needs a new ingredient, they can add it, but it will not be public
+        // until an admin verifies it, as it might be a duplicate or a fake ingredient.
+        public bool isVerified { get; set; }
 
         // Many to many relation
         public virtual ICollection<Recipe> Recipes { get; set; }

@@ -21,14 +21,11 @@ namespace Cooking_Service.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        [MaxLength(4096)]
-        public string Ingredients { get; set; }
+        [MaxLength(10000)]
+        public string IngredientIds { get; set; }
 
         [MaxLength(2048)]
-        public string IngrTypes { get; set; }
-
-        [MaxLength(2048)]
-        public string IngrAmount { get; set; }
+        public string IngrAmounts { get; set; }
 
         [MaxLength(4096)]
         public string Steps { get; set; }
@@ -39,5 +36,20 @@ namespace Cooking_Service.Models
         public TypeRecipe Type { get; set; }
 
         public bool IsPublic { get; set; }
+    }
+
+    public class NewIngredientViewModel
+    {
+        [Required]
+        [Display(Name = "Name")]
+        public string Name { get; set; }
+
+        [MaxLength(16)]
+        [Display(Name = "Unit")]
+        public string Unit { get; set; }
+
+        [MaxLength(256)]
+        [Display(Name = "Tag")]
+        public string TagGUID { get; set; }
     }
 }

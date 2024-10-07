@@ -18,7 +18,7 @@ namespace Cooking_Service.DAL
         public DbSet<Recipe> Recipes { get; set; }
 
         // Ingredient Related
-        public DbSet<RecipeIngredient> Ingredients { get; set; }
+        public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<IngredientBridge> IngBridges { get; set; }
         public DbSet<IngTag> IngTags { get; set; }
 
