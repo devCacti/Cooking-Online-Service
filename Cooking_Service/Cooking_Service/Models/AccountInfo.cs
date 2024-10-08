@@ -104,7 +104,7 @@ namespace Cooking_Service.Models
         public string Description { get; set; }
 
         // The ingredients of the recipe
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
+        public virtual ICollection<IngredientBridge> Bridges { get; set; }
 
         [MaxLength(4096)]
         public string Steps { get; set; }
@@ -210,7 +210,7 @@ namespace Cooking_Service.Models
         public bool isVerified { get; set; }
 
         // Many to many relation
-        public virtual ICollection<Recipe> Recipes { get; set; }
+        public virtual ICollection<IngredientBridge> Bridges { get; set; }
     }
 
     // Shopping list is a no go because of the amount of space

@@ -119,16 +119,50 @@ namespace Cooking_Service.Controllers
                         message = "Recipe created successfully. Check recipe with id: " + newRecipe.GUID,
                         error = "",
                         code = "0"
-                    });
+                    }, JsonRequestBehavior.AllowGet);
                 }
                 else // If the model is not valid, return an error in JSON format
                 {
-                    return Json(new { error = "Invalid recipe data. Try again later", code = "2" });
+                    return Json(new { error = "Invalid recipe data. Try again later", code = "2" }, JsonRequestBehavior.AllowGet);
                 }
             }
             else // If the user is not authenticated, return an error in JSON format
             {
-                return Json(new { error = "You must be logged in to create a recipe.", code = "1" });
+                return HttpNotFound();
+            }
+        }
+
+        // GET: Recipes/GetRecipes
+        [HttpGet]
+        public ActionResult GetRecipes()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Get all public recipes
+                var recipes = db.Recipes.Where(r => r.isPublic).Select(r => new
+                {
+                    GUID = r.GUID,
+                    Image = r.Image,
+                    Title = r.Title,
+                    Description = r.Description,
+                    Steps = r.Steps,
+                    Time = r.Time,
+                    Portions = r.Portions,
+                    Type = r.Type,
+                    isPublic = r.isPublic,
+                    Author = UserManager.FindById(r.Author.GUID).UserName
+                });
+
+                return Json(new
+                {
+                    recipes = recipes,
+                    error = "",
+                    code = "0"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else // If the user is not authenticated, return an error in JSON format
+            {
+                return HttpNotFound();
             }
         }
 
@@ -158,16 +192,16 @@ namespace Cooking_Service.Controllers
                         message = "Ingredient created successfully. Check ingredient with name: " + newIngredient.Name,
                         error = "",
                         code = "0"
-                    });
+                    }, JsonRequestBehavior.AllowGet);
                 }
                 else // If the model is not valid, return an error in JSON format
                 {
-                    return Json(new { error = "Invalid ingredient data. Try again later", code = "2" });
+                    return Json(new { error = "Invalid ingredient data. Try again later", code = "2" }, JsonRequestBehavior.AllowGet);
                 }
             }
             else // If the user is not authenticated, return an error in JSON format
             {
-                return Json(new { error = "You must be logged in to create an ingredient.", code = "1" });
+                return HttpNotFound();
             }
         }
 
@@ -216,7 +250,50 @@ namespace Cooking_Service.Controllers
             }
             else // If the user is not authenticated, return an error in JSON format
             {
-                return Json(new { error = "You must be verified to view this information", code = "1" }, JsonRequestBehavior.DenyGet);
+
+                // Trigger a 404 without throwing an exception
+                return HttpNotFound();
+            }
+        }
+
+        [HttpPut]
+        public ActionResult SetIngVerified(IngVerificationViewModel model)
+        {
+            var user = db.Users.Find(User.Identity.GetUserId());
+
+            if (User.Identity.IsAuthenticated && user.Type == TypeUser.Admin)
+            {
+                var ing = db.Ingredients.FirstOrDefault(i => i.GUID == model.GUID);
+                if (ing != null)
+                {
+                    if (ing.isVerified == model.Verified)
+                    {
+                        return Json(new
+                        {
+                            message = "Ingredient verification status already set to " + model.Verified,
+                            error = "",
+                            code = "0"
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    ing.isVerified = model.Verified;
+                    int changes = db.SaveChanges();
+
+                    return Json(new
+                    {
+                        message = "Ingredient verification status updated successfully -> Updated: " + changes + " row.",
+                        error = "",
+                        code = "0"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { error = "Ingredient not found", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return HttpNotFound();
             }
         }
 
@@ -240,16 +317,16 @@ namespace Cooking_Service.Controllers
                         message = "Tag created successfully. Check tag with name: " + newTag.Name,
                         error = "",
                         code = "0"
-                    });
+                    }, JsonRequestBehavior.AllowGet);
                 }
                 else // If the model is not valid, return an error in JSON format
                 {
-                    return Json(new { error = "Invalid tag data. Try again later", code = "2" });
+                    return Json(new { error = "Invalid tag data. Try again later", code = "2" }, JsonRequestBehavior.AllowGet);
                 }
             }
             else // If the user is not authenticated, return an error in JSON format
             {
-                return Json(new { error = "You must be logged in to create a tag.", code = "1" });
+                return HttpNotFound();
             }
         }
     }

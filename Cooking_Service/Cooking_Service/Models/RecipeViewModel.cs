@@ -52,4 +52,15 @@ namespace Cooking_Service.Models
         [Display(Name = "Tag")]
         public string TagGUID { get; set; }
     }
+
+    public class IngVerificationViewModel
+    {
+        [Required]
+        [Display(Name = "GUID")]
+        public string GUID { get; set; }
+
+        [Required]
+        [Display(Name = "Verified")]
+        public bool Verified { get; set; }
+    }
 }
