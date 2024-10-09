@@ -7,8 +7,11 @@ using System.Web.Mvc;
 using System.Threading.Tasks;
 using System.Web.Services.Description;
 using Cooking_Service.DAL;
+using Cooking_Service.CSFunctions;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
+using Microsoft.Ajax.Utilities;
+using System.Net.Configuration;
 
 /// <summary>
 /// Everytime the responses are changed, the app needs to be updated too to avoid incompatibility
@@ -31,6 +34,7 @@ namespace Cooking_Service.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private CookingContext db = new CookingContext();
+        private Functions _functions = new Functions();
 
         public RecipesController()
         {
@@ -76,20 +80,18 @@ namespace Cooking_Service.Controllers
         [HttpPut]
         public ActionResult NewRecipe(CreateRecipeViewModel model)
         {
-            // Get the header with name "Client-Version"
-            var clientVersion = Request.Headers["Client-Version"];
-
-            // First check if the client version is null
-            if (clientVersion == null)
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
             {
-                // If not, then either the client is outdated or the request is not coming from the app
-                // To not indicate that the request needs a version header, just say that there is no such page or directory
                 return HttpNotFound();
             }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
 
-            // Second check if the client version matches
-
-
+            // If the client version is correct, then continue with the request
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.IsValid)
@@ -164,6 +166,17 @@ namespace Cooking_Service.Controllers
         [HttpGet]
         public ActionResult GetRecipes()
         {
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 // Get all public recipes
@@ -199,6 +212,17 @@ namespace Cooking_Service.Controllers
         [HttpPut]
         public ActionResult NewIngredient(NewIngredientViewModel model)
         {
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.IsValid)
@@ -236,6 +260,17 @@ namespace Cooking_Service.Controllers
         // GET: Recipes/GetIngredients
         public ActionResult GetIngredients()
         {
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 // Get all verified ingredients but replace tag ID with tag name (if it exists)
@@ -265,6 +300,17 @@ namespace Cooking_Service.Controllers
         // GET: Recipes/GetIngsNotVerified
         public ActionResult GetIngsNotVerified()
         {
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
             var user = db.Users.Find(User.Identity.GetUserId());
             if (User.Identity.IsAuthenticated && user.Type == TypeUser.Admin)
             {
@@ -289,6 +335,17 @@ namespace Cooking_Service.Controllers
         [HttpPut]
         public ActionResult SetIngVerified(IngVerificationViewModel model)
         {
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
             var user = db.Users.Find(User.Identity.GetUserId());
 
             if (User.Identity.IsAuthenticated && user.Type == TypeUser.Admin)
@@ -331,6 +388,17 @@ namespace Cooking_Service.Controllers
         [HttpPut]
         public ActionResult NewTag(string name)
         {
+            // First check if the client version is correct before proceeding
+            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.IsValid)
