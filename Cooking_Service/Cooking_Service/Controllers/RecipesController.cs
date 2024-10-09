@@ -10,6 +10,20 @@ using Cooking_Service.DAL;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 
+/// <summary>
+/// Everytime the responses are changed, the app needs to be updated too to avoid incompatibility
+/// The app is expecting a JSON object with specific json formats
+/// And if that format is changed, the app will not be able to parse the data correctly and may cause some errors either when saving 
+/// or when displaying the data.
+/// 
+/// To avoid this, a minimum client version is saved on the server, and if the client doesn't meet that requirement, the service will return an error
+/// Triggering a request to update the app.
+/// 
+/// This is how it should be, as of now (2024-10-9): This is not a reality yet, but is requested that it is implented in the future.
+/// 
+/// </summary>
+
+
 namespace Cooking_Service.Controllers
 {
     public class RecipesController : Controller
@@ -62,6 +76,20 @@ namespace Cooking_Service.Controllers
         [HttpPut]
         public ActionResult NewRecipe(CreateRecipeViewModel model)
         {
+            // Get the header with name "Client-Version"
+            var clientVersion = Request.Headers["Client-Version"];
+
+            // First check if the client version is null
+            if (clientVersion == null)
+            {
+                // If not, then either the client is outdated or the request is not coming from the app
+                // To not indicate that the request needs a version header, just say that there is no such page or directory
+                return HttpNotFound();
+            }
+
+            // Second check if the client version matches
+
+
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.IsValid)
@@ -219,6 +247,8 @@ namespace Cooking_Service.Controllers
                     Tag = ing.Tag != null ? ing.Tag.Name : "no_tag"
                 });
 
+                // Create a JSON object with the ingredients
+                // Everytime this is updated the app needs to be updated too to avoid incompatibility
                 return Json(new
                 {
                     ingredients = ings,
@@ -238,7 +268,7 @@ namespace Cooking_Service.Controllers
             var user = db.Users.Find(User.Identity.GetUserId());
             if (User.Identity.IsAuthenticated && user.Type == TypeUser.Admin)
             {
-                // Get all not verified ingredients
+                // Get all unverified ingredients
                 var ings = db.Ingredients.Where(ing => !ing.isVerified);
 
                 return Json(new

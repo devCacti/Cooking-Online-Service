@@ -24,5 +24,9 @@ namespace Cooking_Service.DAL
 
         // Flag Related
         public DbSet<Flag> Flags { get; set; }
+
+
+        // Server Related
+        public DbSet<ServerInfo> ServerInfo { get; set; }
     }
 }

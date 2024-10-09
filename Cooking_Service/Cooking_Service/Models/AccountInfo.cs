@@ -176,9 +176,19 @@ namespace Cooking_Service.Models
         [Required]
         public double Amount { get; set; }
 
-        // Many to many relation
+        // The custom unit of the ingredient, like a cup, a spoon, etc.
+        // If the user thinks that the ingredient is not well represented by the unit
+        // they can add a custom unit.
+        [MaxLength(16)]
+        public string CustomUnit { get; set; }
+
+        // One to many relation with the recipe and the ingredient
+        // One Bridge can only have one recipe and one ingredient
+        // Yet one recipe can have many bridges
+        // And so can one ingredient
         [Required]
         public virtual Recipe Recipe { get; set; }
+
         [Required]
         public virtual Ingredient Ingredient { get; set; }
     }
@@ -208,6 +218,9 @@ namespace Cooking_Service.Models
         // For example, if a user needs a new ingredient, they can add it, but it will not be public
         // until an admin verifies it, as it might be a duplicate or a fake ingredient.
         public bool isVerified { get; set; }
+
+        // The user that created the ingredient
+        public virtual User Author { get; set; }
 
         // Many to many relation
         public virtual ICollection<IngredientBridge> Bridges { get; set; }
