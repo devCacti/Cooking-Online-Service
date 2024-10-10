@@ -21,7 +21,9 @@ namespace Cooking_Service.Models
         [Display(Name = "Description")]
         public string Description { get; set; }
 
-        [MaxLength(10000)]
+        // There can be about 100 ingredients per recipe
+        // 4096 / 36 ~= 113
+        [MaxLength(4096)]
         public string IngredientIds { get; set; }
 
         [MaxLength(2048)]

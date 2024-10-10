@@ -10,13 +10,15 @@ namespace Cooking_Service.CSFunctions
     {
         private CookingContext db = new CookingContext();
 
-        public Tuple<int, string> isClientVersionValid(string clientVersion)
+        public Tuple<int, string> isClientVersionValid(HttpRequestBase Request)
         {
             bool bypass = true;
             if (bypass)
             {
                 return Tuple.Create(200, "Bypassed. In Testing.");
             }
+
+            var clientVersion = Request.Headers["client-version"];
 
             // Second check if the client version matches any of the registered versions on the db
             var clientVersionChecked = db.ServerInfo.First(s => s.ClientVersion == clientVersion);

@@ -35,8 +35,7 @@ namespace Cooking_Service.Models
     // Many to many relation
     public class Flag
     {
-        [Key]
-        [Required, MaxLength(128)]
+        [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
         [Required]
@@ -50,13 +49,13 @@ namespace Cooking_Service.Models
 
     public class User
     {
-        [Key, Required, MaxLength(128)]
+        [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
         [Required, MaxLength(64)]
         public string Name { get; set; }
 
-        [MaxLength(64)]
+        [MaxLength(128)]
         public string Surname { get; set; }
 
         //The bio is a small description of the user
@@ -90,7 +89,7 @@ namespace Cooking_Service.Models
             GUID = Guid.NewGuid().ToString();
         }
 
-        [Key, Required, MaxLength(128)]
+        [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
         // The image has to be a string because it will be translated to base64
@@ -141,7 +140,7 @@ namespace Cooking_Service.Models
 
     public class IngTag
     {
-        [Key, Required, MaxLength(128)]
+        [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
         [Required, MaxLength(64)]
@@ -170,7 +169,7 @@ namespace Cooking_Service.Models
             GUID = Guid.NewGuid().ToString();
         }
 
-        [Key, Required, MaxLength(128)]
+        [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
         [Required]
@@ -201,7 +200,7 @@ namespace Cooking_Service.Models
             isVerified = false;
         }
 
-        [Key, Required, MaxLength(128)]
+        [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
         [Required, MaxLength(64)]

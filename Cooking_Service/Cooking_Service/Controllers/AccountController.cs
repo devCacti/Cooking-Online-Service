@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cooking_Service.Models;
+using Cooking_Service.CSFunctions;
 using System.Web.Management;
 using Antlr.Runtime.Tree;
 using Cooking_Service.DAL;
@@ -24,6 +25,7 @@ namespace Cooking_Service.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private CookingContext db = new CookingContext();
+        private Functions _cl = new Functions();
 
         public AccountController()
         {
@@ -106,6 +108,137 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // Custom login method
+        // To be used in the app
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("Account/AppLogin")]
+        public async Task<ActionResult> AppLogin(LoginViewModel model)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await UserManager.FindByEmailAsync(model.Email);
+
+
+                    if (user == null)
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = "User not found",
+                            error = new
+                            {
+                                code = "6",
+                                description = "User not found"
+                            }
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        // When this line executes, a login attempt is made
+                        // and if it succeeds, the user is logged in and is given a login cookie
+                        var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+
+                        var userInfo = db.Users.FirstOrDefault(u => u.GUID == user.Id);
+
+                        switch (result)
+                        {
+                            case SignInStatus.Success:
+                                return Json(new
+                                {
+                                    success = true,
+                                    message = "Login successful",
+                                    info = new
+                                    {
+                                        name = userInfo.Name,
+                                        surname = userInfo.Surname,
+                                        username = user.UserName,
+                                        email = user.Email,
+                                        id = user.Id
+                                    },
+                                    error = new
+                                    {
+                                        code = "0",
+                                        description = "Success"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            case SignInStatus.LockedOut:
+                                return Json(new
+                                {
+                                    success = false,
+                                    message = "User locked out",
+                                    error = new
+                                    {
+                                        code = "1",
+                                        description = "User locked out"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            case SignInStatus.RequiresVerification:
+                                return Json(new
+                                {
+                                    success = false,
+                                    message = "Requires verification",
+                                    error = new
+                                    {
+                                        code = "2",
+                                        description = "Requires verification"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            case SignInStatus.Failure:
+                                return Json(new
+                                {
+                                    success = false,
+                                    message = "Login failed",
+                                    error = new
+                                    {
+                                        code = "3",
+                                        description = "Login failed"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            default:
+                                return HttpNotFound("Unhandled.");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "User not found: " + e,
+                        error = new
+                        {
+                            code = "6",
+                            description = "User not found"
+                        }
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            return Json(new
+            {
+                success = false,
+                message = "Model not valid, please try again later",
+                error = new
+                {
+                    code = "5",
+                    description = "Model not valid"
+                }
+            }, JsonRequestBehavior.AllowGet);
+        }
 
         //
         // GET: /Account/VerifyCode
@@ -309,132 +442,6 @@ namespace Cooking_Service.Controllers
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("Account/AppLogin")]
-        public async Task<ActionResult> AppLogin(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var user = await UserManager.FindByEmailAsync(model.Email);
-
-
-                    if (user == null)
-                    {
-                        return Json(new
-                           {
-                            success = false,
-                            message = "User not found",
-                            error = new
-                            {
-                                code = "6",
-                                description = "User not found"
-                            }
-                        }, JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
-
-                        var userInfo = db.Users.FirstOrDefault(u => u.GUID == user.Id);
-
-                        switch (result)
-                        {
-                            case SignInStatus.Success:
-                                return Json(new
-                                {
-                                    success = true,
-                                    message = "Login successful",
-                                    info = new
-                                    {
-                                        nameof = userInfo.Name,
-                                        surname = userInfo.Surname,
-                                        username = user.UserName,
-                                        email = user.Email,
-                                        id = user.Id
-                                    },
-                                    error = new
-                                    {
-                                        code = "0",
-                                        description = "Success"
-                                    }
-                                }, JsonRequestBehavior.AllowGet);
-                            case SignInStatus.LockedOut:
-                                return Json(new
-                                {
-                                    success = false,
-                                    message = "User locked out",
-                                    error = new
-                                    {
-                                        code = "1",
-                                        description = "User locked out"
-                                    }
-                                }, JsonRequestBehavior.AllowGet);
-                            case SignInStatus.RequiresVerification:
-                                return Json(new
-                                {
-                                    success = false,
-                                    message = "Requires verification",
-                                    error = new
-                                    {
-                                        code = "2",
-                                        description = "Requires verification"
-                                    }
-                                }, JsonRequestBehavior.AllowGet);
-                            case SignInStatus.Failure:
-                                return Json(new
-                                {
-                                    success = false,
-                                    message = "Login failed",
-                                    error = new
-                                    {
-                                        code = "3",
-                                        description = "Login failed"
-                                    }
-                                }, JsonRequestBehavior.AllowGet);
-                            default:
-                                return Json(new
-                                {
-                                    success = false,
-                                    message = "Unknown error",
-                                    error = new
-                                    {
-                                        code = "4",
-                                        description = "Unknown error"
-                                    }
-                                }, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    return Json(new
-                    {
-                        success = false,
-                        message = "User not found: " + e,
-                        error = new
-                        {
-                            code = "6",
-                            description = "User not found"
-                        }
-                    }, JsonRequestBehavior.AllowGet);
-                }
-
-            }
-            return Json(new
-            {
-                success = false,
-                message = "Model not valid, please try again later",
-                error = new
-                {
-                    code = "5",
-                    description = "Model not valid"
-                }
-            }, JsonRequestBehavior.AllowGet);
         }
 
         //Função que devolve as receitas em JSON segundo o email/id do utilizador

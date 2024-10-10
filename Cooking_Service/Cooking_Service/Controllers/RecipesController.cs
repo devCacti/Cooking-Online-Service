@@ -31,10 +31,15 @@ namespace Cooking_Service.Controllers
 {
     public class RecipesController : Controller
     {
+        // Identity Managers
+        // ASP.NET Provided Managers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+
+        // Cooking Context database
         private CookingContext db = new CookingContext();
-        private Functions _functions = new Functions();
+        // Client custom functions
+        private Functions _cl = new Functions();
 
         public RecipesController()
         {
@@ -81,7 +86,7 @@ namespace Cooking_Service.Controllers
         public ActionResult NewRecipe(CreateRecipeViewModel model)
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
@@ -96,11 +101,13 @@ namespace Cooking_Service.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    // The version verifier is important for things like this that can be changed and need
+                    // to be in a specific way to work with the app
                     // Checking for Ingredient IDS
-                    var ingIDs = model.IngredientIds.Split(';');
+                    var ingIDs = model.IngredientIds.Split(';').ToList();
 
                     // Checking for Ingredient Amounts
-                    var ingAmounts = model.IngrAmounts.Split(';');
+                    var ingAmounts = model.IngrAmounts.Split(';').ToList();
 
                     // Create a new recipe
                     var newRecipe = new Recipe
@@ -120,7 +127,7 @@ namespace Cooking_Service.Controllers
                     db.SaveChanges();
 
                     // Create the ingredient bridges
-                    for (int i = 0; i < ingIDs.Length; i++)
+                    for (int i = 0; i < ingIDs.Count; i++)
                     {
                         // First check if it is possible to convert the amount to double, if not, just assign 0
                         try
@@ -167,7 +174,7 @@ namespace Cooking_Service.Controllers
         public ActionResult GetRecipes()
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
@@ -207,13 +214,15 @@ namespace Cooking_Service.Controllers
             }
         }
 
-
+        // When creating new ingredients, the app sends a put to this endpoint
+        // so that when the user clicks save recipe, the app attaches all the
+        // ingredient IDs to the recipe
         // PUT: Recipes/NewIngredient
         [HttpPut]
         public ActionResult NewIngredient(NewIngredientViewModel model)
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
@@ -261,7 +270,7 @@ namespace Cooking_Service.Controllers
         public ActionResult GetIngredients()
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
@@ -297,11 +306,12 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // Admin Only function
         // GET: Recipes/GetIngsNotVerified
         public ActionResult GetIngsNotVerified()
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
@@ -332,11 +342,13 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // Admin Only function
+        // PUT: Recipes/SetIngVerified
         [HttpPut]
         public ActionResult SetIngVerified(IngVerificationViewModel model)
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
@@ -389,7 +401,7 @@ namespace Cooking_Service.Controllers
         public ActionResult NewTag(string name)
         {
             // First check if the client version is correct before proceeding
-            var iCVV = _functions.isClientVersionValid(Request.Headers["client-version"]);
+            var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
             {
                 return HttpNotFound();
