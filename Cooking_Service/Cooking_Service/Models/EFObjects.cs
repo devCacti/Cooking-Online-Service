@@ -4,6 +4,12 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Cooking_Service.DAL;
+
+// EFObjects
+// Entity Framwork Objects
+// This is the file that contains the classes for the Cooking Context Database
+// This file is used to create the tables in it
 
 namespace Cooking_Service.Models
 {
@@ -11,6 +17,8 @@ namespace Cooking_Service.Models
     {
         Admin,
         User,
+        Base,
+        Premium,
         Cook,
         Guest
     }
@@ -35,18 +43,102 @@ namespace Cooking_Service.Models
     // Many to many relation
     public class Flag
     {
+        public Flag()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+
         [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
+        // Indicates what type of flag the user has
         [Required]
         public FlagType Type { get; set; }
 
         [MaxLength(128)]
         public string Description { get; set; }
 
+        // 1. It's only one user per flag has each flag has its own
+        // description
+        // 2. When creating a new flag, the description is inserted
+        // as an explenation to why the flag is being atributed
+        // 3. Now, an user can have more than one flag
         public virtual User User { get; set; }
     }
 
+    public class Limit
+    {
+        private CookingContext db;
+        public Limit()
+        {
+            // Atributes a new GUID
+            GUID = Guid.NewGuid().ToString();
+        }
+
+        // Global Unique Identifier
+        [Key, Required, MaxLength(64)]
+        public string GUID { get; set; }
+
+        // Description about the limit (Only admins can access)
+        [MaxLength(128)]
+        public string Description { get; set; }
+
+        // Depends on the program that the user has
+        public double ImageSize { get; set; }
+
+        // Depends on the program that the user has
+        public double TotalStorage { get; set; }
+
+        // Which users this Limit has
+        public virtual ICollection<User> Users { get; set; }
+
+        // Static function to get the user types
+        // This is entended to be used by an admin
+        // In theory, no regular user should access this
+        public static List<String> GetUserTypes()
+        {
+            // Defines a new List of strings
+            List<String> types = new List<String>();
+
+            // Runs through all the values of the TypeUser enum
+            // Then attaches the string value of the enum to the list
+            foreach (TypeUser type in Enum.GetValues(typeof(TypeUser)))
+            {
+                types.Add(type.ToString());
+            }
+
+            // Returns the list of strings
+            return types;
+        }
+
+        public static Tuple<double, double> GetMyLimit(User user)
+        {
+            // This creates a new Tuple with two doubles
+            // It's created with 0.0, 0.0 because if it fails to
+            // get the limit of the user, there is something wrong
+            Tuple<double,double> r = Tuple.Create(0.0, 0.0);
+
+            // Look through the limit of the user
+            if (user.Limit != null)
+            {
+                // If the user has a limit, then return it
+                // By using Entity Framework, it's not needed
+                // to trigger a new database request
+
+                // We get the max image size and the total storage
+                // that the user can use
+                // and then we attach it to r (result)
+                r = Tuple.Create(
+                    user.Limit.ImageSize, 
+                    user.Limit.TotalStorage
+                );
+            }
+            else return null; // Returns null if there is no limit
+
+            // Return the result
+            return r;
+        }
+    }
     public class User
     {
         [Key, Required, MaxLength(64)]
@@ -76,10 +168,17 @@ namespace Cooking_Service.Models
         // The recipes of the user
         public virtual ICollection<Recipe> Recipes { get; set; }
 
+        // The ingredients of the user
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
+
         //User Flags, this is used by the admins to pay attention to the actions of the user
         //Many to many relation
         public virtual ICollection<Flag> Flags { get; set; }
 
+        // User Limits, this is used to determine the space limit of the user
+        // One to many relation
+        // One Limit for many users
+        public Limit Limit { get; set; }
     }
 
     public class Recipe
@@ -136,10 +235,17 @@ namespace Cooking_Service.Models
     ///    Herb,
     ///    Other
     ///}
+    ///
+    /// - Replaced by the IngTag class -
     /// </summary>
 
     public class IngTag
     {
+        public IngTag()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+
         [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
@@ -147,19 +253,6 @@ namespace Cooking_Service.Models
         public string Name { get; set; }
 
         public virtual ICollection<Ingredient> Ingredients { get; set; }
-
-        public static IngTag NewTag(string name)
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return null;
-            }
-            return new IngTag()
-            {
-                GUID = Guid.NewGuid().ToString(),
-                Name = name
-            };
-        }
     }
 
     public class IngredientBridge
@@ -172,8 +265,7 @@ namespace Cooking_Service.Models
         [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
-        [Required]
-        public double Amount { get; set; }
+        public double Amount { get; set; } = 0.0;
 
         // The custom unit of the ingredient, like a cup, a spoon, etc.
         // If the user thinks that the ingredient is not well represented by the unit

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.SessionState;
+using System.Web.Http.Controllers;
+using System.Web.Mvc;
 
 namespace Cooking_Service.Models
 {
@@ -29,5 +32,25 @@ namespace Cooking_Service.Models
         // Otherwise the server cannot correctly indicate whether the client is outdated or not.
         [Required]
         public DateTime DateTimeCreated { get; set; }
+
+
+        // Location
+        private static string _recipeImages = "C:/Cooking_Service/Uploads/Images/Recipes/";
+        // The location of the recipe images
+        public static string RecipeImages { get {
+                CheckLocations();
+
+                return _recipeImages;
+            }
+        }
+
+        // Location checking
+        public static void CheckLocations()
+        {
+            if (!System.IO.Directory.Exists(_recipeImages))
+            {
+                System.IO.Directory.CreateDirectory(_recipeImages);
+            }
+        }
     }
 }

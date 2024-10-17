@@ -12,6 +12,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
 using Microsoft.Ajax.Utilities;
 using System.Net.Configuration;
+using System.Web.Http.Controllers;
 
 /// <summary>
 /// Everytime the responses are changed, the app needs to be updated too to avoid incompatibility
@@ -75,6 +76,7 @@ namespace Cooking_Service.Controllers
             }
         }
 
+
         // GET: Recipes
         public ActionResult Index()
         {
@@ -87,14 +89,17 @@ namespace Cooking_Service.Controllers
         {
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
+            var files = Request.Files;
+
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+            // Returns Not Found if code is 404
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
+            // Returns Forbidden if code is 403
+
+            // Continues if the client version is correct
 
             // If the client version is correct, then continue with the request
             if (User.Identity.IsAuthenticated)
@@ -104,15 +109,41 @@ namespace Cooking_Service.Controllers
                     // The version verifier is important for things like this that can be changed and need
                     // to be in a specific way to work with the app
                     // Checking for Ingredient IDS
-                    var ingIDs = model.IngredientIds.Split(';').ToList();
-
+                    List<string> ingIDs = new List<string>();
+                       
                     // Checking for Ingredient Amounts
-                    var ingAmounts = model.IngrAmounts.Split(';').ToList();
+                    List<string> ingAmounts = new List<string>();
+
+                    // Checking for Custom measured ingredients
+                    List<string> customIngs = new List<string>();
+
+                    if (model.IngredientIds != null)
+                    {
+                        // Split the string into a list of strings
+                        ingIDs = model.IngredientIds.Split(';').ToList();
+
+                        // Split the string into a list of strings
+                        if (model.IngrAmounts != null)
+                        {
+                            ingAmounts = model.IngrAmounts.Split(';').ToList();
+
+                        }
+
+                        // Split the string into a list of strings
+                        if (model.CustomIngM != null)
+                        {
+                            // Split the string into a list of strings
+                            customIngs = model.CustomIngM.Split(';').ToList();
+                        }
+                        
+                    }
+
+                    // Get user from the CookingContext
+                    var user = db.Users.Find(User.Identity.GetUserId());
 
                     // Create a new recipe
                     var newRecipe = new Recipe
                     {
-                        Image = model.Image,
                         Title = model.Title,
                         Description = model.Description,
                         Steps = model.Steps,
@@ -120,35 +151,136 @@ namespace Cooking_Service.Controllers
                         Portions = model.Portions,
                         Type = model.Type,
                         isPublic = model.IsPublic,
-                        Author = db.Users.Find(User.Identity.GetUserId())
+                        Author = user
                     };
 
-                    db.Recipes.Add(newRecipe);
-                    db.SaveChanges();
+                    // The path where the image will be saved
+                    // Includes the name of the image
+                    var path = "";
+
+                    // File type is like this as it is received from a form
+                    HttpPostedFileBase file = null;
+
+                    // Save the first image using the GUID of the recipe + 'main' as the name
+                    try // Try to save the image
+                    {
+                        // Gets the first element of all the files sent
+                        file = files[0];
+
+                        // Get the type of the file
+                        var fileType = file.ContentType.Split('/')[1];
+                        
+                        // Convert to MB (value / 1024^2)
+                        var fileSize = file.ContentLength / 1048576;
+
+                        // Check if the file is an image
+                        if (fileType != "jpg" && fileType != "jpeg" && fileType != "png")
+                        {
+                            // If the file is not a known image format, return an error in JSON format
+                            return Json(new { error = "Invalid image format. Try again later", code = "2" }, JsonRequestBehavior.AllowGet);
+                        }
+
+                        // Check if the file is too big
+                        if (fileSize > _cl.getImageSizeLimit(user))
+                        {
+                            // If the file is too big, return an error in JSON format
+                            return Json(new { error = "Image is too big. Max size is 5MB", code = "2" }, JsonRequestBehavior.AllowGet);
+                        }
+
+                        // Decide the name of the file
+                        var fileName = newRecipe.GUID + "_main." + fileType;
+
+                        // Decide where the file will be saved
+                        path = ServerInfo.RecipeImages + fileName;
+
+                        // Assign the path to the image field
+                        newRecipe.Image = path;
+
+                        // Save the recipe before the bridge
+                        db.Recipes.Add(newRecipe);
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        // If the image is not saved, then the image will be null
+                        throw e;
+                        //newRecipe.Image = null;
+                    }
 
                     // Create the ingredient bridges
                     for (int i = 0; i < ingIDs.Count; i++)
                     {
-                        // First check if it is possible to convert the amount to double, if not, just assign 0
                         try
                         {
+                            // Try to convert the amount to double
                             Convert.ToDouble(ingAmounts[i]);
                         }
                         catch (Exception)
                         {
+                            // If the amount fails to convert, set it to 0
                             ingAmounts[i] = "0";
                         }
 
-                        var newIngBridge = new IngredientBridge
-                        {
-                            Recipe = newRecipe,
-                            Ingredient = db.Ingredients.FirstOrDefault(ing => ing.GUID == ingIDs[i]),
-                            Amount = Convert.ToDouble(ingAmounts[i])
-                        };
+                        double _ingamount = Convert.ToDouble(ingAmounts[i]);
 
-                        db.IngBridges.Add(newIngBridge);
+                        // Create a new ingredient bridge
+                        try
+                        {
+                            // Getting the current id from the list is crucial
+                            // This is because LINQ cannot translate the value from the list
+                            var _ingIdNow = ingIDs[i];
+
+                            // Check if the current loop i variable is within the bounds of the custom ingredient measurements
+
+                            if (i >= customIngs.Count)
+                            {
+                                customIngs.Add("");
+                            }
+
+                            string[] _ingCM = null;
+
+                            if (customIngs[i] != "")
+                                _ingCM = customIngs[i].Split(':');
+
+                            string _cUnit = null;
+
+                            // If the custom ingredient measurement is not empty
+                            // and corresponds to the current ingredients id
+                            // The custom ingredient measurement is added to the CustomUnit
+                            // of the ingredient bridge
+                            if (_ingCM != null && _ingCM.Length > 1 && _ingCM[0] == _ingIdNow)
+                            {
+                                _cUnit = _ingCM[1];
+                            }
+
+                            // The the ingredient with the GUID
+                            var _ing = db.Ingredients.FirstOrDefault(ing => ing.GUID == _ingIdNow);
+
+                            // Create a new ingredient bridge
+                            var newIngBridge = new IngredientBridge
+                            {
+                                Recipe = newRecipe,
+                                Ingredient = _ing,
+                                Amount = _ingamount,
+                                CustomUnit = _cUnit
+                            };
+
+                            db.IngBridges.Add(newIngBridge);
+                            db.SaveChanges();
+                        }
+                        catch (Exception e)
+                        {
+                            //throw e;
+                            return Json(new { error = "Something went wrong." , ids = ingIDs});
+                        }
+
+                        // Save everything all at once to avoid errors before the end
+                        // Save the file
+
                     }
-                    db.SaveChanges();
+
+                    // Save the image
+                    file.SaveAs(path);
 
                     // Return the GUID of the new recipe
                     return Json(new
@@ -169,31 +301,118 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // GET: Recipes/RecipeImage
+        public ActionResult RecipeImage(string id)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            // Get the recipe with the GUID
+            var recipe = db.Recipes.FirstOrDefault(r => r.GUID == id);
+
+            // If the recipe is not found, return an error in JSON format
+            if (recipe == null)
+            {
+                return Json(new { error = "Recipe not found", code = "2" }, JsonRequestBehavior.AllowGet);
+            }
+
+            // Get the image path
+            var path = recipe.Image;
+
+            // Return the image
+            return File(path, "image/jpeg");
+        }
+
         // GET: Recipes/GetRecipes
-        [HttpGet]
         public ActionResult GetRecipes()
         {
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
 
             if (User.Identity.IsAuthenticated)
             {
+
                 // Get all public recipes
                 var recipes = db.Recipes.Where(r => r.isPublic).Select(r => new
                 {
                     GUID = r.GUID,
-                    Image = r.Image,
                     Title = r.Title,
                     Description = r.Description,
+                    Time = r.Time,
+                    Portions = r.Portions,
+                    Type = r.Type,
+                    Author = UserManager.FindById(r.Author.GUID).UserName
+                });
+
+                return Json(new
+                {
+                    recipes = recipes,
+                    error = "",
+                    code = "0"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            // Get all public recipes
+            var _recipes = db.Recipes.Where(r => r.isPublic).Select(r => new
+            {
+                GUID = r.GUID,
+                Title = r.Title,
+                Description = r.Description,
+                Author = UserManager.FindById(r.Author.GUID).UserName
+            });
+
+            return Json(new
+            {
+                recipes = _recipes,
+                error = "",
+                code = "0"
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: Recipes/GetMyRecipes
+        public ActionResult GetMyRecipes()
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+
+                // Get all recipes of the user
+                var recipes = user.Recipes.Select(r => new
+                {
+                    GUID = r.GUID,
+                    // The image is not sent as it is a string containing the directory of the image
+                    // Instead, it's sent with a different method that only sends the image, avoiding
+                    // long request durations, the get image function only requires the id of the recipe
+                    Title = r.Title,
+                    Description = r.Description,
+                    // In the final version of the Get My Recipes, the ingredients will not be shown
+                    // This is because when the user gets all the recipes, only the main info is needed
+                    Ingredients = r.Bridges.Select(b => new
+                    {
+                        Name = b.Ingredient.Name,
+                        Amount = b.Amount,
+                        CustomUnit = b.CustomUnit ?? b.Ingredient.Unit
+                    }),
+                    // The same goes for the steps
                     Steps = r.Steps,
+
                     Time = r.Time,
                     Portions = r.Portions,
                     Type = r.Type,
@@ -224,33 +443,45 @@ namespace Cooking_Service.Controllers
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
+
+            var user = db.Users.Find(User.Identity.GetUserId());
 
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.IsValid)
                 {
+                    // Check if there is already a ingredient with this name
+                    var ing_n = user.Ingredients.Count(ing => ing.Name == model.Name);
+
+                    // If the ingredient already exists, return an error in JSON format
+                    if (ing_n != 0)
+                    {
+                        // Get the id of the already existant ingredient
+                        var ing_id = user.Ingredients.FirstOrDefault(ing => ing.Name == model.Name).GUID;
+                        return Json(new { error = "Ingredient already exists", ing_id = ing_id, code = "2" }, JsonRequestBehavior.AllowGet);
+                    }
+
                     // Create a new ingredient
                     var newIngredient = new Ingredient
                     {
                         Name = model.Name,
                         Unit = model.Unit,
-                        Tag = db.IngTags.FirstOrDefault(t => t.GUID == model.TagGUID) ?? null
+                        Tag = db.IngTags.FirstOrDefault(t => t.GUID == model.TagGUID) ?? null,
+                        Author = user
                     };
 
                     db.Ingredients.Add(newIngredient);
                     db.SaveChanges();
 
-                    // Return the name of the new ingredient
+                    // Return the name of the new ingredient and id
                     return Json(new
                     {
                         message = "Ingredient created successfully. Check ingredient with name: " + newIngredient.Name,
+                        ing_id = newIngredient.GUID,
                         error = "",
                         code = "0"
                     }, JsonRequestBehavior.AllowGet);
@@ -266,19 +497,56 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // GET: Recipes/GetMyIngredients
+        public ActionResult GetMyIngredients()
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+
+                // Without the select json is unable to serialise the object, as it enters a loop of references
+                var ings = user.Ingredients.Select(i => new
+                {
+                    GUID = i.GUID,
+                    Name = i.Name,
+                    Unit = i.Unit,
+                    Tag = i.Tag != null ? i.Tag.Name : "no_tag",
+                    isVerified = i.isVerified
+                }).ToList();
+
+                // Create a JSON object with the ingredients
+                // Everytime this is updated the app needs to be updated too to avoid incompatibility
+                return Json(new
+                {
+                    ingredients = ings,
+                    error = "",
+                    code = "0"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else // If the user is not authenticated, return an error in JSON format
+            {
+                return Json(new { error = "You must be logged in to see this information.", code = "1" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         // GET: Recipes/GetIngredients
         public ActionResult GetIngredients()
         {
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
 
             if (User.Identity.IsAuthenticated)
             {
@@ -313,13 +581,10 @@ namespace Cooking_Service.Controllers
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
 
             var user = db.Users.Find(User.Identity.GetUserId());
             if (User.Identity.IsAuthenticated && user.Type == TypeUser.Admin)
@@ -350,13 +615,10 @@ namespace Cooking_Service.Controllers
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
 
             var user = db.Users.Find(User.Identity.GetUserId());
 
@@ -403,20 +665,17 @@ namespace Cooking_Service.Controllers
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
-            {
                 return HttpNotFound();
-            }
+
             else if (iCVV.Item1 == 403)
-            {
                 return new HttpStatusCodeResult(403, iCVV.Item2);
-            }
 
             if (User.Identity.IsAuthenticated)
             {
                 if (ModelState.IsValid)
                 {
                     // Create a new tag
-                    var newTag = IngTag.NewTag(name);
+                    var newTag = new IngTag { Name = name };
 
                     db.IngTags.Add(newTag);
                     db.SaveChanges();

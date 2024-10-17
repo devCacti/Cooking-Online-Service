@@ -1,4 +1,5 @@
 ﻿using Cooking_Service.DAL;
+using Cooking_Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,18 @@ namespace Cooking_Service.CSFunctions
     public class Functions
     {
         private CookingContext db = new CookingContext();
+
+        public float getImageSizeLimit(User user)
+        {
+            // This function returns the image size limit for the user,
+            // based on the user type
+            // The user type is defined in the User class
+
+            // The default image size limit is 2.5MB
+            float imageSizeLimit = 2.5f;
+
+            return imageSizeLimit;
+        }
 
         public Tuple<int, string> isClientVersionValid(HttpRequestBase Request)
         {
