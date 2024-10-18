@@ -191,7 +191,7 @@ namespace Cooking_Service.Models
         [Key, Required, MaxLength(64)]
         public string GUID { get; set; }
 
-        // The image has to be a string because it will be translated to base64
+        // The image has to be a string because it will be a directory
         [MaxLength(4096)]
         public string Image { get; set; }
 

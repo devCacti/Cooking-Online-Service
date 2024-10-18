@@ -3,11 +3,15 @@
   "WorkspaceRootPath": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|c:\\users\\clouddev\\onedrive - contoso\\documentos\\github\\cooking-online-service\\cooking_service\\cooking_service\\models\\efobjects.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\models\\efobjects.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\dal\\cookingcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|c:\\users\\clouddev\\onedrive - contoso\\documentos\\github\\cooking-online-service\\cooking_service\\cooking_service\\dal\\cookingcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\dal\\cookingcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -15,15 +19,11 @@
       "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\models\\recipeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|c:\\users\\clouddev\\onedrive - contoso\\documentos\\github\\cooking-online-service\\cooking_service\\cooking_service\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\controllers\\recipescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\csfunctions\\myfunctions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\csfunctions\\myfunctions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|c:\\users\\clouddev\\onedrive - contoso\\documentos\\github\\cooking-online-service\\cooking_service\\cooking_service\\models\\serverinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\cooking_service\\models\\serverinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C6CFB059-7A97-4DA6-B9C9-296E3B6DD01B}|Cooking_Service\\Cooking_Service.csproj|solutionrelative:cooking_service\\models\\serverinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -86,7 +86,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 512,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -110,12 +110,11 @@
               "RelativeToolTip": "Cooking_Service\\Models\\ServerInfo.cs",
               "ViewState": "AgIAABcAAAAAAAAAAAAwwCUAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-15T09:33:08.919Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-15T09:33:08.919Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "CookingContext.cs",
               "DocumentMoniker": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\DAL\\CookingContext.cs",
               "RelativeDocumentMoniker": "Cooking_Service\\DAL\\CookingContext.cs",
@@ -128,13 +127,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "RecipesController.cs",
               "DocumentMoniker": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\RecipesController.cs",
               "RelativeDocumentMoniker": "Cooking_Service\\Controllers\\RecipesController.cs",
               "ToolTip": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\RecipesController.cs",
               "RelativeToolTip": "Cooking_Service\\Controllers\\RecipesController.cs",
-              "ViewState": "AgIAAFoBAAAAAQAAAIAZwF0BAAAwAAAAAAAAAA==",
+              "ViewState": "AgIAAPcAAABA7////z8rwBgBAAB6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-06T16:51:24.873Z",
               "EditorCaption": ""
@@ -149,8 +148,7 @@
               "RelativeToolTip": "Cooking_Service\\Controllers\\AccountController.cs",
               "ViewState": "AgIAAHoAAAAAAAAAAAAwwJcAAABgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T16:51:24.752Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-06T16:51:24.752Z"
             },
             {
               "$type": "Document",
@@ -305,13 +303,13 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "EFObjects.cs",
               "DocumentMoniker": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\EFObjects.cs",
               "RelativeDocumentMoniker": "Cooking_Service\\Models\\EFObjects.cs",
               "ToolTip": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\EFObjects.cs",
               "RelativeToolTip": "Cooking_Service\\Models\\EFObjects.cs",
-              "ViewState": "AgIAALEAAACQyczMzMwwwAYBAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAALEAAACQyczMzMwwwMEAAABGAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-06T16:51:25.166Z",
               "EditorCaption": ""
@@ -326,12 +324,11 @@
               "RelativeToolTip": "Cooking_Service\\CSFunctions\\MyFunctions.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAuwBQAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-09T18:44:21.465Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-09T18:44:21.465Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "RecipeViewModel.cs",
               "DocumentMoniker": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\RecipeViewModel.cs",
               "RelativeDocumentMoniker": "Cooking_Service\\Models\\RecipeViewModel.cs",
@@ -339,8 +336,7 @@
               "RelativeToolTip": "Cooking_Service\\Models\\RecipeViewModel.cs",
               "ViewState": "AgIAAAIAAAAUm5mZmRklwCUAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-06T16:51:24.711Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-06T16:51:24.711Z"
             }
           ]
         }

@@ -230,27 +230,30 @@ namespace Cooking_Service.Controllers
                             // This is because LINQ cannot translate the value from the list
                             var _ingIdNow = ingIDs[i];
 
-                            // Check if the current loop i variable is within the bounds of the custom ingredient measurements
-
-                            if (i >= customIngs.Count)
-                            {
-                                customIngs.Add("");
-                            }
-
+                            // Custom ingredient measurement list
                             string[] _ingCM = null;
 
-                            if (customIngs[i] != "")
-                                _ingCM = customIngs[i].Split(':');
-
+                            // Custom measurement unit of the ingredient
                             string _cUnit = null;
 
-                            // If the custom ingredient measurement is not empty
-                            // and corresponds to the current ingredients id
-                            // The custom ingredient measurement is added to the CustomUnit
-                            // of the ingredient bridge
-                            if (_ingCM != null && _ingCM.Length > 1 && _ingCM[0] == _ingIdNow)
+                            // Run through the custom ingredient measurements
+                            // and check if any corresponds to the current ingredient being analysed
+                            for (int j = 0; j < customIngs.Count; j++)
                             {
-                                _cUnit = _ingCM[1];
+                                var _cIngs = customIngs[j].Split(':');
+
+                                // 1. By checking if the id from the custom ingredient measurement is the same as the current ingredient id
+                                // it's not needed to check if the id from that list is empty;
+                                // 
+                                // 2. By checking if the unit is not null or empty, even if the id was correctly atributed, the unit
+                                // will be set to the default unit of the ingredient, this way, we avoid errors
+                                if (_cIngs[0] == _ingIdNow && 
+                                    !string.IsNullOrEmpty(_cIngs[1]))
+                                {
+                                    _ingCM = customIngs[j].Split(':');
+                                    _cUnit = _ingCM[1];
+                                    break;
+                                }
                             }
 
                             // The the ingredient with the GUID
@@ -271,15 +274,11 @@ namespace Cooking_Service.Controllers
                         catch (Exception e)
                         {
                             //throw e;
-                            return Json(new { error = "Something went wrong." , ids = ingIDs});
+                            return Json(new { error = "Something went wrong. e:" + e , ids = ingIDs});
                         }
-
-                        // Save everything all at once to avoid errors before the end
-                        // Save the file
-
                     }
 
-                    // Save the image
+                    // Save the image after everything is saved to avoid saving a picture before the recipe and components
                     file.SaveAs(path);
 
                     // Return the GUID of the new recipe
