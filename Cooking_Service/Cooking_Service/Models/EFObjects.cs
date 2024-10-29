@@ -139,6 +139,7 @@ namespace Cooking_Service.Models
             return r;
         }
     }
+    
     public class User
     {
         [Key, Required, MaxLength(64)]
@@ -204,7 +205,11 @@ namespace Cooking_Service.Models
         // The ingredients of the recipe
         public virtual ICollection<IngredientBridge> Bridges { get; set; }
 
-        [MaxLength(4096)]
+        // The steps of the recipe will be saved as a json string
+        // As weird as it sounds, it's the best way to save it
+        // Removing the limit for now because it can be a problem
+        // in the future
+        //[MaxLength(4096)]
         public string Steps { get; set; }
 
         // Small number with decimal places

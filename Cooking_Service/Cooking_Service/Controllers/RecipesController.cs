@@ -405,9 +405,12 @@ namespace Cooking_Service.Controllers
                     // This is because when the user gets all the recipes, only the main info is needed
                     Ingredients = r.Bridges.Select(b => new
                     {
+                        GUID = b.GUID,
+                        IngGUID = b.Ingredient.GUID,
                         Name = b.Ingredient.Name,
+                        Unit = b.Ingredient.Unit,
                         Amount = b.Amount,
-                        CustomUnit = b.CustomUnit ?? b.Ingredient.Unit
+                        CustomUnit = b.CustomUnit,
                     }),
                     // The same goes for the steps
                     Steps = r.Steps,
@@ -415,6 +418,7 @@ namespace Cooking_Service.Controllers
                     Time = r.Time,
                     Portions = r.Portions,
                     Type = r.Type,
+                    Tags = r.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tag"),
                     isPublic = r.isPublic,
                     Author = UserManager.FindById(r.Author.GUID).UserName
                 });
@@ -432,6 +436,42 @@ namespace Cooking_Service.Controllers
             }
         }
 
+
+        // This function is used to Delete a recipe by its GUID
+        // Only the user that created the recipe can delete it
+        // GET: Recipes/GetRecipeById
+        public ActionResult DeleteRecipeById(string guid)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var user = db.Users.Find(User.Identity.GetUserId());
+                var recipe = db.Recipes.FirstOrDefault(r => r.GUID == guid);
+
+                if (recipe != null)
+                {
+                    // Only the owner or admins can delete a recipe
+                    if (recipe.Author.GUID == user.GUID || user.Type == TypeUser.Admin)
+                    {
+                        db.Recipes.Remove(recipe);
+                        db.SaveChanges();
+
+                        return Json(new { message = "Recipe deleted successfully", error = "", code = "0" }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        return Json(new { error = "You are not the author of this recipe", code = "2" }, JsonRequestBehavior.AllowGet);
+                    }
+                }
+                else
+                {
+                    return Json(new { error = "Recipe not found", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
         // When creating new ingredients, the app sends a put to this endpoint
         // so that when the user clicks save recipe, the app attaches all the
         // ingredient IDs to the recipe

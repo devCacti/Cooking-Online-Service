@@ -108,11 +108,33 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // GET: /Account/AmILoggedIn
+        [AllowAnonymous]
+        public ActionResult AmILoggedIn()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Returns a json response with the user's username, saying, yes, you are logged in
+                return Json(new
+                {
+                    success = true,
+                    message = "Yes, ou are logged in.",
+                    username = User.Identity.GetUserName()
+                }, JsonRequestBehavior.AllowGet);
+            }
+
+            // Returns a json response saying that the user is not logged in
+            return Json(new
+            {
+                success = false,
+                message = "No, you are not logged in."
+            }, JsonRequestBehavior.AllowGet);
+        }
+
         // Custom login method
         // To be used in the app
         [HttpPost]
         [AllowAnonymous]
-        [Route("Account/AppLogin")]
         public async Task<ActionResult> AppLogin(LoginViewModel model)
         {
             // First check if the client version is correct before proceeding
