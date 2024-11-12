@@ -418,7 +418,7 @@ namespace Cooking_Service.Controllers
                     Time = r.Time,
                     Portions = r.Portions,
                     Type = r.Type,
-                    Tags = r.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tag"),
+                    Tags = r.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
                     isPublic = r.isPublic,
                     Author = UserManager.FindById(r.Author.GUID).UserName
                 });
@@ -610,6 +610,54 @@ namespace Cooking_Service.Controllers
             else // If the user is not authenticated, return an error in JSON format
             {
                 return Json(new { error = "You must be logged in to see this information.", code = "1" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        // GET: Recipes/GetIngredient
+        // Returns a specific ingredient by its GUID
+        public ActionResult GetIngredient(string Id)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                // Get the ingredient with the GUID
+                var ing = db.Ingredients.FirstOrDefault(i => i.GUID == Id);
+
+                var user = db.Users.Find(User.Identity.GetUserId());
+
+
+                // If the ingredient is not found, return an error in JSON format
+                if (ing == null || ing.Author != user)
+                {
+                    return Json(new { error = "Ingredient not found", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Create a JSON object with the ingredient
+                // Everytime this is updated the app needs to be updated too to avoid incompatibility
+                return Json(new
+                {
+                    ingredient = new
+                    {
+                        GUID = ing.GUID,
+                        Name = ing.Name,
+                        Unit = ing.Unit,
+                        Tag = ing.Tag != null ? ing.Tag.Name : "no_tag",
+                        isVerified = ing.isVerified
+                    },
+                    error = "",
+                    code = "0"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            else // If the user is not authenticated, return an error in JSON format
+            {
+                return HttpNotFound();
             }
         }
 

@@ -7,7 +7,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Cooking_Service.DAL;
 
 // EFObjects
+// -----------------------
 // Entity Framwork Objects
+// -----------------------
 // This is the file that contains the classes for the Cooking Context Database
 // This file is used to create the tables in it
 
