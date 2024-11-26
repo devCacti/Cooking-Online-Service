@@ -26,6 +26,63 @@ using System.Web.Http.Controllers;
 /// This is how it should be, as of now (2024-10-9): This is not a reality yet, but is requested that it is implented in the future.
 /// 
 /// </summary>
+/// 
+/// <summary>
+/// 
+/// This is what the controller has to give to the app:
+///recipe = new
+///{
+///    // Standard recipe info format
+///    GUID = rec.GUID,
+///    Title = rec.Title,
+///    Description = rec.Description,
+///    Time = rec.Time,
+///    Portions = rec.Portions,
+///    Type = rec.Type,
+///    Ingredients = rec.Bridges.Select(b => new
+///    {
+///        GUID = b.GUID,
+///        IngGUID = b.Ingredient.GUID,
+///        Name = b.Ingredient.Name,
+///        Unit = b.Ingredient.Unit,
+///        Amount = b.Amount,
+///        CustomUnit = b.CustomUnit,
+///    }),
+///    Steps = rec.Steps,
+///    Tags = rec.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
+///    isPublic = rec.isPublic,
+///    Author = UserManager.FindById(rec.Author.GUID).UserName
+///},
+///
+/// The app has a very specific way of parsing the data, and if the data is not in the correct format, the app will not be able to parse it
+/// Leading the application to break unexpectedly.
+/// The app uses the following method for decoding the JSON object:
+/// factory Recipe.fromJson(Map<String, dynamic> json) {
+///  return Recipe(
+///    id: json['GUID'],
+///    //image: json['image'],
+///    title: json['Title'],
+///    description: json['Description'] ?? '',
+///    bridges: (json['Ingredients'] is List)
+///      ? (json['Ingredients'] as List<dynamic>?)
+///          ?.map<IngBridge>((bridge) => IngBridge.fromJson(bridge))
+///          .toList()
+///      : [IngBridge.fromJson(json['Ingredients'])],
+///    steps: json['Steps'].toString(),
+///    time: (json['Time'] is int) ? (json['Time'] as int).toDouble() : (json['Time'] ?? 0.0) as double,
+///    servings: (json['Portions'] is int) ? (json['Portions'] as int).toDouble() : (json['Portions'] ?? 0.0) as double,
+///    type: (json['Type'] is int) ? json['Type'] : (json['Type'] as double).toInt(),
+///    //isAllowed: json['isAllowed'],
+///    isPublic: json['isPublic'],
+///  );
+///}
+///
+/// Keep in mind that this code is written in Dart, and the app is made with Flutter.
+/// The two (json response object and the dart decoding methods) are compatible with each other, if changed
+/// be sure that it is compatible with the app.
+/// The App follows a very strict pattern of decoding, the slightest of changes can lead to unexpected results.
+/// 
+/// </summary>
 
 
 namespace Cooking_Service.Controllers
@@ -83,6 +140,7 @@ namespace Cooking_Service.Controllers
             return View();
         }
 
+        // This method requires the user to be authenticated, without it, the method will return an error
         // PUT: Recipes/NewRecipe
         [HttpPut]
         public ActionResult NewRecipe(CreateRecipeViewModel model)
@@ -300,6 +358,7 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // This method does not require the user to be authenticated
         // GET: Recipes/RecipeImage
         public ActionResult RecipeImage(string id)
         {
@@ -327,45 +386,40 @@ namespace Cooking_Service.Controllers
             return File(path, "image/jpeg");
         }
 
+        // This method only requires the user to be authenticated if the recipe is not public (isPublic = false)
         // GET: Recipes/GetRecipes
         public ActionResult GetRecipes()
         {
             // First check if the client version is correct before proceeding
+            // iCVV means: is the Client Version Valid
+            // It is a tuple<int, string>
             var iCVV = _cl.isClientVersionValid(Request);
+
             if (iCVV.Item1 == 404)
                 return HttpNotFound();
 
             else if (iCVV.Item1 == 403)
                 return new HttpStatusCodeResult(403, iCVV.Item2);
 
+            // Create a neww empty user
+            User user = new User();
+
+            // If the user is authenticated, get the user that corresponds to that cookie
             if (User.Identity.IsAuthenticated)
             {
-
-                // Get all public recipes
-                var recipes = db.Recipes.Where(r => r.isPublic).Select(r => new
-                {
-                    GUID = r.GUID,
-                    Title = r.Title,
-                    Description = r.Description,
-                    Time = r.Time,
-                    Portions = r.Portions,
-                    Type = r.Type,
-                    Author = UserManager.FindById(r.Author.GUID).UserName
-                });
-
-                return Json(new
-                {
-                    recipes = recipes,
-                    error = "",
-                    code = "0"
-                }, JsonRequestBehavior.AllowGet);
+                user = db.Users.Find(User.Identity.GetUserId());
             }
+
             // Get all public recipes
-            var _recipes = db.Recipes.Where(r => r.isPublic).Select(r => new
+            var _recipes = db.Recipes.Where(r => r.isPublic || r.Author == user).Select(r => new
+            // Select specific fields to avoid sending unnecessary data and to avoid causing json loops
             {
                 GUID = r.GUID,
                 Title = r.Title,
                 Description = r.Description,
+                Time = r.Time,
+                Portions = r.Portions,
+                Type = r.Type,
                 Author = UserManager.FindById(r.Author.GUID).UserName
             });
 
@@ -377,6 +431,8 @@ namespace Cooking_Service.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+        // This method requires the user to be authenticated, without authentication, the method will return an error because the server doesn't know which user is trying to access
+        // or if an attack is being made
         // GET: Recipes/GetMyRecipes
         public ActionResult GetMyRecipes()
         {
@@ -390,6 +446,7 @@ namespace Cooking_Service.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
+                // Finds the user with the id corresponding to the cookie
                 var user = db.Users.Find(User.Identity.GetUserId());
 
                 // Get all recipes of the user
@@ -432,6 +489,81 @@ namespace Cooking_Service.Controllers
             }
             else // If the user is not authenticated, return an error in JSON format
             {
+                return HttpNotFound();
+            }
+        }
+
+        // This method requires the user to be authenticated, the person will have to create an account if they wish to see the full recipe
+        // GET: Recipes/GetRecipe
+        public ActionResult GetRecipe(string id)
+        {
+            // Standard check for client version compatibility
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                Recipe recipe = db.Recipes.FirstOrDefault(r => r.GUID == id);
+                User user = db.Users.Find(User.Identity.GetUserId());
+
+                if (recipe == null)
+                {
+                    return Json(new { error = "Recipe not found", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+
+                if (recipe.isPublic || recipe.Author == user)
+                {
+                    // Get the recipe with the GUID
+                    var rec = db.Recipes.FirstOrDefault(r => r.GUID == id);
+
+                    // If the recipe is not found, return an error in JSON format
+                    if (rec == null)
+                    {
+                        return Json(new { error = "Recipe not found", code = "2" }, JsonRequestBehavior.AllowGet);
+                    }
+
+                    // Create a JSON object with the recipe
+                    // Everytime this is updated the app needs to be updated too to avoid incompatibility
+                    return Json(new
+                    {
+                        recipe = new
+                        {
+                            // Standard recipe info format
+                            GUID = rec.GUID,
+                            Title = rec.Title,
+                            Description = rec.Description,
+                            Time = rec.Time,
+                            Portions = rec.Portions,
+                            Type = rec.Type,
+                            Ingredients = rec.Bridges.Select(b => new
+                            {
+                                GUID = b.GUID,
+                                IngGUID = b.Ingredient.GUID,
+                                Name = b.Ingredient.Name,
+                                Unit = b.Ingredient.Unit,
+                                Amount = b.Amount,
+                                CustomUnit = b.CustomUnit,
+                            }),
+                            Steps = rec.Steps,
+                            Tags = rec.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
+                            isPublic = rec.isPublic,
+                            Author = UserManager.FindById(rec.Author.GUID).UserName
+                        },
+                        error = "",
+                        code = "0"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(new { error = "You are not the author of this recipe", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            else // If the user is not authenticated, return an error in JSON format
+            {    // The requester will not be sure if the method exists or not, this may prevent the requester from trying to use the method again
                 return HttpNotFound();
             }
         }
@@ -613,11 +745,10 @@ namespace Cooking_Service.Controllers
             }
         }
 
-        // GET: Recipes/GetIngredient
-        // Returns a specific ingredient by its GUID
-        public ActionResult GetIngredient(string Id)
+        // GET: Recipes/GetIngredientsByRecipe
+        // This uses the GUID of the recipe to get the ingredients
+        public ActionResult GetIngredientsByRecipe(string Id)
         {
-            // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
             if (iCVV.Item1 == 404)
                 return HttpNotFound();
@@ -625,41 +756,38 @@ namespace Cooking_Service.Controllers
             else if (iCVV.Item1 == 403)
                 return new HttpStatusCodeResult(403, iCVV.Item2);
 
-            if (User.Identity.IsAuthenticated)
+            Recipe recipe = db.Recipes.FirstOrDefault(r => r.GUID == Id);
+
+            List<Ingredient> ings = new List<Ingredient>();
+
+            if (recipe == null)
             {
-                // Get the ingredient with the GUID
-                var ing = db.Ingredients.FirstOrDefault(i => i.GUID == Id);
+                return Json(new { error = "Recipe not found", code = "2" }, JsonRequestBehavior.AllowGet);
+            }
 
-                var user = db.Users.Find(User.Identity.GetUserId());
+            if (recipe.isPublic || recipe.Author.GUID == User.Identity.GetUserId())
+            {
+                ings = recipe.Bridges.Select(b => b.Ingredient).ToList();
 
-
-                // If the ingredient is not found, return an error in JSON format
-                if (ing == null || ing.Author != user)
-                {
-                    return Json(new { error = "Ingredient not found", code = "2" }, JsonRequestBehavior.AllowGet);
-                }
-
-                // Create a JSON object with the ingredient
-                // Everytime this is updated the app needs to be updated too to avoid incompatibility
                 return Json(new
                 {
-                    ingredient = new
+                    ingredients = ings.Select(i => new
                     {
-                        GUID = ing.GUID,
-                        Name = ing.Name,
-                        Unit = ing.Unit,
-                        Tag = ing.Tag != null ? ing.Tag.Name : "no_tag",
-                        isVerified = ing.isVerified
-                    },
+                        GUID = i.GUID,
+                        Name = i.Name,
+                        Unit = i.Unit,
+                        Tag = i.Tag != null ? i.Tag.Name : "no_tag"
+                    }),
                     error = "",
                     code = "0"
                 }, JsonRequestBehavior.AllowGet);
             }
-            else // If the user is not authenticated, return an error in JSON format
+            else
             {
-                return HttpNotFound();
+                return Json(new { error = "You are not allowed to access this recipe", code = "1" }, JsonRequestBehavior.AllowGet);
             }
         }
+
 
         // Admin Only function
         // GET: Recipes/GetIngsNotVerified
