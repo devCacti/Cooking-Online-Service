@@ -118,7 +118,7 @@ namespace Cooking_Service.Models
             // This creates a new Tuple with two doubles
             // It's created with 0.0, 0.0 because if it fails to
             // get the limit of the user, there is something wrong
-            Tuple<double,double> r = Tuple.Create(0.0, 0.0);
+            Tuple<double, double> r = Tuple.Create(0.0, 0.0);
 
             // Look through the limit of the user
             if (user.Limit != null)
@@ -131,7 +131,7 @@ namespace Cooking_Service.Models
                 // that the user can use
                 // and then we attach it to r (result)
                 r = Tuple.Create(
-                    user.Limit.ImageSize, 
+                    user.Limit.ImageSize,
                     user.Limit.TotalStorage
                 );
             }
@@ -141,7 +141,7 @@ namespace Cooking_Service.Models
             return r;
         }
     }
-    
+
     public class User
     {
         [Key, Required, MaxLength(64)]
@@ -327,4 +327,57 @@ namespace Cooking_Service.Models
     // Shopping list is a no go because of the amount of space
     // it would take in the database, as well as being too complex.
     // In the future, I might add it.
+
+    // Today is the future, and I'm adding it.
+
+    public class ShoppingList
+    {
+        public ShoppingList()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+
+        [Key, Required, MaxLength(64)]
+        public string GUID { get; set; }
+
+        [MaxLength(8)]
+        // The code reference for shared shopping lists
+        public string CodeRef { get; set; }
+
+        [Required]
+        public bool isShared { get; set; }
+
+        [Required]
+        public bool isDetailed { get; set; }
+
+        [Required]
+        public virtual User User { get; set; }
+
+        [Required]
+        public virtual ICollection<ShoppingListElement> Elements { get; set; }
+    }
+
+    public class ShoppingListElement
+    {
+        public ShoppingListElement()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+
+        [Key, Required, MaxLength(64)]
+        public string GUID { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        public double Amount { get; set; }
+
+        public double Price { get; set; }
+
+        public bool onBasket { get; set; }
+
+        [Required]
+        public virtual ShoppingList List { get; set; }
+
+    }
 }
