@@ -167,6 +167,8 @@ namespace Cooking_Service.Models
 
 
         // - User's linked - //
+        // The recipes that the user liked
+        public virtual ICollection<Recipe> LikedRecipes { get; set; }
 
         // The recipes of the user
         public virtual ICollection<Recipe> Recipes { get; set; }
@@ -223,9 +225,9 @@ namespace Cooking_Service.Models
         public bool isAllowed { get; set; }
         public bool isPublic { get; set; }
 
-
-        // Foreign key
+        // Foreign keys
         public virtual User Author { get; set; }
+        public virtual ICollection<User> LikedBy { get; set; }
     }
 
     /// <summary>

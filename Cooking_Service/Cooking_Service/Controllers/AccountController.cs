@@ -154,7 +154,6 @@ namespace Cooking_Service.Controllers
                 {
                     var user = await UserManager.FindByEmailAsync(model.Email);
 
-
                     if (user == null)
                     {
                         return Json(new
@@ -262,6 +261,78 @@ namespace Cooking_Service.Controllers
             }, JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> AppRegister(RegisterViewModel model)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
+            // Checks if the model is valid
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: true, rememberBrowser: false);
+
+                    var uInfo = new User
+                    {
+                        GUID = user.Id,
+                        Name = model.Name,
+                        Surname = model.Surname,
+                        Type = model.Type
+                    };
+
+                    db.Users.Add(uInfo);
+                    db.SaveChanges();
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "User created",
+                        info = new
+                        {
+                            name = model.Name,
+                            surname = model.Surname,
+                            username = model.UserName,
+                            email = model.Email,
+                            id = user.Id
+                        },
+                        error = new
+                        {
+                            code = "0",
+                            description = "Success"
+                        }
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                AddErrors(result);
+
+            }
+
+            // If the model is not valid, it will return a json response with the error message
+            return Json(new
+            {
+                success = false,
+                message = "Model not valid, please try again later",
+                error = new
+                {
+                    code = "5",
+                    description = "Model not valid"
+                }
+            });
+        }
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]

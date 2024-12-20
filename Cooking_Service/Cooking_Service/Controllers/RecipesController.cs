@@ -13,6 +13,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Ajax.Utilities;
 using System.Net.Configuration;
 using System.Web.Http.Controllers;
+using System.Configuration;
 
 /// <summary>
 /// Everytime the responses are changed, the app needs to be updated too to avoid incompatibility
@@ -429,6 +430,58 @@ namespace Cooking_Service.Controllers
                 error = "",
                 code = "0"
             }, JsonRequestBehavior.AllowGet);
+        }
+
+        //This method is used to get the top x recipes at page y
+        // GET: Recipes/GetPopular
+        // int page = 0 -> Defaults the parameter value to 0 if it's not set
+        public ActionResult GetPopular(int page = 0)
+        {
+            int amount = 5;
+
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Get all public recipes
+                    var _recipes = db.Recipes
+                    .Where(r => r.isPublic)
+                    .OrderByDescending(r => r.LikedBy.Count)
+                    .Skip(page * amount)
+                    .Take(amount)
+                    .Select(r => new // Select specific fields to avoid sending unnecessary data and to avoid causing json loops
+                    {
+                        GUID = r.GUID,
+                        Title = r.Title,
+                        Description = r.Description,
+                        //Time = r.Time,
+                        //Portions = r.Portions,
+                        Type = r.Type,
+                        //NumLikes = r.LikedBy.Count,
+                        //Author = UserManager.FindById(r.Author.GUID).UserName // Gets the UserName of the author for simplicity
+                    }).ToList();
+
+                    return Json(new
+                    {
+                        recipes = _recipes,
+                        error = "",
+                        code = "0"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception e) {
+                    return Json(new { error = e.Message, code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { error = "Invalid Page", code = "1" });
+
         }
 
         // This method requires the user to be authenticated, without authentication, the method will return an error because the server doesn't know which user is trying to access
