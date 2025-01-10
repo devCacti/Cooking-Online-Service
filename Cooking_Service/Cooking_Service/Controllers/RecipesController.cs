@@ -10,6 +10,7 @@ using Cooking_Service.DAL;
 using Cooking_Service.CSFunctions;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using Microsoft.Ajax.Utilities;
 using System.Net.Configuration;
 using System.Web.Http.Controllers;
@@ -199,6 +200,15 @@ namespace Cooking_Service.Controllers
 
                     // Get user from the CookingContext
                     var user = db.Users.Find(User.Identity.GetUserId());
+
+                    List<Step> steps = new List<Step>();
+
+                    // Split the string into a list of strings, it comes in a JSON format so it needs to be decoded
+                    //JSON format: [{"details":"Step 1"},{"details":"Step 2"}]
+                    if (model.Steps != null)
+                    {
+                        steps = JsonConvert.DeserializeObject<List<Step>>(model.Steps);
+                    }
 
                     // Create a new recipe
                     var newRecipe = new Recipe
@@ -451,10 +461,12 @@ namespace Cooking_Service.Controllers
             {
                 try
                 {
+                    var users = UserManager.Users.ToList();
+
                     // Get all public recipes
                     var _recipes = db.Recipes
                     .Where(r => r.isPublic)
-                    .OrderByDescending(r => r.LikedBy.Count)
+                    .OrderByDescending(r => r.Likes.Count)
                     .Skip(page * amount)
                     .Take(amount)
                     .Select(r => new // Select specific fields to avoid sending unnecessary data and to avoid causing json loops
@@ -462,11 +474,24 @@ namespace Cooking_Service.Controllers
                         GUID = r.GUID,
                         Title = r.Title,
                         Description = r.Description,
-                        //Time = r.Time,
-                        //Portions = r.Portions,
+                        Ingredients = r.Bridges.Select(b => new
+                        {
+                            GUID = b.GUID,
+                            IngGUID = b.Ingredient.GUID,
+                            Amount = b.Amount,
+                            CustomUnit = b.CustomUnit
+                        }),
+                        Steps = r.Steps.Select(s => new
+                        {
+                            GUID = s.GUID,
+                            Details = s.Details
+                        }),
+                        Time = r.Time,
+                        Portions = r.Portions,
                         Type = r.Type,
-                        //NumLikes = r.LikedBy.Count,
-                        //Author = UserManager.FindById(r.Author.GUID).UserName // Gets the UserName of the author for simplicity
+                        NumLikes = r.Likes.Count,
+                        isPublic = r.isPublic,
+                        AuthorGUID = r.Author.GUID
                     }).ToList();
 
                     return Json(new

@@ -168,7 +168,7 @@ namespace Cooking_Service.Models
 
         // - User's linked - //
         // The recipes that the user liked
-        public virtual ICollection<Recipe> LikedRecipes { get; set; }
+        public virtual List<Like> Liked { get; set; }
 
         // The recipes of the user
         public virtual ICollection<Recipe> Recipes { get; set; }
@@ -184,6 +184,23 @@ namespace Cooking_Service.Models
         // One to many relation
         // One Limit for many users
         public Limit Limit { get; set; }
+    }
+
+    public class Like
+    {
+        public Like()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+
+        [Key, Required, MaxLength(64)]
+        public string GUID { get; set; }
+
+        [Required]
+        public virtual User User { get; set; }
+
+        [Required]
+        public virtual Recipe Recipe { get; set; }
     }
 
     public class Recipe
@@ -209,12 +226,7 @@ namespace Cooking_Service.Models
         // The ingredients of the recipe
         public virtual ICollection<IngredientBridge> Bridges { get; set; }
 
-        // The steps of the recipe will be saved as a json string
-        // As weird as it sounds, it's the best way to save it
-        // Removing the limit for now because it can be a problem
-        // in the future
-        //[MaxLength(4096)]
-        public string Steps { get; set; }
+        public ICollection<Step> Steps { get; set; }
 
         // Small number with decimal places
         public double Time { get; set; }
@@ -226,8 +238,15 @@ namespace Cooking_Service.Models
         public bool isPublic { get; set; }
 
         // Foreign keys
+
+        [Required]
         public virtual User Author { get; set; }
-        public virtual ICollection<User> LikedBy { get; set; }
+        public virtual List<Like> Likes { get; set; }
+
+        [Required]
+        public DateTime WhenCreated { get; set; }
+        [Required]
+        public DateTime WhenEdited { get; set; }
     }
 
     /// <summary>
@@ -264,6 +283,7 @@ namespace Cooking_Service.Models
         public virtual ICollection<Ingredient> Ingredients { get; set; }
     }
 
+    // The Ingredient Bridge class was created in order to allow the user to define custom units to the ingredients
     public class IngredientBridge
     {
         public IngredientBridge()
@@ -326,11 +346,28 @@ namespace Cooking_Service.Models
         public virtual ICollection<IngredientBridge> Bridges { get; set; }
     }
 
-    // Shopping list is a no go because of the amount of space
-    // it would take in the database, as well as being too complex.
-    // In the future, I might add it.
+    public class Step
+    {
+        // Check if it's possible to do to all the other classes with GUIDs
+        [Key, Required]
+        public Guid GUID { get; set; }
 
-    // Today is the future, and I'm adding it.
+        [Required]
+        [MaxLength(250)]
+        public string Details { get; set; }
+
+        [Required]
+        public int Order { get; set; }
+
+        // Parent Recipe
+        [Required]
+        public virtual Recipe Recipe { get; set; }
+
+        public Step()
+        {
+            GUID = Guid.NewGuid();
+        }
+    }
 
     public class ShoppingList
     {
