@@ -20,6 +20,7 @@ namespace Cooking_Service.DAL
         // Ingredient Related
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<IngredientBridge> IngBridges { get; set; }
+        public DbSet<Step> RecipeSteps { get; set; }
         public DbSet<IngTag> IngTags { get; set; }
 
         // Flag Related
@@ -28,5 +29,6 @@ namespace Cooking_Service.DAL
 
         // Server Related
         public DbSet<ServerInfo> ServerInfo { get; set; }
+        public DbSet<CaughtException> CaughtExceptions { get; set; }
     }
 }

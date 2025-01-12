@@ -197,3 +197,7 @@ C:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_S
 C:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\bin\Debug\tr\Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
 C:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\bin\Debug\zh-Hans\Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
 C:\Users\Admin\Documents\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\bin\Debug\zh-Hant\Microsoft.VisualStudio.TestPlatform.ObjectModel.resources.dll
+C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\obj\Debug\Cooking_Service.Tests.csproj.AssemblyReference.cache
+C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\obj\Debug\Cooking_Service.Tests.csproj.CoreCompileInputs.cache
+C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\obj\Debug\Cooking_Service.Tests.dll
+C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service.Tests\obj\Debug\Cooking_Service.Tests.pdb

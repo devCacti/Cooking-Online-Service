@@ -5,6 +5,8 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cooking_Service.DAL;
+using System.Linq.Expressions;
+using Cooking_Service.DAL;
 
 // EFObjects
 // -----------------------
@@ -198,9 +200,6 @@ namespace Cooking_Service.Models
 
         [Required]
         public virtual User User { get; set; }
-
-        [Required]
-        public virtual Recipe Recipe { get; set; }
     }
 
     public class Recipe
@@ -208,6 +207,9 @@ namespace Cooking_Service.Models
         public Recipe()
         {
             GUID = Guid.NewGuid().ToString();
+
+            Created = DateTime.Now;
+            Edited = DateTime.Now;
         }
 
         [Key, Required, MaxLength(64)]
@@ -241,12 +243,12 @@ namespace Cooking_Service.Models
 
         [Required]
         public virtual User Author { get; set; }
-        public virtual List<Like> Likes { get; set; }
+        public virtual ICollection<Like> Likes { get; set; }
 
         [Required]
-        public DateTime WhenCreated { get; set; }
+        public DateTime Created { get; set; }
         [Required]
-        public DateTime WhenEdited { get; set; }
+        public DateTime Edited { get; set; }
     }
 
     /// <summary>
@@ -348,9 +350,14 @@ namespace Cooking_Service.Models
 
     public class Step
     {
+        public Step()
+        {
+            GUID = Guid.NewGuid().ToString();
+        }
+
         // Check if it's possible to do to all the other classes with GUIDs
         [Key, Required]
-        public Guid GUID { get; set; }
+        public string GUID { get; set; }
 
         [Required]
         [MaxLength(250)]
@@ -363,10 +370,6 @@ namespace Cooking_Service.Models
         [Required]
         public virtual Recipe Recipe { get; set; }
 
-        public Step()
-        {
-            GUID = Guid.NewGuid();
-        }
     }
 
     public class ShoppingList
@@ -418,5 +421,56 @@ namespace Cooking_Service.Models
         [Required]
         public virtual ShoppingList List { get; set; }
 
+    }
+
+
+    // This object is for exceptions that are caught and are not handled correctly
+    public class CaughtException
+    {
+        public CaughtException()
+        {
+            GUID = Guid.NewGuid().ToString();
+            DateTime = DateTime.Now;
+            Solved = false;
+        }
+
+        public CaughtException(Exception e)
+        {
+            GUID = Guid.NewGuid().ToString();
+            Message = e.Message;
+            StackTrace = e.StackTrace;
+            DateTime = DateTime.Now;
+            Solved = false;
+            CatchException();
+        }
+
+        [Key, Required, MaxLength(64)]
+        public string GUID { get; set; }
+
+        [Required]
+        public string Message { get; set; }
+
+        [Required]
+        public string StackTrace { get; set; }
+
+        [Required]
+        public DateTime DateTime { get; set; }
+
+        [Required]
+        public bool Solved { get; set; }
+
+        public bool CatchException()
+        {
+            CookingContext db = new CookingContext();
+            CaughtException caughtException = db.CaughtExceptions.FirstOrDefault(e => e.Message == Message);
+
+            if (caughtException == null)
+            {
+                db.CaughtExceptions.Add(this);
+                db.SaveChanges();
+                return true;
+            }
+            return false;
+        }
     }
 }

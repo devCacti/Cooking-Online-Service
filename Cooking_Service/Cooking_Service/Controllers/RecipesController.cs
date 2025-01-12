@@ -166,6 +166,7 @@ namespace Cooking_Service.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    Recipe newRecipe;
                     // The version verifier is important for things like this that can be changed and need
                     // to be in a specific way to work with the app
                     // Checking for Ingredient IDS
@@ -177,25 +178,33 @@ namespace Cooking_Service.Controllers
                     // Checking for Custom measured ingredients
                     List<string> customIngs = new List<string>();
 
-                    if (model.IngredientIds != null)
+                    try
                     {
-                        // Split the string into a list of strings
-                        ingIDs = model.IngredientIds.Split(';').ToList();
-
-                        // Split the string into a list of strings
-                        if (model.IngrAmounts != null)
-                        {
-                            ingAmounts = model.IngrAmounts.Split(';').ToList();
-
-                        }
-
-                        // Split the string into a list of strings
-                        if (model.CustomIngM != null)
+                        if (model.IngredientIds != null)
                         {
                             // Split the string into a list of strings
-                            customIngs = model.CustomIngM.Split(';').ToList();
+                            ingIDs = model.IngredientIds.Split(';').ToList();
+
+                            // Split the string into a list of strings
+                            if (model.IngrAmounts != null)
+                            {
+                                ingAmounts = model.IngrAmounts.Split(';').ToList();
+                            }
+
+                            // Split the string into a list of strings
+                            if (model.CustomIngM != null)
+                            {
+                                // Split the string into a list of strings
+                                customIngs = model.CustomIngM.Split(';').ToList();
+                            }
                         }
-                        
+                    }
+                    catch (Exception ex)
+                    {
+                        // This CaughtException declaration automatically saves the exception to the database without needing to call the CatchException method
+                        new CaughtException(ex);
+
+                        return Json(new { error = "Something went wrong and the recipe could not be created. Try again later.", code = "2" }, JsonRequestBehavior.AllowGet);
                     }
 
                     // Get user from the CookingContext
@@ -205,23 +214,34 @@ namespace Cooking_Service.Controllers
 
                     // Split the string into a list of strings, it comes in a JSON format so it needs to be decoded
                     //JSON format: [{"details":"Step 1"},{"details":"Step 2"}]
-                    if (model.Steps != null)
+                    try
                     {
-                        steps = JsonConvert.DeserializeObject<List<Step>>(model.Steps);
-                    }
+                        if (model.Steps != null)
+                        {
+                            steps = JsonConvert.DeserializeObject<List<Step>>(model.Steps);
+                        }
 
-                    // Create a new recipe
-                    var newRecipe = new Recipe
+                        // Create a new recipe
+                        newRecipe = new Recipe
+                        {
+                            Title = model.Title,
+                            Description = model.Description,
+                            Steps = steps,
+                            Time = model.Time,
+                            Portions = model.Portions,
+                            Type = model.Type,
+                            isPublic = model.IsPublic,
+                            Author = user
+                        };
+
+                    }
+                    catch (Exception e)
                     {
-                        Title = model.Title,
-                        Description = model.Description,
-                        Steps = model.Steps,
-                        Time = model.Time,
-                        Portions = model.Portions,
-                        Type = model.Type,
-                        isPublic = model.IsPublic,
-                        Author = user
-                    };
+                        // Save the caught exception into the database and return
+                        new CaughtException(e);
+
+                        return Json(new { error = "Something went wrong and the recipe could not be created. Try again later.", code = "3" }, JsonRequestBehavior.AllowGet);
+                    }
 
                     // The path where the image will be saved
                     // Includes the name of the image
@@ -246,14 +266,14 @@ namespace Cooking_Service.Controllers
                         if (fileType != "jpg" && fileType != "jpeg" && fileType != "png")
                         {
                             // If the file is not a known image format, return an error in JSON format
-                            return Json(new { error = "Invalid image format. Try again later", code = "2" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { error = "Invalid image format. Try again later", code = "4" }, JsonRequestBehavior.AllowGet);
                         }
 
                         // Check if the file is too big
                         if (fileSize > _cl.getImageSizeLimit(user))
                         {
                             // If the file is too big, return an error in JSON format
-                            return Json(new { error = "Image is too big. Max size is 5MB", code = "2" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { error = "Image is too big. Max size is 5MB", code = "5" }, JsonRequestBehavior.AllowGet);
                         }
 
                         // Decide the name of the file
@@ -264,10 +284,6 @@ namespace Cooking_Service.Controllers
 
                         // Assign the path to the image field
                         newRecipe.Image = path;
-
-                        // Save the recipe before the bridge
-                        db.Recipes.Add(newRecipe);
-                        db.SaveChanges();
                     }
                     catch (Exception e)
                     {
@@ -275,6 +291,8 @@ namespace Cooking_Service.Controllers
                         throw e;
                         //newRecipe.Image = null;
                     }
+
+                    bool _recipeCreated = false;
 
                     // Create the ingredient bridges
                     for (int i = 0; i < ingIDs.Count; i++)
@@ -337,13 +355,20 @@ namespace Cooking_Service.Controllers
                                 CustomUnit = _cUnit
                             };
 
+                            // Only save here so that if there is an error at the ingredients part or at the bridge part, we can avoid saving a recipe without all the important data
+                            // Save the recipe before the bridge
+                            if (!_recipeCreated)
+                                db.Recipes.Add(newRecipe);
                             db.IngBridges.Add(newIngBridge);
+                            // This way, if there is an error, everything will fail to save and avoid saving a meaningless recipe
                             db.SaveChanges();
+                            _recipeCreated = true;
                         }
                         catch (Exception e)
                         {
+                            new CaughtException(e);
                             //throw e;
-                            return Json(new { error = "Something went wrong. e:" + e , ids = ingIDs});
+                            return Json(new { error = "Something went wrong. The Recipe could not be saved.", code = "6", ids = ingIDs});
                         }
                     }
 
@@ -353,14 +378,14 @@ namespace Cooking_Service.Controllers
                     // Return the GUID of the new recipe
                     return Json(new
                     {
-                        message = "Recipe created successfully. Check recipe with id: " + newRecipe.GUID,
+                        message = newRecipe.GUID,
                         error = "",
                         code = "0"
                     }, JsonRequestBehavior.AllowGet);
                 }
                 else // If the model is not valid, return an error in JSON format
                 {
-                    return Json(new { error = "Invalid recipe data. Try again later", code = "2" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "Invalid recipe data. Try again later", code = "7" }, JsonRequestBehavior.AllowGet);
                 }
             }
             else // If the user is not authenticated, return an error in JSON format
