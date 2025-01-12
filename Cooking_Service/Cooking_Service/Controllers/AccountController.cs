@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Cooking_Service.Models;
+using Cooking_Service.CSFunctions;
 using System.Web.Management;
 using Antlr.Runtime.Tree;
 using Cooking_Service.DAL;
@@ -24,6 +25,7 @@ namespace Cooking_Service.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private CookingContext db = new CookingContext();
+        private Functions _cl = new Functions();
 
         public AccountController()
         {
@@ -74,35 +76,30 @@ namespace Cooking_Service.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
-            Logger.Log("Login attempt from " + model.Email);
             if (!ModelState.IsValid)
             {
-                Logger.Log("Login attempt failed from " + model.Email);
                 return View(model);
             }
 
             // Isso não conta falhas de login em relação ao bloqueio de conta
             // Para permitir que falhas de senha acionem o bloqueio da conta, altere para shouldLockout: true
             var user = await UserManager.FindByEmailAsync(model.Email);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Tentativa de login inválida.");
+                return View(model);
+            }
             var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    Logger.Log("Login attempt successful with user " + user.UserName);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    Logger.Log("Login attempt failed from " + model.Email + " - LockedOut");
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    Logger.Log("Login attempt failed from " + model.Email + " - RequiresVerification");
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
-                    Logger.Log("Login attempt failed from " + model.Email + " - Failure\n" +
-                        "\t username: " + user.UserName + "\n" +
-                        "\t email   : " + user.Email + "\n" +
-                        "\t password: " + model.Password + "\n" +
-                        "\t remember: " + model.RememberMe + "\n"
-                    );
                     ModelState.AddModelError("", "Tentativa de login inválida e desconhecida.");
                     return View(model);
                 default:
@@ -111,7 +108,231 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // GET: /Account/AmILoggedIn
+        [AllowAnonymous]
+        public ActionResult AmILoggedIn()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                // Returns a json response with the user's username, saying, yes, you are logged in
+                return Json(new
+                {
+                    success = true,
+                    message = "Yes, ou are logged in.",
+                    username = User.Identity.GetUserName()
+                }, JsonRequestBehavior.AllowGet);
+            }
 
+            // Returns a json response saying that the user is not logged in
+            return Json(new
+            {
+                success = false,
+                message = "No, you are not logged in."
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+        // Custom login method
+        // To be used in the app
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> AppLogin(LoginViewModel model)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var user = await UserManager.FindByEmailAsync(model.Email);
+
+                    if (user == null)
+                    {
+                        return Json(new
+                        {
+                            success = false,
+                            message = "User not found",
+                            error = new
+                            {
+                                code = "6",
+                                description = "User not found"
+                            }
+                        }, JsonRequestBehavior.AllowGet);
+                    }
+                    else
+                    {
+                        // When this line executes, a login attempt is made
+                        // and if it succeeds, the user is logged in and is given a login cookie
+                        var result = await SignInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, shouldLockout: false);
+
+                        var userInfo = db.Users.FirstOrDefault(u => u.GUID == user.Id);
+
+                        switch (result)
+                        {
+                            case SignInStatus.Success:
+                                return Json(new
+                                {
+                                    success = true,
+                                    message = "Login successful",
+                                    info = new
+                                    {
+                                        name = userInfo.Name,
+                                        surname = userInfo.Surname,
+                                        username = user.UserName,
+                                        email = user.Email,
+                                        id = user.Id
+                                    },
+                                    error = new
+                                    {
+                                        code = "0",
+                                        description = "Success"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            case SignInStatus.LockedOut:
+                                return Json(new
+                                {
+                                    success = false,
+                                    message = "User locked out",
+                                    error = new
+                                    {
+                                        code = "1",
+                                        description = "User locked out"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            case SignInStatus.RequiresVerification:
+                                return Json(new
+                                {
+                                    success = false,
+                                    message = "Requires verification",
+                                    error = new
+                                    {
+                                        code = "2",
+                                        description = "Requires verification"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            case SignInStatus.Failure:
+                                return Json(new
+                                {
+                                    success = false,
+                                    message = "Login failed",
+                                    error = new
+                                    {
+                                        code = "3",
+                                        description = "Login failed"
+                                    }
+                                }, JsonRequestBehavior.AllowGet);
+                            default:
+                                return HttpNotFound("Unhandled.");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "User not found: " + e,
+                        error = new
+                        {
+                            code = "6",
+                            description = "User not found"
+                        }
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
+            }
+            return Json(new
+            {
+                success = false,
+                message = "Model not valid, please try again later",
+                error = new
+                {
+                    code = "5",
+                    description = "Model not valid"
+                }
+            }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult> AppRegister(RegisterViewModel model)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+            {
+                return HttpNotFound();
+            }
+            else if (iCVV.Item1 == 403)
+            {
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+            }
+
+            // Checks if the model is valid
+            if (ModelState.IsValid)
+            {
+                var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
+                var result = await UserManager.CreateAsync(user, model.Password);
+
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: true, rememberBrowser: false);
+
+                    var uInfo = new User
+                    {
+                        GUID = user.Id,
+                        Name = model.Name,
+                        Surname = model.Surname,
+                        Type = model.Type
+                    };
+
+                    db.Users.Add(uInfo);
+                    db.SaveChanges();
+
+                    return Json(new
+                    {
+                        success = true,
+                        message = "User created",
+                        info = new
+                        {
+                            name = model.Name,
+                            surname = model.Surname,
+                            username = model.UserName,
+                            email = model.Email,
+                            id = user.Id
+                        },
+                        error = new
+                        {
+                            code = "0",
+                            description = "Success"
+                        }
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                AddErrors(result);
+
+            }
+
+            // If the model is not valid, it will return a json response with the error message
+            return Json(new
+            {
+                success = false,
+                message = "Model not valid, please try again later",
+                error = new
+                {
+                    code = "5",
+                    description = "Model not valid"
+                }
+            });
+        }
         //
         // GET: /Account/VerifyCode
         [AllowAnonymous]
@@ -170,20 +391,17 @@ namespace Cooking_Service.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
-            Logger.Log("Register attempt from " + model.Email);
             //User is preset to User - this is the default value, even if the http post contains a different value
             model.Type = TypeUser.User;
             
             if (model.Name == null)
             {
-                Logger.Log("Register attempt info: Name is null");
-                model.Name = "No Name";
+                model.Name = "";
             }
 
             if (model.Surname == null)
             {
-                Logger.Log("Register attempt info: Surname is null");
-                model.Surname = "No Surnames";
+                model.Surname = "";
             }
 
             if (ModelState.IsValid)
@@ -192,7 +410,6 @@ namespace Cooking_Service.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    Logger.Log("Register attempt successful with user " + user.UserName);
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
 
                     var uInfo = new User
@@ -320,173 +537,30 @@ namespace Cooking_Service.Controllers
             return View();
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("Account/AppRegister")]
-        public async Task<ActionResult> AppRegister(RegisterViewModel model)
-        {
-            var errors = new { };
-            var response = new
-            {
-                success = false,
-                message = new
-                { uid = "", name = "", surname = "", username = "", email = "" },
-                error = new
-                {
-                    code = "5",
-                    description = "ModelState not valid",
-                    model = new
-                    {
-                        name = model.Name,
-                        surname = model.Surname,
-                        email = model.Email,
-                        username = model.UserName,
-                        password = model.Password,
-                        confPass = model.ConfirmPassword,
-                        type = model.Type
-                    }
-                }
-            };
-
-            if (ModelState.IsValid)
-            {
-                response = new
-                {
-                    success = false,
-                    message = new
-                    { uid = "", name = "", surname = "", username = "", email = "" },
-                    error = new
-                    {
-                        code = "5",
-                        description = "Something went wrong, but the modelstate is valid.",
-                        model = new
-                        {
-                            name = model.Name,
-                            surname = model.Surname,
-                            email = model.Email,
-                            username = model.UserName,
-                            password = model.Password,
-                            confPass = model.ConfirmPassword,
-                            type = model.Type
-                        }
-                    }
-                };
-
-                try
-                {
-                    var user = new ApplicationUser { UserName = model.UserName, Email = model.Email };
-                    var result = await UserManager.CreateAsync(user, model.Password);
-
-                    //Json Response
-                    if (result.Succeeded)
-                    {
-                        db.Users.Add(new User
-                        {
-                            GUID = user.Id,
-                            Name = model.Name,
-                            Surname = model.Surname,
-                            Type = model.Type
-                        });
-                        db.SaveChanges();
-
-                        response = new
-                        {
-                            success = true,
-                            message = new
-                            {
-                                uid = user.Id,
-                                name = model.Name,
-                                surname = model.Surname,
-                                username = user.UserName,
-                                email = user.Email,
-                            },
-                            error = new
-                            {
-                                code = "0",
-                                description = "Success",
-                                model = new
-                                {
-                                    name = model.Name,
-                                    surname = model.Surname,
-                                    email = model.Email,
-                                    username = model.UserName,
-                                    password = model.Password,
-                                    confPass = model.ConfirmPassword,
-                                    type = model.Type,
-                                }
-                            }
-                        };
-                    }
-                    else if (result.Errors != null)
-                    {
-                        response = new
-                        {
-                            success = false,
-                            message = new
-                            { uid = "", name = "", surname = "", username = "", email = "" },
-                            error = new
-                            {
-                                code = "5",
-                                description = "Could not save user, there are errors... { " + result.Errors.ToList()[0] +"}",
-                                model = new
-                                {
-                                    name = model.Name,
-                                    surname = model.Surname,
-                                    email = model.Email,
-                                    username = model.UserName,
-                                    password = model.Password,
-                                    confPass = model.ConfirmPassword,
-                                    type = model.Type
-                                }
-                            }
-                        };
-                    }
-                }
-                catch (Exception e) {
-                    response = new
-                    {
-                        success = false,
-                        message = new
-                        { uid = "", name = "", surname = "", username = "", email = "" },
-                        error = new
-                        {
-                            code = "6",
-                            description = e.Message,
-                            model = new
-                            {
-                                name = model.Name,
-                                surname = model.Surname,
-                                email = model.Email,
-                                username = model.UserName,
-                                password = model.Password,
-                                confPass = model.ConfirmPassword,
-                                type = model.Type
-                            }
-                        }
-                    };
-                }
-            }
-
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
-
         //Função que devolve as receitas em JSON segundo o email/id do utilizador
         [HttpGet]
-        [AllowAnonymous]
         [Route("Account/AppGetRecipes")]
-        public async Task<ActionResult> AppGetRecipes(GetRecipesViewModel model)
+        public async Task<ActionResult> AppGetRecipes()
         {
-            var user = await UserManager.FindByEmailAsync(model.Email);
-            if (user == null)
+            if (User.Identity.IsAuthenticated)
             {
-                return Json(new 
-                    { success = false, message = "User not found" },
-                    JsonRequestBehavior.AllowGet
-                );
-            }
-            else
-            {
-                var recipes = db.Recipes.All(r => r.Author.GUID == user.Id);
+                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var recipes = db.Recipes.Where(r => r.Author.GUID == user.Id).ToList();
+
+                if (recipes.Count == 0)
+                {
+                    return Json(new
+                    {
+                        success = false,
+                        message = "No recipes found in user: " + user.UserName,
+                        error = new
+                        {
+                            code = "1",
+                            description = "No recipes found"
+                        }
+                    }, JsonRequestBehavior.AllowGet);
+                }
+
                 var response = new
                 {
                     success = true,
@@ -499,178 +573,16 @@ namespace Cooking_Service.Controllers
                 };
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
+            return Json(new
+            { success = false, message = "User not found" },
+                JsonRequestBehavior.AllowGet
+            );
         }
 
         // Function that works for the app login and returns a json response with the username, if the login was
         // successful or an error message if the login failed
         //App Login
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("Account/AppLogin")]
-        public async Task<ActionResult> AppLogin(LoginViewModel model)
-        {
-            /// <summary>
-            /// List of errors:
-            ///     0 - Success
-            ///     1 - LockedOut
-            ///     2 - RequiresVerification
-            ///     3 - Failure
-            ///     4 - User not found
-            ///     5 - Something went horribly wrong
-            /// 
-            /// </summary>
-            
-            var response = new
-            {
-                success = false,
-                message = new
-                { uid = "", name = "", surname = "", username = ""},
-                error = new {
-                    code = "5",
-                    description = "Something went horribly wrong"
-                }
-            };
 
-            //This bool will be changed if the user is found by username
-            bool isFoundByUserName = false;
-            bool aUserExists = false;
-
-            // Attempts to find the user by email
-            var user = await UserManager.FindByEmailAsync(model.Email);
-            if (user == null)
-            {
-                // Here we try to find the user by username (The username can be put in the email field)
-                user = await UserManager.FindByNameAsync(model.Email);
-
-                if (user != null)
-                {
-                    isFoundByUserName = true;
-                }
-            }
-
-            if (user == null)
-            {
-                response = new
-                {
-                    success = false,
-                    message = new
-                    { uid = "", name = "", surname = "", username = "" },
-                    error = new
-                    {
-                        code = "4",
-                        description = "User not found"
-                    }
-                };
-                // Returns a response saying it could not find a user with the email provided
-                return Json(response, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                aUserExists = true;
-            }
-
-            // Checks if the request has the required fields if the user hasn't been found yet
-            if (!ModelState.IsValid && !aUserExists)
-            {
-                return Json(response, JsonRequestBehavior.AllowGet);
-            }
-
-            // This attempt is not to sign in the use but to build the result structure,
-            // This way we wont have to repeat the 100 lines of code for each case,
-            // Therefore the shouldLockout is set to false, so it doesn't affect the ammount of tries the user has done
-
-            var result = await SignInManager.PasswordSignInAsync(user.UserName , model.Password, model.RememberMe, shouldLockout: false);
-
-
-            if (result == SignInStatus.Success)
-            {
-                var userInfo = db.Users.FirstOrDefault(u => u.GUID == user.Id);
-                if (userInfo != null)
-                {
-                    response = new
-                    {
-                        success = true,
-                        message = new
-                        {
-                            uid = user.Id,
-                            name = userInfo.Name,
-                            surname = userInfo.Surname,
-                            username = user.UserName
-                        },
-                        error = new
-                        {
-                            code = "0",
-                            description = "Success"
-                        }
-                    };
-                }
-                else
-                {
-                    response = new
-                    {
-                        success = true,
-                        message = new
-                        {
-                            uid = "",
-                            name = "No Name",
-                            surname = "No Surnames",
-                            username = user.UserName
-                        },
-                        error = new
-                        {
-                            code = "0",
-                            description = "Success, but the user does not have user information."
-                        }
-                    };
-                }
-            }
-            else if (result == SignInStatus.LockedOut)
-            {
-                response = new
-                {
-                    success = false,
-                    message = new
-                    { uid = "", name = "", surname = "", username = "" },
-                    error = new
-                    {
-                        code = "1",
-                        description = "LockedOut"
-                    }
-                };
-            }
-            else if (result == SignInStatus.RequiresVerification)
-            {
-                response = new
-                {
-                    success = false,
-                    message = new
-                    { uid = "", name = "", surname = "", username = "" },
-                    error = new
-                    {
-                        code = "2",
-                        description = "RequiresVerification"
-                    }
-                };
-            }
-            else if (result == SignInStatus.Failure)
-            {
-                response = new
-                {
-                    success = false,
-                    message = new
-                    { uid = "", name = "", surname = "", username = "" },
-                    error = new
-                    {
-                        code = "3",
-                        description = "Failure"
-                    }
-                };
-            }
-
-            return Json(response, JsonRequestBehavior.AllowGet);
-        }
-
-        //
         // POST: /Account/ExternalLogin
         [HttpPost]
         [AllowAnonymous]

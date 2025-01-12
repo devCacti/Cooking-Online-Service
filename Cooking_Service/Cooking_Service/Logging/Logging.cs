@@ -6,6 +6,9 @@ using System.Web;
 
 namespace Cooking_Service.Logging
 {
+    /// <summary>
+    /// DEPRECATED
+    /// </summary>
 
     // The Logging class is a way of making debugging easier with custom logs made by the developer
     public class Logger
