@@ -221,6 +221,14 @@ namespace Cooking_Service.Controllers
                             steps = JsonConvert.DeserializeObject<List<Step>>(model.Steps);
                         }
 
+                        // Order the steps, in the database they might not be in order but it's important to organise for the people that will see the recipe
+                        for (int i = 0; i < steps.Count; i++)
+                        {
+                            // This sets the order of the steps
+
+                            steps[i].Order = i;
+                        }
+
                         // Create a new recipe
                         newRecipe = new Recipe
                         {
@@ -488,6 +496,19 @@ namespace Cooking_Service.Controllers
                 {
                     var users = UserManager.Users.ToList();
 
+                    // Get the total amount of possible pages
+                    double res = db.Recipes.Count() / amount;
+                    var totalPages = Math.Ceiling(res);
+
+                    //Limit the amount to 10
+                    if (totalPages > 10)
+                        totalPages = 10;
+
+                    if (page > totalPages)
+                    {
+                        return Json(new { error = "Invalid Page", code = "1" }, JsonRequestBehavior.AllowGet);
+                    }
+
                     // Get all public recipes
                     var _recipes = db.Recipes
                     .Where(r => r.isPublic)
@@ -499,14 +520,9 @@ namespace Cooking_Service.Controllers
                         GUID = r.GUID,
                         Title = r.Title,
                         Description = r.Description,
-                        Ingredients = r.Bridges.Select(b => new
-                        {
-                            GUID = b.GUID,
-                            IngGUID = b.Ingredient.GUID,
-                            Amount = b.Amount,
-                            CustomUnit = b.CustomUnit
-                        }),
-                        Steps = r.Steps.Select(s => new
+                        Steps = r.Steps
+                        .OrderBy(s => s.Order)
+                        .Select(s => new
                         {
                             GUID = s.GUID,
                             Details = s.Details
@@ -516,18 +532,33 @@ namespace Cooking_Service.Controllers
                         Type = r.Type,
                         NumLikes = r.Likes.Count,
                         isPublic = r.isPublic,
-                        AuthorGUID = r.Author.GUID
+                        Author = r.Author
                     }).ToList();
+
+                    var recipes = _recipes.Select(r => new
+                    {
+                        GUID = r.GUID,
+                        Title = r.Title,
+                        Description = r.Description,
+                        Steps = r.Steps,
+                        Time = r.Time,
+                        Portions = r.Portions,
+                        Type = r.Type,
+                        NumLikes = r.NumLikes,
+                        isPublic = r.isPublic,
+                        Author = UserManager.FindById(r.Author.GUID)?.UserName
+                    });
 
                     return Json(new
                     {
-                        recipes = _recipes,
+                        recipes = recipes,
+                        totalPages = totalPages,
                         error = "",
                         code = "0"
                     }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception e) {
-                    return Json(new { error = e.Message, code = "2" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "Could not return ", code = "2" }, JsonRequestBehavior.AllowGet);
                 }
             }
             return Json(new { error = "Invalid Page", code = "1" });
@@ -550,7 +581,7 @@ namespace Cooking_Service.Controllers
             if (User.Identity.IsAuthenticated)
             {
                 // Finds the user with the id corresponding to the cookie
-                var user = db.Users.Find(User.Identity.GetUserId());
+                User user = db.Users.Find(User.Identity.GetUserId());
 
                 // Get all recipes of the user
                 var recipes = user.Recipes.Select(r => new
@@ -573,7 +604,11 @@ namespace Cooking_Service.Controllers
                         CustomUnit = b.CustomUnit,
                     }),
                     // The same goes for the steps
-                    Steps = r.Steps,
+                    Steps = r.Steps.Select(s => new
+                    {
+                        GUID = s.GUID,
+                        Details = s.Details
+                    }),
 
                     Time = r.Time,
                     Portions = r.Portions,
@@ -651,7 +686,11 @@ namespace Cooking_Service.Controllers
                                 Amount = b.Amount,
                                 CustomUnit = b.CustomUnit,
                             }),
-                            Steps = rec.Steps,
+                            Steps = rec.Steps.Select(s => new
+                            {
+                                GUID = s.GUID,
+                                Details = s.Details
+                            }),
                             Tags = rec.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
                             isPublic = rec.isPublic,
                             Author = UserManager.FindById(rec.Author.GUID).UserName
@@ -874,7 +913,7 @@ namespace Cooking_Service.Controllers
 
                 return Json(new
                 {
-                    ingredients = ings.Select(i => new
+                    Ingredients = ings.Select(i => new
                     {
                         GUID = i.GUID,
                         Name = i.Name,
@@ -887,7 +926,7 @@ namespace Cooking_Service.Controllers
             }
             else
             {
-                return Json(new { error = "You are not allowed to access this recipe", code = "1" }, JsonRequestBehavior.AllowGet);
+                return Json(new { error = "You are not allowed to access the ingredients of this recipe.", code = "1" }, JsonRequestBehavior.AllowGet);
             }
         }
 
