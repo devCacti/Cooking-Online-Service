@@ -13,8 +13,8 @@ using Microsoft.AspNet.Identity;
 using Newtonsoft.Json;
 using Microsoft.Ajax.Utilities;
 using System.Net.Configuration;
-using System.Web.Http.Controllers;
 using System.Configuration;
+using System.Web.WebPages;
 
 /// <summary>
 /// Everytime the responses are changed, the app needs to be updated too to avoid incompatibility
@@ -242,6 +242,8 @@ namespace Cooking_Service.Controllers
                             Author = user
                         };
 
+                        // Add the recipe here before adding the bridges and not saving yet
+                        db.Recipes.Add(newRecipe);
                     }
                     catch (Exception e)
                     {
@@ -261,58 +263,63 @@ namespace Cooking_Service.Controllers
                     // Save the first image using the GUID of the recipe + 'main' as the name
                     try // Try to save the image
                     {
-                        // Gets the first element of all the files sent
-                        file = files[0];
+                        if (files != null && files.Count != 0)
+                        {
+                            // Gets the first element of all the files sent
+                            file = files[0];
 
-                        // Get the type of the file
-                        var fileType = file.ContentType.Split('/')[1];
+                            // Get the type of the file
+                            var fileType = file.ContentType.Split('/')[1];
                         
-                        // Convert to MB (value / 1024^2)
-                        var fileSize = file.ContentLength / 1048576;
+                            // Convert to MB (value / 1024^2)
+                            var fileSize = file.ContentLength / 1048576;
 
-                        // Check if the file is an image
-                        if (fileType != "jpg" && fileType != "jpeg" && fileType != "png")
-                        {
-                            // If the file is not a known image format, return an error in JSON format
-                            return Json(new { error = "Invalid image format. Try again later", code = "4" }, JsonRequestBehavior.AllowGet);
+                            // Check if the file is an image
+                            if (fileType != "jpg" && fileType != "jpeg" && fileType != "png")
+                            {
+                                // If the file is not a known image format, return an error in JSON format
+                                return Json(new { error = "Invalid image format. Try again later", code = "4" }, JsonRequestBehavior.AllowGet);
+                            }
+
+                            // Check if the file is too big
+                            if (fileSize > _cl.getImageSizeLimit(user))
+                            {
+                                // If the file is too big, return an error in JSON format
+                                return Json(new { error = "Image is too big. Max size is 5MB", code = "5" }, JsonRequestBehavior.AllowGet);
+                            }
+
+                            // Decide the name of the file
+                            var fileName = newRecipe.GUID + "_main." + fileType;
+
+                            // Decide where the file will be saved
+                            path = ServerInfo.RecipeImages + fileName;
+
+                            // Assign the path to the image field
+                            newRecipe.Image = path;
                         }
-
-                        // Check if the file is too big
-                        if (fileSize > _cl.getImageSizeLimit(user))
-                        {
-                            // If the file is too big, return an error in JSON format
-                            return Json(new { error = "Image is too big. Max size is 5MB", code = "5" }, JsonRequestBehavior.AllowGet);
-                        }
-
-                        // Decide the name of the file
-                        var fileName = newRecipe.GUID + "_main." + fileType;
-
-                        // Decide where the file will be saved
-                        path = ServerInfo.RecipeImages + fileName;
-
-                        // Assign the path to the image field
-                        newRecipe.Image = path;
                     }
                     catch (Exception e)
                     {
                         // If the image is not saved, then the image will be null
-                        throw e;
+                        //throw e;
+                        new CaughtException(e);
                         //newRecipe.Image = null;
                     }
 
-                    bool _recipeCreated = false;
+                    List<IngredientBridge> bridges = new List<IngredientBridge>();
 
                     // Create the ingredient bridges
-                    for (int i = 0; i < ingIDs.Count; i++)
+                    for (int i = 0; i < ingIDs.Count && ingIDs.Count != 0; i++)
                     {
                         try
                         {
                             // Try to convert the amount to double
                             Convert.ToDouble(ingAmounts[i]);
                         }
-                        catch (Exception)
+                        catch (Exception e)
                         {
                             // If the amount fails to convert, set it to 0
+                            new CaughtException(e);
                             ingAmounts[i] = "0";
                         }
 
@@ -365,23 +372,32 @@ namespace Cooking_Service.Controllers
 
                             // Only save here so that if there is an error at the ingredients part or at the bridge part, we can avoid saving a recipe without all the important data
                             // Save the recipe before the bridge
-                            if (!_recipeCreated)
-                                db.Recipes.Add(newRecipe);
                             db.IngBridges.Add(newIngBridge);
-                            // This way, if there is an error, everything will fail to save and avoid saving a meaningless recipe
-                            db.SaveChanges();
-                            _recipeCreated = true;
                         }
                         catch (Exception e)
                         {
                             new CaughtException(e);
                             //throw e;
-                            return Json(new { error = "Something went wrong. The Recipe could not be saved.", code = "6", ids = ingIDs});
+                            return Json(new { error = "Something went wrong. The Bridges could not be saved.", code = "6", ids = ingIDs});
                         }
                     }
 
+                    // Attempt to save the recipe
+                    try
+                    {
+                        db.SaveChanges();
+                    }
+                    catch (Exception e)
+                    {
+                        new CaughtException(e);
+                        return Json(new { error = "Something went wrong. The Recipe could not be saved.", code = "7", ids = ingIDs });
+                    }
+
                     // Save the image after everything is saved to avoid saving a picture before the recipe and components
-                    file.SaveAs(path);
+                    if (!string.IsNullOrEmpty(path) && file != null)
+                    {
+                        file.SaveAs(path);
+                    }
 
                     // Return the GUID of the new recipe
                     return Json(new
@@ -393,7 +409,7 @@ namespace Cooking_Service.Controllers
                 }
                 else // If the model is not valid, return an error in JSON format
                 {
-                    return Json(new { error = "Invalid recipe data. Try again later", code = "7" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "Invalid recipe data. Try again later", code = "8" }, JsonRequestBehavior.AllowGet);
                 }
             }
             else // If the user is not authenticated, return an error in JSON format
@@ -421,6 +437,11 @@ namespace Cooking_Service.Controllers
             if (recipe == null)
             {
                 return Json(new { error = "Recipe not found", code = "2" }, JsonRequestBehavior.AllowGet);
+            }
+
+            if (string.IsNullOrEmpty(recipe.Image))
+            {
+                return Json(new { error = "No image found", code = "2" }, JsonRequestBehavior.AllowGet);
             }
 
             // Get the image path
@@ -480,7 +501,7 @@ namespace Cooking_Service.Controllers
         // int page = 0 -> Defaults the parameter value to 0 if it's not set
         public ActionResult GetPopular(int page = 0)
         {
-            int amount = 5;
+            int amount = 4;
 
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
@@ -501,8 +522,9 @@ namespace Cooking_Service.Controllers
                     var totalPages = Math.Ceiling(res);
 
                     //Limit the amount to 10
-                    if (totalPages > 10)
+                    if (totalPages > 10) {
                         totalPages = 10;
+                    }
 
                     if (page > totalPages)
                     {
@@ -520,6 +542,13 @@ namespace Cooking_Service.Controllers
                         GUID = r.GUID,
                         Title = r.Title,
                         Description = r.Description,
+                        Ingredients = r.Bridges.Select(b => new
+                        {
+                            GUID = b.GUID,
+                            IngGUID = b.Ingredient.GUID,
+                            Amount = b.Amount,
+                            CustomUnit = b.CustomUnit
+                        }),
                         Steps = r.Steps
                         .OrderBy(s => s.Order)
                         .Select(s => new
@@ -540,6 +569,7 @@ namespace Cooking_Service.Controllers
                         GUID = r.GUID,
                         Title = r.Title,
                         Description = r.Description,
+                        Ingredients = r.Ingredients,
                         Steps = r.Steps,
                         Time = r.Time,
                         Portions = r.Portions,
@@ -552,12 +582,11 @@ namespace Cooking_Service.Controllers
                     return Json(new
                     {
                         recipes = recipes,
-                        totalPages = totalPages,
                         error = "",
                         code = "0"
                     }, JsonRequestBehavior.AllowGet);
                 }
-                catch (Exception e) {
+                catch (Exception) {
                     return Json(new { error = "Could not return ", code = "2" }, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -565,6 +594,49 @@ namespace Cooking_Service.Controllers
 
         }
 
+        // Returns the amount of pages that the popular recipes occupies
+        public ActionResult GetPopularPages()
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (ModelState.IsValid)
+            {
+                int amount = 4;
+
+                try
+                {
+                    int num = db.Recipes.Where(r => r.isPublic).Count();
+                    // Get the total amount of possible pages
+                    double res = (double)num / amount;
+                    var totalPages = Math.Ceiling(res);
+
+                    //Limit the amount to 10
+                    if (totalPages > 10)
+                    {
+                        totalPages = 10;
+                    }
+
+                    return Json(new
+                    {
+                        totalPages = totalPages,
+                        error = "",
+                        code = "0"
+                    }, JsonRequestBehavior.AllowGet);
+                }
+                catch (Exception)
+                {
+                    return Json(new { error = "Could not return ", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            return Json(new { error = "Invalid Page", code = "1" });
+
+        }
         // This method requires the user to be authenticated, without authentication, the method will return an error because the server doesn't know which user is trying to access
         // or if an attack is being made
         // GET: Recipes/GetMyRecipes
@@ -584,7 +656,8 @@ namespace Cooking_Service.Controllers
                 User user = db.Users.Find(User.Identity.GetUserId());
 
                 // Get all recipes of the user
-                var recipes = user.Recipes.Select(r => new
+                // ERROR: CAN BE RELATED TO THE BRIDGES NOT BEING CREATED
+                var recipes = db.Recipes.Where(r => r.Author.GUID == user.GUID).Select(r => new
                 {
                     GUID = r.GUID,
                     // The image is not sent as it is a string containing the directory of the image
@@ -609,13 +682,12 @@ namespace Cooking_Service.Controllers
                         GUID = s.GUID,
                         Details = s.Details
                     }),
-
                     Time = r.Time,
                     Portions = r.Portions,
                     Type = r.Type,
-                    Tags = r.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
-                    isPublic = r.isPublic,
-                    Author = UserManager.FindById(r.Author.GUID).UserName
+                    //Tags = r.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
+                    isPublic = r.isPublic//,
+                    //Author = UserManager.FindById(r.Author.GUID).UserName
                 });
 
                 return Json(new
@@ -746,12 +818,13 @@ namespace Cooking_Service.Controllers
                 return HttpNotFound();
             }
         }
+        
         // When creating new ingredients, the app sends a put to this endpoint
         // so that when the user clicks save recipe, the app attaches all the
         // ingredient IDs to the recipe
         // PUT: Recipes/NewIngredient
         [HttpPut]
-        public ActionResult NewIngredient(NewIngredientViewModel model)
+        public ActionResult NewIngredient(NewIngredientModel model)
         {
             // First check if the client version is correct before proceeding
             var iCVV = _cl.isClientVersionValid(Request);
@@ -809,6 +882,81 @@ namespace Cooking_Service.Controllers
                 return HttpNotFound();
             }
         }
+
+
+        // This method is used to create multiple ingredients at once, used by the mobile app to send multiple ingredients at once
+        // This method has to return all the GUIDs of the ingredients that were created, return some error if there was even a single error
+        // If a single ingredient fails to be created, the method should return an error and delete all the ingredients that were just created
+        // PUT: Recipes/NewIngredients
+        [HttpPut]
+        public ActionResult NewIngredients(MultipleNewIngredientsModel model)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            // We do not need to do the "if (User.Identity.IsAuthenticated)" check here as it is [Authorize] only
+            try
+            {
+                User user = db.Users.Find(User.Identity.GetUserId());
+
+                // The model consists of elements where the character ';' can't appear as input from the user
+                // meaning that, if the name of an ingredient has a semicolon, it was the app that put it there
+                // and it's not a user input
+
+                List<string> names = model.Names.Split(';').ToList();
+                List<string> units = model.Units.Split(';').ToList();
+                //List<string> tags = model.Tags.Split(';').ToList();     // Tags are optional and GUIDs of the actual tags; Not Implemented
+
+                // Check if the amount of names is the same as the amount of units
+                if (names.Count != units.Count)
+                {
+                    return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Saving to the database
+                List<Ingredient> ings = new List<Ingredient>();
+                foreach (string name in names)
+                {
+                    ings.Add(new Ingredient
+                    {
+                        Name = name,
+                        Unit = units[names.IndexOf(name)], // Matching index on the units list
+                        Author = user
+                    });
+                }
+
+                foreach (Ingredient ing in ings)
+                {
+                    db.Ingredients.Add(ing);
+                }
+                db.SaveChanges();
+
+                // Return the GUIDs of the ingredients that were created, for that:
+                // Instead of going through the database to get the GUIDs, we can use the list of ingredients as they should have been saved
+                // in the same order as the names and units
+                return Json(new
+                {
+                    ingredientIds = ings.Select(i => i.GUID),
+                    error = "",
+                    code = "0"
+                }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception e)
+            {
+                new CaughtException(e);
+                // Say an error occurred at the moment of creation of the ingredients
+                return Json(new { error = "An error occurred and the request could not be completed.", code = "1" }, JsonRequestBehavior.AllowGet);
+            }
+
+            // Say that an error occurred and didn't even get to the creation of the ingredients
+            //return Json(new { error = "Unnexpected error occurred.", code = "-1" }, JsonRequestBehavior.AllowGet);
+        }
+
 
         // GET: Recipes/GetMyIngredients
         public ActionResult GetMyIngredients()

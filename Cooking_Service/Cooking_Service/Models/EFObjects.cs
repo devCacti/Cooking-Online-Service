@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Cooking_Service.DAL;
 using System.Linq.Expressions;
-using Cooking_Service.DAL;
 
 // EFObjects
 // -----------------------
@@ -72,7 +71,6 @@ namespace Cooking_Service.Models
 
     public class Limit
     {
-        private CookingContext db;
         public Limit()
         {
             // Atributes a new GUID
@@ -186,6 +184,10 @@ namespace Cooking_Service.Models
         // One to many relation
         // One Limit for many users
         public Limit Limit { get; set; }
+
+        
+        public DateTime? DateTimeCreated { get; set; }
+        public DateTime? DateTimeEdited { get; set; }
     }
 
     public class Like

@@ -53,12 +53,12 @@ namespace Cooking_Service.Models
         public bool IsPublic { get; set; }
     }
 
-    // New Ingredient ViewModel
+    // New Ingredient Model
     // Used to create a new ingredient
     // The user provides the name, unit and tag of the ingredient
     // The tag is a GUID as it will be managed by the service
     // If the GUID doesn't correspond to any tag, it'll be null
-    public class NewIngredientViewModel
+    public class NewIngredientModel
     {
         [Required]
         [Display(Name = "Name")]
@@ -71,6 +71,22 @@ namespace Cooking_Service.Models
         [MaxLength(256)]
         [Display(Name = "Tag")]
         public string TagGUID { get; set; }
+    }
+
+    // Multiple New Ingredients Model
+    // Used for the creation of multiple ingredients
+    public class MultipleNewIngredientsModel
+    {
+        [Required]
+        [Display(Name = "Names")]
+        public string Names { get; set; }
+
+        [Display(Name = "Units")]
+        public string Units { get; set; }
+
+        [Display(Name = "Tags")]
+        public string Tags { get; set; }
+
     }
 
     // Assign verified status to an ingredient
