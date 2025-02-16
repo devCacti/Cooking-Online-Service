@@ -53,6 +53,49 @@ namespace Cooking_Service.Models
         public bool IsPublic { get; set; }
     }
 
+    // Edit (Update) Recipe View Model
+    // Much like the Create Recipe View Model, but including the GUID
+    public class UpdateRecipeViewModel
+    {
+        [Required]
+        [Display(Name = "GUID")]
+        public string GUID { get; set; }
+
+        [Required]
+        [Display(Name = "Title")]
+        public string Title { get; set; }
+
+        [MaxLength(512)]
+        [Display(Name = "Description")]
+        public string Description { get; set; }
+
+        // All the ingredients, bridges, custom measurements and amounts
+        // all need to be in the same order, so they can be matched
+        // That has to be done in the app, or be given in a json format
+        [MaxLength(4096)]
+        public string IngredientIds { get; set; }
+
+        [MaxLength(4096)]
+        public string BridgeIds { get; set; }
+
+        [MaxLength(2048)]
+        public string CustomIngM { get; set; }
+
+        [MaxLength(2048)]
+        public string IngrAmounts { get; set; }
+
+
+        // The steps are given in a string in a JSON format
+        [MaxLength(4096)]
+        public string Steps { get; set; }
+
+        public double Time { get; set; }
+        public double Portions { get; set; }
+        public TypeRecipe Type { get; set; }
+        public bool IsPublic { get; set; }
+    }
+
+
     // New Ingredient Model
     // Used to create a new ingredient
     // The user provides the name, unit and tag of the ingredient

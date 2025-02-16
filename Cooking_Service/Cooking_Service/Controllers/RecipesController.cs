@@ -418,6 +418,230 @@ namespace Cooking_Service.Controllers
             }
         }
 
+        // This method requires the user to be authenticated, without it, the method will return an error
+        [HttpPut]
+        public ActionResult UpdateRecipe(UpdateRecipeViewModel model)
+        {
+            // First check if the client version is correct before proceeding
+            var iCVV = _cl.isClientVersionValid(Request);
+            if (iCVV.Item1 == 404)
+                return HttpNotFound();
+
+            else if (iCVV.Item1 == 403)
+                return new HttpStatusCodeResult(403, iCVV.Item2);
+
+            if (User.Identity.IsAuthenticated)
+            {
+                //Check if the model is valid
+                if (!ModelState.IsValid)
+                {
+                    return Json(new { error = "Invalid recipe data. Try again later", code = "9" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Get the recipe according to the GUID passed
+                Recipe recipe = db.Recipes.FirstOrDefault(r => r.GUID == model.GUID);
+                User user = db.Users.Find(User.Identity.GetUserId());
+
+                // If the recipe is not found, return an error in JSON format
+                if (recipe == null || user == null)
+                {
+                    return Json(new { error = "An error occurred", code = "8" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Check if the user is the author of the recipe
+                if (recipe.Author.GUID != user.GUID)
+                {
+                    return Json(new { error = "You are not the author of this recipe", code = "7" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Bridges Preparation
+                List<string> ingIDs = new List<string>();
+                List<string> bridgeIDs = new List<string>();
+                List<string> ingAmounts = new List<string>();
+                List<string> customIngs = new List<string>();
+
+                try
+                {
+                    // Check if the ingredient ids exist and are not null
+                    if (model.IngredientIds != null)
+                    {
+                        // Split the string into a list of strings with all the ingredient ids
+                        ingIDs = model.IngredientIds.Split(';').ToList();
+
+                        // Check if there are amounts to be assigned to the ingredients
+                        if (model.IngrAmounts != null)
+                        {
+                            ingAmounts = model.IngrAmounts.Split(';').ToList();
+                            // If the number of amounts is different from the number of ingredients, return an error
+                            if (ingAmounts.Count != ingIDs.Count)
+                            {
+                                return Json(new { error = "Invalid updated recipe.", code = "6" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+
+                        // Check if there are custom measurements for the ingredients
+                        if (model.CustomIngM != null)
+                        {
+                            customIngs = model.CustomIngM.Split(';').ToList();
+
+                            // If the number of custom measurements is different from the number of ingredients, return an error
+                            if (customIngs.Count != ingIDs.Count)
+                            {
+                                return Json(new { error = "Invalid updated recipe.", code = "5" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+
+                        // Check if there are bridge ids
+                        if (model.BridgeIds != null)
+                        {
+                            // Split the string into a list of strings with all the bridge ids
+                            bridgeIDs = model.BridgeIds.Split(';').ToList();
+
+                            // If the number of bridge ids is different from the number of ingredients, return an error
+                            if (bridgeIDs.Count != ingIDs.Count)
+                            {
+                                return Json(new { error = "Invalid updated recipe.", code = "4" }, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    new CaughtException(ex);
+                    return Json(new { error = "An error occurred", code = "4" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Steps Preparation
+                List<Step> steps = new List<Step>();
+                steps = recipe.Steps.ToList();
+
+                // The steps are sent in a JSON format, so they need to be decoded
+                List<Step> updatedSteps = new List<Step>();
+
+                try
+                {
+                    // Decoding the steps
+                    if (model.Steps != null)
+                    {
+                        updatedSteps = JsonConvert.DeserializeObject<List<Step>>(model.Steps);
+                    }
+
+                    // Order the steps
+                    for (int i = 0; i < updatedSteps.Count; i++)
+                    {
+                        updatedSteps[i].Order = i;
+                    }
+
+                    // Delete the existing steps from the database
+                    foreach (var step in steps)
+                    {
+                        db.Recipes.FirstOrDefault(r => r.GUID == model.GUID).Steps.Remove(step);
+                    }
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    new CaughtException(ex);
+                    return Json(new { error = "An error occurred", code = "3" }, JsonRequestBehavior.AllowGet);
+                }
+
+                // Updating the ingredient bridges
+                List<IngredientBridge> ingredientBridges = new List<IngredientBridge>();
+
+                ingredientBridges = db.IngBridges.Where(b => b.Recipe.GUID == model.GUID).ToList();
+
+                // Update the information of the ingredient bridges
+                foreach (var bridge in ingredientBridges)
+                {
+                    if (ingIDs == null || ingAmounts == null || customIngs == null)
+                    {
+                        try
+                        {
+                            db.IngBridges.Remove(bridge);
+                            db.SaveChanges();
+                        }
+                        catch (Exception ex)
+                        {
+                            new CaughtException(ex);
+                            return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+
+                try
+                {
+                    int n = bridgeIDs.Count;
+
+                    for (int i = 0; i < n; i++)
+                    {
+                        try
+                        {
+                            // If the bridge id is not the same and the bridge is not found, that means that the user no longer
+                            // Want the ingredient in the recipe, so it's removed completely, the ingredient stays in the db
+                            // But is no longer in the recipe as it can be used in other recipes
+                            if (bridgeIDs[i] != ingredientBridges[i].GUID && !ingredientBridges.Any(b => b.GUID == bridgeIDs[i]))
+                            {
+                                ingredientBridges.RemoveAt(i);
+                                db.IngBridges.Remove(ingredientBridges[i]);
+                                continue;
+                            }
+
+                            // Try to update the ingredient bridges
+                            ingredientBridges[i] = new IngredientBridge
+                            {
+                                GUID = bridgeIDs[i],
+                                Recipe = recipe,
+                                Ingredient = db.Ingredients.FirstOrDefault(ing => ing.GUID == ingIDs[i]),
+                                Amount = Convert.ToDouble(ingAmounts[i]),
+                                CustomUnit = customIngs[i]
+                            };
+                        }
+                        catch (Exception e)
+                        {
+                            new CaughtException(e);
+                            return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    new CaughtException(e);
+                    return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                }
+
+
+                // Updating all the fields of the recipe to the new ones
+                recipe = new Recipe
+                {
+                    GUID = recipe.GUID,
+                    Title = model.Title,
+                    Description = model.Description,
+                    Bridges = ingredientBridges,
+                    Steps = updatedSteps,
+                    Time = model.Time,
+                    Portions = model.Portions,
+                    Type = model.Type,
+                    isPublic = model.IsPublic,
+                    Author = user
+                };
+
+                // Save the changes
+                try
+                {
+                    db.Recipes.Remove(recipe);
+                    db.Recipes.Add(recipe);
+                    db.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    new CaughtException(e);
+                    return Json(new { error = "An error occurred", code = "1" }, JsonRequestBehavior.AllowGet);
+                }
+            }
+            // Last return if the user is not authenticated
+            return Json(new { error = "Could not authenticate", code = "1" }, JsonRequestBehavior.AllowGet);
+        }
+
         // This method does not require the user to be authenticated
         // GET: Recipes/RecipeImage
         public ActionResult RecipeImage(string id)
@@ -686,7 +910,7 @@ namespace Cooking_Service.Controllers
                     Portions = r.Portions,
                     Type = r.Type,
                     //Tags = r.Bridges.Select(b => b.Ingredient.Tag != null ? b.Ingredient.Tag.Name : "no_tags"),
-                    isPublic = r.isPublic//,
+                    isPublic = r.isPublic
                     //Author = UserManager.FindById(r.Author.GUID).UserName
                 });
 

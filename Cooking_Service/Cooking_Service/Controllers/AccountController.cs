@@ -292,7 +292,7 @@ namespace Cooking_Service.Controllers
                         GUID = user.Id,
                         Name = model.Name,
                         Surname = model.Surname,
-                        Type = model.Type
+                        Type = TypeUser.User
                     };
 
                     db.Users.Add(uInfo);
@@ -392,7 +392,6 @@ namespace Cooking_Service.Controllers
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             //User is preset to User - this is the default value, even if the http post contains a different value
-            model.Type = TypeUser.User;
             
             if (model.Name == null)
             {
@@ -417,7 +416,7 @@ namespace Cooking_Service.Controllers
                         GUID = user.Id,
                         Name = model.Name,
                         Surname = model.Surname,
-                        Type = model.Type
+                        Type = TypeUser.User
                     };
 
                     db.Users.Add(uInfo);

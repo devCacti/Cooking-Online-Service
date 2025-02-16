@@ -92,8 +92,8 @@ namespace Cooking_Service.Models
         [Display(Name = "Sobrenome")]
         public string Surname { get; set; }
 
-        [Display(Name = "Tipo de Utilizador")]
-        public TypeUser Type { get; set; }
+        //[Display(Name = "Tipo de Utilizador")]
+        //public TypeUser Type { get; set; }
     }
 
     public class ResetPasswordViewModel
