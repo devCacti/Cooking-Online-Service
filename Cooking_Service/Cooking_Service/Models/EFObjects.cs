@@ -472,6 +472,12 @@ namespace Cooking_Service.Models
                 db.SaveChanges();
                 return true;
             }
+            else
+            {
+                caughtException.DateTime = DateTime.Now;
+                caughtException.Solved = false;
+                db.SaveChanges();
+            }
             return false;
         }
     }

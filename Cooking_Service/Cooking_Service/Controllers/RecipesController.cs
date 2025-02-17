@@ -458,7 +458,7 @@ namespace Cooking_Service.Controllers
 
                 // Bridges Preparation
                 List<string> ingIDs = new List<string>();
-                List<string> bridgeIDs = new List<string>();
+                //List<string> bridgeIDs = new List<string>();
                 List<string> ingAmounts = new List<string>();
                 List<string> customIngs = new List<string>();
 
@@ -486,24 +486,13 @@ namespace Cooking_Service.Controllers
                         {
                             customIngs = model.CustomIngM.Split(';').ToList();
 
+
+                            /// THIS MAKES NO SENSE AT ALL
                             // If the number of custom measurements is different from the number of ingredients, return an error
-                            if (customIngs.Count != ingIDs.Count)
-                            {
-                                return Json(new { error = "Invalid updated recipe.", code = "9" }, JsonRequestBehavior.AllowGet);
-                            }
-                        }
-
-                        // Check if there are bridge ids
-                        if (model.BridgeIds != null)
-                        {
-                            // Split the string into a list of strings with all the bridge ids
-                            bridgeIDs = model.BridgeIds.Split(';').ToList();
-
-                            // If the number of bridge ids is different from the number of ingredients, return an error
-                            if (bridgeIDs.Count != ingIDs.Count)
-                            {
-                                return Json(new { error = "Invalid updated recipe.", code = "8" }, JsonRequestBehavior.AllowGet);
-                            }
+                            //if (customIngs.Count != ingIDs.Count)
+                            //{
+                            //    return Json(new { error = "Invalid updated recipe.", code = "9" }, JsonRequestBehavior.AllowGet);
+                            //}
                         }
                     }
                 }
@@ -549,71 +538,45 @@ namespace Cooking_Service.Controllers
                 }
 
                 // Updating the ingredient bridges
-                List<IngredientBridge> ingredientBridges = new List<IngredientBridge>();
-
-                ingredientBridges = db.IngBridges.Where(b => b.Recipe.GUID == model.GUID).ToList();
-
-                // Update the information of the ingredient bridges
-                foreach (var bridge in ingredientBridges)
-                {
-                    if (ingIDs == null || ingAmounts == null || customIngs == null)
-                    {
-                        try
-                        {
-                            db.IngBridges.Remove(bridge);
-                            db.SaveChanges();
-                        }
-                        catch (Exception ex)
-                        {
-                            new CaughtException(ex);
-                            return Json(new { error = "An error occurred", code = "5" }, JsonRequestBehavior.AllowGet);
-                        }
-                    }
-                }
+                List<IngredientBridge> ingredientBridges = db.IngBridges.Where(b => b.Recipe.GUID == model.GUID).ToList();
 
                 try
                 {
-                    int n = bridgeIDs.Count;
+                    db.IngBridges.RemoveRange(ingredientBridges);
+                    recipe.Bridges = new List<IngredientBridge>();
+                    ingredientBridges = new List<IngredientBridge>();
 
-                    for (int i = 0; i < n; i++)
+                    foreach (var ing in ingIDs)
                     {
-                        try
-                        {
-                            // If the bridge id is not the same and the bridge is not found, that means that the user no longer
-                            // Want the ingredient in the recipe, so it's removed completely, the ingredient stays in the db
-                            // But is no longer in the recipe as it can be used in other recipes
-                            if (bridgeIDs[i] != ingredientBridges[i].GUID && !ingredientBridges.Any(b => b.GUID == bridgeIDs[i]))
-                            {
-                                ingredientBridges.RemoveAt(i);
-                                db.IngBridges.Remove(ingredientBridges[i]);
-                                continue;
-                            }
-
-                            // Try to update the ingredient bridges
-                            ingredientBridges[i] = new IngredientBridge
-                            {
-                                GUID = bridgeIDs[i],
-                                Recipe = recipe,
-                                Ingredient = db.Ingredients.FirstOrDefault(ing => ing.GUID == ingIDs[i]),
-                                Amount = Convert.ToDouble(ingAmounts[i]),
-                                CustomUnit = customIngs[i]
-                            };
+                        int index = ingIDs.IndexOf(ing);
+                        string customUnit; 
+                        try {
+                            customUnit = customIngs[index].Split(':')[1];
+                        } catch {
+                            customUnit = null;
                         }
-                        catch (Exception e)
+                        Ingredient _ingredient = db.Ingredients.FirstOrDefault(i => i.GUID == ing);
+                        if (string.IsNullOrEmpty(ing) || _ingredient == null)
                         {
-                            new CaughtException(e);
-                            return Json(new { error = "An error occurred", code = "4" }, JsonRequestBehavior.AllowGet);
+                            continue;
                         }
+                        var _bridge = new IngredientBridge
+                        {
+                            Recipe = recipe,
+                            Ingredient = _ingredient,
+                            Amount = Convert.ToDouble(ingAmounts[index]),
+                            CustomUnit = customUnit
+                        };
+                        ingredientBridges.Add(_bridge);
                     }
+                    db.IngBridges.AddRange(ingredientBridges);
+                    db.SaveChanges();
                 }
                 catch (Exception e)
                 {
                     new CaughtException(e);
                     return Json(new { error = "An error occurred", code = "3" }, JsonRequestBehavior.AllowGet);
                 }
-
-                // Updating all the fields of the recipe to the new ones
-                recipe = db.Recipes.FirstOrDefault(r => r.GUID == model.GUID);
 
                 // Update the recipe
                 recipe.Title = model.Title;

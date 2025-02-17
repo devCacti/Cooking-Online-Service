@@ -75,8 +75,8 @@ namespace Cooking_Service.Models
         [MaxLength(4096)]
         public string IngredientIds { get; set; }
 
-        [MaxLength(4096)]
-        public string BridgeIds { get; set; }
+        //[MaxLength(4096)]
+        //public string BridgeIds { get; set; }
 
         [MaxLength(2048)]
         public string CustomIngM { get; set; }

@@ -81,7 +81,7 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 519,
+          "DockedWidth": 613,
           "SelectedChildIndex": 4,
           "Children": [
             {
@@ -116,7 +116,7 @@
               "RelativeDocumentMoniker": "Cooking_Service\\Controllers\\RecipesController.cs",
               "ToolTip": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Controllers\\RecipesController.cs",
               "RelativeToolTip": "Cooking_Service\\Controllers\\RecipesController.cs",
-              "ViewState": "AgIAAGQCAAAAAAAAAAAAAGcCAABOAAAAAAAAAA==",
+              "ViewState": "AgIAABYCAAAAAAAAAAAAAB8CAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-06T16:51:24.873Z",
               "EditorCaption": ""
@@ -269,7 +269,7 @@
           ]
         },
         {
-          "DockedWidth": 421,
+          "DockedWidth": 327,
           "SelectedChildIndex": 0,
           "Children": [
             {
@@ -280,7 +280,7 @@
               "RelativeDocumentMoniker": "Cooking_Service\\Models\\EFObjects.cs",
               "ToolTip": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\EFObjects.cs",
               "RelativeToolTip": "Cooking_Service\\Models\\EFObjects.cs",
-              "ViewState": "AgIAAN8AAAAAMjMzM3MowNMAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAMwBAAAAzczMzEwhwN4BAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-06T16:51:25.166Z",
               "EditorCaption": ""
@@ -293,7 +293,7 @@
               "RelativeDocumentMoniker": "Cooking_Service\\Models\\RecipeViewModel.cs",
               "ToolTip": "C:\\Users\\CloudDev\\OneDrive - Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\Models\\RecipeViewModel.cs",
               "RelativeToolTip": "Cooking_Service\\Models\\RecipeViewModel.cs",
-              "ViewState": "AgIAAAoAAADAMzMzMzMpwFcAAAA7AAAAAAAAAA==",
+              "ViewState": "AgIAAEEAAADAmZmZmZk5wE4AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-06T16:51:24.711Z",
               "EditorCaption": ""
