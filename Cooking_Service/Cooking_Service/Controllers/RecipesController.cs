@@ -419,6 +419,8 @@ namespace Cooking_Service.Controllers
         }
 
         // This method requires the user to be authenticated, without it, the method will return an error
+        // This is basically the function for editing a recipe
+        // PUT: Recipes/UpdateRecipe
         [HttpPut]
         public ActionResult UpdateRecipe(UpdateRecipeViewModel model)
         {
@@ -435,7 +437,7 @@ namespace Cooking_Service.Controllers
                 //Check if the model is valid
                 if (!ModelState.IsValid)
                 {
-                    return Json(new { error = "Invalid recipe data. Try again later", code = "9" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "Invalid recipe data. Try again later", code = "13" }, JsonRequestBehavior.AllowGet);
                 }
 
                 // Get the recipe according to the GUID passed
@@ -445,13 +447,13 @@ namespace Cooking_Service.Controllers
                 // If the recipe is not found, return an error in JSON format
                 if (recipe == null || user == null)
                 {
-                    return Json(new { error = "An error occurred", code = "8" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "An error occurred", code = "12" }, JsonRequestBehavior.AllowGet);
                 }
 
                 // Check if the user is the author of the recipe
                 if (recipe.Author.GUID != user.GUID)
                 {
-                    return Json(new { error = "You are not the author of this recipe", code = "7" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "You are not the author of this recipe", code = "11" }, JsonRequestBehavior.AllowGet);
                 }
 
                 // Bridges Preparation
@@ -475,7 +477,7 @@ namespace Cooking_Service.Controllers
                             // If the number of amounts is different from the number of ingredients, return an error
                             if (ingAmounts.Count != ingIDs.Count)
                             {
-                                return Json(new { error = "Invalid updated recipe.", code = "6" }, JsonRequestBehavior.AllowGet);
+                                return Json(new { error = "Invalid updated recipe.", code = "10" }, JsonRequestBehavior.AllowGet);
                             }
                         }
 
@@ -487,7 +489,7 @@ namespace Cooking_Service.Controllers
                             // If the number of custom measurements is different from the number of ingredients, return an error
                             if (customIngs.Count != ingIDs.Count)
                             {
-                                return Json(new { error = "Invalid updated recipe.", code = "5" }, JsonRequestBehavior.AllowGet);
+                                return Json(new { error = "Invalid updated recipe.", code = "9" }, JsonRequestBehavior.AllowGet);
                             }
                         }
 
@@ -500,7 +502,7 @@ namespace Cooking_Service.Controllers
                             // If the number of bridge ids is different from the number of ingredients, return an error
                             if (bridgeIDs.Count != ingIDs.Count)
                             {
-                                return Json(new { error = "Invalid updated recipe.", code = "4" }, JsonRequestBehavior.AllowGet);
+                                return Json(new { error = "Invalid updated recipe.", code = "8" }, JsonRequestBehavior.AllowGet);
                             }
                         }
                     }
@@ -508,12 +510,12 @@ namespace Cooking_Service.Controllers
                 catch (Exception ex)
                 {
                     new CaughtException(ex);
-                    return Json(new { error = "An error occurred", code = "4" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "An error occurred", code = "7" }, JsonRequestBehavior.AllowGet);
                 }
 
                 // Steps Preparation
                 List<Step> steps = new List<Step>();
-                steps = recipe.Steps.ToList();
+                steps = db.RecipeSteps.Where(s => s.Recipe.GUID == model.GUID).ToList() ?? new List<Step>();
 
                 // The steps are sent in a JSON format, so they need to be decoded
                 List<Step> updatedSteps = new List<Step>();
@@ -535,14 +537,15 @@ namespace Cooking_Service.Controllers
                     // Delete the existing steps from the database
                     foreach (var step in steps)
                     {
+                        db.RecipeSteps.Remove(step);
                         db.Recipes.FirstOrDefault(r => r.GUID == model.GUID).Steps.Remove(step);
                     }
                     db.SaveChanges();
                 }
-                catch (Exception ex)
+                catch (Exception e)
                 {
-                    new CaughtException(ex);
-                    return Json(new { error = "An error occurred", code = "3" }, JsonRequestBehavior.AllowGet);
+                    new CaughtException(e);
+                    return Json(new { error = "An error occurred", code = "6" }, JsonRequestBehavior.AllowGet);
                 }
 
                 // Updating the ingredient bridges
@@ -563,7 +566,7 @@ namespace Cooking_Service.Controllers
                         catch (Exception ex)
                         {
                             new CaughtException(ex);
-                            return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { error = "An error occurred", code = "5" }, JsonRequestBehavior.AllowGet);
                         }
                     }
                 }
@@ -599,43 +602,45 @@ namespace Cooking_Service.Controllers
                         catch (Exception e)
                         {
                             new CaughtException(e);
-                            return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                            return Json(new { error = "An error occurred", code = "4" }, JsonRequestBehavior.AllowGet);
                         }
                     }
                 }
                 catch (Exception e)
                 {
                     new CaughtException(e);
-                    return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "An error occurred", code = "3" }, JsonRequestBehavior.AllowGet);
                 }
 
-
                 // Updating all the fields of the recipe to the new ones
-                recipe = new Recipe
-                {
-                    GUID = recipe.GUID,
-                    Title = model.Title,
-                    Description = model.Description,
-                    Bridges = ingredientBridges,
-                    Steps = updatedSteps,
-                    Time = model.Time,
-                    Portions = model.Portions,
-                    Type = model.Type,
-                    isPublic = model.IsPublic,
-                    Author = user
-                };
+                recipe = db.Recipes.FirstOrDefault(r => r.GUID == model.GUID);
 
-                // Save the changes
+                // Update the recipe
+                recipe.Title = model.Title;
+                recipe.Description = model.Description;
+                recipe.Bridges = ingredientBridges;
+                recipe.Steps = updatedSteps;
+                recipe.Time = model.Time;
+                recipe.Portions = model.Portions;
+                recipe.Type = model.Type;
+                recipe.isPublic = model.IsPublic;
+                recipe.Edited = DateTime.Now;
+
                 try
                 {
-                    db.Recipes.Remove(recipe);
-                    db.Recipes.Add(recipe);
+                    // Save the changes
                     db.SaveChanges();
+                    return Json(new
+                    {
+                        error = "",
+                        code = "0",
+                        message = "Recipe updated successfully"
+                    }, JsonRequestBehavior.AllowGet);
                 }
                 catch (Exception e)
                 {
                     new CaughtException(e);
-                    return Json(new { error = "An error occurred", code = "1" }, JsonRequestBehavior.AllowGet);
+                    return Json(new { error = "An error occurred", code = "2" }, JsonRequestBehavior.AllowGet);
                 }
             }
             // Last return if the user is not authenticated
