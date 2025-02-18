@@ -458,6 +458,7 @@ namespace Cooking_Service.Controllers
 
                 // Bridges Preparation
                 List<string> ingIDs = new List<string>();
+
                 //List<string> bridgeIDs = new List<string>();
                 List<string> ingAmounts = new List<string>();
                 List<string> customIngs = new List<string>();
@@ -542,7 +543,10 @@ namespace Cooking_Service.Controllers
 
                 try
                 {
+                    // Remove every single bridge from the database
                     db.IngBridges.RemoveRange(ingredientBridges);
+
+                    // Change Lists
                     recipe.Bridges = new List<IngredientBridge>();
                     ingredientBridges = new List<IngredientBridge>();
 
@@ -552,6 +556,9 @@ namespace Cooking_Service.Controllers
                         string customUnit; 
                         try {
                             customUnit = customIngs[index].Split(':')[1];
+                            // If it is "null" make it real NULL 👌
+                            if (customUnit == "null")
+                                throw new Exception();
                         } catch {
                             customUnit = null;
                         }
@@ -869,7 +876,7 @@ namespace Cooking_Service.Controllers
                         CustomUnit = b.CustomUnit,
                     }),
                     // The same goes for the steps
-                    Steps = r.Steps.Select(s => new
+                    Steps = r.Steps.OrderBy(s => s.Order).Select(s => new
                     {
                         GUID = s.GUID,
                         Details = s.Details
