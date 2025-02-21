@@ -1,39 +1,81 @@
 ﻿@model Cooking_Service.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Registre-se";
+    ViewBag.Title = "Registar";
 }
 
-<main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+<main aria-labelledby="title" class="form">
+    <p></p>
+    <h2 id="title">@ViewBag.Title</h2>
 
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
     {
         @Html.AntiForgeryToken()
-        <h4>Criar uma nova conta.</h4>
+        <h4 id="subtitle">Criar uma nova conta</h4>
         <hr />
+        <br />
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Name, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.Name, new { @class = "input-field" })
+            </div>
+        </div>
+        <p></p>
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Surname, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.Surname, new { @class = "input-field" })
+            </div>
+        </div>
+        <br />
+        <br />
         @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="row">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Email, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.Email, new { @class = "input-field" })
             </div>
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+        <p></p>
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.UserName, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.TextBoxFor(m => m.UserName, new { @class = "input-field" })
             </div>
         </div>
-        <div class="row">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 col-form-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+        <br /><br />
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.Password, new { @class = "input-label" })
+            </div>
+            <div>
+                @Html.PasswordFor(m => m.Password, new { @class = "input-field password" })
             </div>
         </div>
-        <div class="row">
-            <div class="offset-md-2 col-md-10">
-                <input type="submit" value="Registrar" class="btn btn-outline-dark" />
+        <p></p>
+        <div class="input-group">
+            <div>
+                @Html.LabelFor(m => m.ConfirmPassword, new { @class = "input-label" })
             </div>
+            <div>
+                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "input-field password" })
+            </div>
+        </div>
+        <br />
+        <div>
+            <button type="submit" class="btn">Registar</button>
+        </div>
+
+        <br />
+        <div class="niceLink small">
+            <a>Já tem uma conta?</a>
         </div>
     }
 </main>

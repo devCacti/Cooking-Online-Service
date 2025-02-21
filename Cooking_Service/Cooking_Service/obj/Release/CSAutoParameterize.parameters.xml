@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <parameters>
-  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection A Cadeia de Conexão usada em web.config pelo aplicativo para acessar o banco de dados." defaultValue="Server=DESKTOP-T1CDB54\SQLEXPRESS;Database=Cooking_Service;Integrated Security=true" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\Admin\\Documents\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection A Cadeia de Conexão usada em web.config pelo aplicativo para acessar o banco de dados." defaultValue="Server=(local)\SQLEXPRESS;Database=Cooking_Service_Tests;Integrated Security=true" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\CloudDev\\OneDrive\ -\ Contoso\\Documentos\\GitHub\\Cooking-Online-Service\\Cooking_Service\\Cooking_Service\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
   </parameter>
 </parameters>

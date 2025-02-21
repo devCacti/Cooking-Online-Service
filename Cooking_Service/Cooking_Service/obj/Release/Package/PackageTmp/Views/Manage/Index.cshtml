@@ -1,16 +1,126 @@
-﻿@model Cooking_Service.Models.IndexViewModel
+﻿@using Cooking_Service.DAL;
+@using Cooking_Service.Models;
+@using Microsoft.AspNet.Identity;
+@model Cooking_Service.Models.IndexViewModel
 @{
-    ViewBag.Title = "Gerenciar";
+    ViewBag.Title = "Gerir Conta";
+
+    var ctx = new ApplicationDbContext();
+    var userC = new CookingContext();
+    var userA = ctx.Users.Find(User.Identity.GetUserId());
+
+    string userName = "No user";
+    User user = new User();
+
+    if (userA != null)
+    {
+        userName = userA.UserName;
+        user = userC.Users.Find(userA.Id);
+    }
 }
 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css" rel="stylesheet">
+
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
+    <p></p>
+    <h2 class="title">@ViewBag.Title</h2>
 
     <p class="text-success">@ViewBag.StatusMessage</p>
     <div>
+        <h4 class="subtitle">Informações gerais da conta</h4>
+        <br />
+        <br />
+        <div class="margin50">
+            <div class="row">
+                <div class="element">
+                    <div class="row">
+                        <h4>UserName</h4>
+                        <a href="#" class="lnk-n">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </div>
+                    <p class="text-info">@userName</p>
+                    <hr />
+                </div>
+                <div class="element">
+                    <h4>Email</h4>
+                    <address>
+                        <!--Show only first 2 letters of the email and the .com or .pt-->
+                        @if (userA.Email != null) { 
+                            <p class="text-info">
+                                @userA.Email.Substring(0, 2)*****@userA.Email.Substring(userA.Email.Length - 4)
+                            </p>
+                        } else { 
+                            <p class="text-info"> No email </p>
+                        }
+                    </address>
+                    <hr />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="element">
+                    <div class="row">
+                        <h4>Nome</h4>
+                        <a href="#" class="lnk-n">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </div>
+                    @if (user.Name == null || user.Name.IsEmpty())
+                    {
+                        <p class="text-info">Sem Nome</p>
+                    }
+                    else
+                    {
+                        <p class="text-info">@user.Name</p>
+                    }
+                    <hr />
+                </div>
+                <div class="element">
+                    <div class="row">
+                        <h4>Apelido (s)</h4>
+                        <a href="#" class="lnk-n">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                    </div>
+                    @if (user.Surname == null || user.Surname.IsEmpty())
+                    {
+                        <p class="text-info">Sem Apelido</p>
+                    }
+                    else
+                    {
+                        <p class="text-info">@user.Surname</p>
+                    }
+                    <hr />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="element">
+                <div class="row">
+                    <h4>Telefone</h4>
+                    <a href="#" class="lnk-n">
+                        <i class="bi bi-pencil-fill"></i>
+                    </a>
+                </div>
+                @if (userA.PhoneNumber == null)
+                {
+                    <p class="text-info">Sem Telefone</p>
+                }
+                else
+                {
+                    <p class="text-info">@userA.PhoneNumber</p>
+                }
+                <hr />
+            </div>
+        </div>
+
+        <hr /> <br />
         <h4>Alterar as configurações de conta</h4>
-        
+        <p></p>
         <hr />
+
         <dl class="dl-horizontal">
             <dt>Senha:</dt>
             <dd>
@@ -32,13 +142,13 @@
             </dd>
             @*
                 Os Números de Telefone podem ser usados como um segundo fator de verificação em um sistema de autenticação de dois fatores.
-                
+
                 Confira <a href="https://go.microsoft.com/fwlink/?LinkId=403804">esse artigo</a>
                     para obter detalhes sobre como configurar este aplicativo ASP.NET para oferecer suporte à autenticação de dois fatores usando SMS.
-                
+
                 Remova a marca de comentário do seguinte bloco depois de configurar a autenticação de dois fatores
             *@
-            @*  
+            @*
                 <dt>Número de Telefone:</dt>
                 <dd>
                     @(Model.PhoneNumber ?? "None")
@@ -57,14 +167,14 @@
                         <text>[&nbsp;&nbsp;@Html.ActionLink("Add", "AddPhoneNumber")
                     }
                 </dd>
-            *@
+            
             <dt>Autenticação de dois fatores:</dt>
             <dd>
                 <p>
                     Não há provedores de autenticação de dois fatores configurados. Consulte <a href="https://go.microsoft.com/fwlink/?LinkId=403804">esse artigo</a>
                     para obter detalhes sobre como configurar este aplicativo ASP.NET para dar suporte à autenticação de dois fatores.
                 </p>
-                @*@if (Model.TwoFactor)
+                @if (Model.TwoFactor)
                     {
                         using (Html.BeginForm("DisableTwoFactorAuthentication", "Manage", FormMethod.Post, new { role = "form" }))
                         {
@@ -83,8 +193,9 @@
                             <input type="submit" value="Habilitar" class="btn btn-link" />
                             </text>
                         }
-                    }*@
+                    }
             </dd>
+                *@
         </dl>
     </div>
 </main>

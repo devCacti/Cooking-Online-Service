@@ -558,7 +558,9 @@ namespace Cooking_Service.Controllers
                             customUnit = customIngs[index].Split(':')[1];
                             // If it is "null" make it real NULL 👌
                             if (customUnit == "null")
+                            {
                                 throw new Exception();
+                            }
                         } catch {
                             customUnit = null;
                         }
@@ -1257,6 +1259,10 @@ namespace Cooking_Service.Controllers
             if (recipe.isPublic || recipe.Author.GUID == User.Identity.GetUserId())
             {
                 ings = recipe.Bridges.Select(b => b.Ingredient).ToList();
+                var ing_unit = recipe.Bridges.Select(b => new { 
+                    ingredient = b.Ingredient,
+                    unit = b.CustomUnit == null ? b.Ingredient.Unit : b.CustomUnit
+                }).ToList();
 
                 return Json(new
                 {
@@ -1264,7 +1270,7 @@ namespace Cooking_Service.Controllers
                     {
                         GUID = i.GUID,
                         Name = i.Name,
-                        Unit = i.Unit,
+                        Unit = ing_unit.First(iu => iu.ingredient == i).unit ?? "null",
                         Tag = i.Tag != null ? i.Tag.Name : "no_tag"
                     }),
                     error = "",

@@ -1,0 +1,206 @@
+﻿@using Cooking_Service.DAL;
+@using Cooking_Service.Models;
+@using Microsoft.AspNet.Identity;
+
+@{
+    ViewBag.Title = "Administração";
+    var ctx = new ApplicationDbContext();
+    var ctxC = new CookingContext();
+    ApplicationUser user = ctx.Users.Find(User.Identity.GetUserId());
+    User userC = ctxC.Users.Find(User.Identity.GetUserId());
+}
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<main onload="fetchResults('Users', 1, '', true)">
+    <br />
+    <h1>Administration</h1>
+    <h3> Control Center</h3>
+    <hr /><br />
+    <div class="txt-justify txt-18 card-cont">
+        <!--Search bar-->
+        <div class="form-group">
+            <div><h3 onclick="fetchResults('Users', 1, '', true)" style="cursor: pointer">Users</h3></div>
+            <div><input type="text" class="form-control" id="search" placeholder="Search for users..."></div>
+            <div><button class="btn btn-outline-primary" onclick="fetchResults('Users', 1, $('#search').val(), false)">Find</button></div>
+        </div>
+        <table class="t-search" id="users_table">
+            <tr>
+                <th>User Email</th>
+                <th>User Name</th>
+                <th>Full Name</th>
+                <th>User Type</th>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="modal" id="userModal">
+        <!--Modal-->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!--Modal Header-->
+                <div class="modal-header">
+                    <h4 class="modal-title">User Information</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <!--Modal Body-->
+                <div class="modal-body">
+                    <!--The information is altered in the js-->
+                    <div id="email"></div> <!--Email of the user-->
+                    <br />
+                    <div id="username"></div> <!--The unique username-->
+                    <br />
+                    <div id="fullname"></div> <!--The full name of the user First + (Middle + Last)-->
+                    <br />
+                    <div id="usertype"></div> <!--The type of user (Admin, User, etc) This will have a tiny description of what the user is capable of doing-->
+                    <br />
+                    <div id="recipes"></div> <!--The recipes that the user has created or participated in-->
+                    <br />
+                    <div id="flags"></div> <!--The flags that the user has received if banned it doesn't matter if it's a admin or not-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+<style>
+
+    .form-group {
+        display: flex;
+        justify-content: left;
+        padding-bottom: 10px;
+    }
+
+    .form-group div {
+        padding-right: 20px;
+    }
+
+    .t-search {
+        width: 100%;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .t-search tr th, td {
+        border-radius: 5px;
+        text-align: center;
+        border: 1px solid grey;
+        background-color: #00000000;
+        transition: background-color 0.5s ease-in-out;
+    }
+
+    .t-search tr th:hover, td:hover {
+        background-color: #00000055;
+    }
+    
+
+    .oU {
+        /* Open User */
+        cursor: pointer;
+    }
+</style>
+
+
+<script>
+    var users = [];
+
+    // Open a modal with the user's information (use the user's email to fetch the information)
+
+    $(document).on('click', '.oU', function () {
+        var email = $(this).parent().find('td').eq(1).text();
+        var _userText = "<h6>This user can post and view recipes.</h6>";
+        var _adminText = "<h6>This is a user that can manage everything from recipes to users. We call them admins (Of course)</h6>"
+        console.log(email);
+
+        // Fetch the user's information
+        user = users.find(user => user.UEmail == email);
+        console.log(users);
+
+        // Alter the information in the modal
+        var emailDiv = document.getElementById('email');
+        var usernameDiv = document.getElementById('username');
+        var fullnameDiv = document.getElementById('fullname');
+        var usertypeDiv = document.getElementById('usertype');
+        var recipesDiv = document.getElementById('recipes');
+        var flagsDiv = document.getElementById('flags');
+
+        emailDiv.innerHTML = '<h4>Email</h4><h5><a href="mailto:'+ user.UEmail + '">' + user.UEmail + '</a></h6>';
+        usernameDiv.innerHTML = '<h4>Username</h4><h6>' + user.UUserName + '</h6>';
+        fullnameDiv.innerHTML = '<h4>Full Name</h4><h6>' + user.EName + '</h6>';
+        if (user.EType == 'User') {
+            usertypeDiv.innerHTML = '<h4>User Type</h4><h5 style="color: yellow">' + user.EType + '</h5>' + _userText;
+        }
+        else if (user.EType == 'Admin') {
+            usertypeDiv.innerHTML = '<h4>User Type</h4><h5 style="color: lime">' + user.EType + '</h5>' + _adminText;
+        }
+        else {
+            usertypeDiv.innerHTML = '<h4>User Type</h4><h6 style="color: red">' + user.EType + '</h6> <h6>Unkown Permissions...</h6>';
+        }
+        recipesDiv.innerHTML = '<h4>Recipes</h4><h6>Unkown for now</h6>';
+        flagsDiv.innerHTML = '<h4>Flags</h4><h6>Unkown for now</h6>';
+
+
+        // Open the modal
+        $('#userModal').modal('show');
+
+    });
+
+    /*
+    * Type: 'User' 'Recipe' 'Other'
+    * Page: 1, 2, 3, ...
+    * Search: '89S8GAASS7877DAG87' 'John' 'False Information'
+    */
+    function fetchResults(type, page, search, isOnLoad) {
+        if (search == '' && !isOnLoad) {
+            return;
+        }
+        var index = 0;
+        // Disable the find button
+        $('#find_button').prop('disabled', true);
+        $.ajax({
+            url: '/Admin/GetResult',
+            type: 'GET',
+            data: {
+                type: type,
+                page: page,
+                search: search
+            },
+            success: function (data) {
+                console.log(data);
+                $('#users_table').empty();
+                $('#users_table').append('<tr><th>...</th><th>User Email</th><th>User Name</th><th>Full Name</th><th>User Type</th></tr>');
+
+                if (data.users) {
+                    users = data.users;
+                    data.users.forEach(user => {
+                        index += 1;
+                        $('#users_table').append('<tr><td class="oU">' + index + '</td><td class="oU">' + user.UEmail + '</td><td class="oU">' + user.UUserName + '</td><td class="oU">' + user.EName + '</td><td class="oU">' + user.EType + '</td></tr>');
+                    });
+                }
+
+                if (data.error) {
+                    $('#users_table').append('<tr><td style="color: red;">No Matches Found</td><tr>');
+                }
+            },
+            error: function (error) {
+                console.log(error);
+            },
+            complete: function () {
+                // Enable the find button after the response is received
+                $('#find_button').prop('disabled', false);
+            }
+        });
+    }
+
+
+    // Fetch results for the first page of users
+    $(document).ready(function () {
+        fetchResults('Users', 1, '', true)
+    })
+
+</script>

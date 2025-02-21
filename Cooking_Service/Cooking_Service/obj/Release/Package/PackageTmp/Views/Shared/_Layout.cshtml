@@ -1,42 +1,122 @@
-﻿<!DOCTYPE html>
-<html>
+﻿@using Microsoft.AspNet.Identity
+@using Cooking_Service.Models
+@using Cooking_Service.DAL
+
+@{
+    var ctx = new ApplicationDbContext();
+    var ctxC = new CookingContext();
+    ApplicationUser user = ctx.Users.Find(User.Identity.GetUserId());
+    User userI = ctxC.Users.Find(User.Identity.GetUserId());
+}
+
+<!DOCTYPE html>
+<html lang="pt-pt">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - Cooking</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+
+
+    <link rel="stylesheet" href="~/MyCSS/main-styles.css" />
+    <link rel="stylesheet" href="~/MyCSS/customCSS.css" />
+
+    <!--
+    @@ Styles.Render("~/Content/css")
+    @@ Scripts.Render("~/bundles/modernizr")    
+    -->
 
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-        <div class="container">
-            @Html.ActionLink("Cooking", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Alternar a navegação" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Página Inicial", "Index", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Sobre", "About", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contato", "Contact", "Home", new { area = "" }, new { @class = "nav-link" })</li>
-                </ul>
-                 @Html.Partial("_LoginPartial")
+    <div class="my-navbar">
+        <div class="nav-center">
+            <div class="navbar-item nav-logo">
+                <a href="@Url.Action("Index", "Home")">
+                    <h1 class="pretty" style="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="75" height="50" viewBox="0 0 450 450" fill="none" style="scale: 1.5">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M425 240C425 282.87 398.024 319.439 360.12 333.659C355.957 335.221 353 339.085 353 343.531V404C353 417.807 341.807 429 328 429H122C108.193 429 97 417.807 97 404V343.531C97 339.085 94.0427 335.221 89.8796 333.659C51.9762 319.439 25 282.87 25 240C25 184.772 69.7715 140 125 140C125.036 140 125.072 140 125.107 140C129.438 140.005 133.426 137.528 135.349 133.647C151.695 100.671 185.7 78 225 78C264.3 78 298.305 100.671 314.651 133.647C316.574 137.528 320.562 140.005 324.893 140C324.928 140 324.964 140 325 140C380.228 140 425 184.772 425 240Z" fill="#FCFCFC" />
+                        <path d="M135.349 133.647L121.91 126.986L135.349 133.647ZM89.8796 333.659L95.1484 319.615L89.8796 333.659ZM360.12 333.659L365.389 347.703L360.12 333.659ZM365.389 347.703C408.955 331.359 440 289.324 440 240H410C410 276.416 387.093 307.519 354.852 319.615L365.389 347.703ZM368 404V343.531H338V404H368ZM328 444C350.091 444 368 426.091 368 404H338C338 409.523 333.523 414 328 414V444ZM122 444H328V414H122V444ZM82 404C82 426.091 99.9086 444 122 444V414C116.477 414 112 409.523 112 404H82ZM82 343.531V404H112V343.531H82ZM10 240C10 289.324 41.0455 331.359 84.6109 347.703L95.1484 319.615C62.9069 307.519 40 276.416 40 240H10ZM125 125C61.4873 125 10 176.487 10 240H40C40 193.056 78.0558 155 125 155V125ZM125.123 125C125.082 125 125.041 125 125 125V155C125.031 155 125.061 155 125.092 155L125.123 125ZM225 63C179.783 63 140.689 89.0987 121.91 126.986L148.789 140.309C162.701 112.242 191.617 93 225 93V63ZM328.09 126.986C309.311 89.0986 270.217 63 225 63V93C258.383 93 287.299 112.242 301.211 140.309L328.09 126.986ZM325 125C324.959 125 324.918 125 324.877 125L324.908 155C324.939 155 324.969 155 325 155V125ZM440 240C440 176.487 388.513 125 325 125V155C371.944 155 410 193.056 410 240H440ZM125.092 155C135.142 155.011 144.337 149.289 148.789 140.309L121.91 126.986C122.514 125.766 123.734 124.999 125.123 125L125.092 155ZM301.211 140.309C305.663 149.289 314.858 155.011 324.908 155L324.877 125C326.266 124.999 327.486 125.766 328.09 126.986L301.211 140.309ZM112 343.531C112 332.189 104.538 323.137 95.1484 319.615L84.6109 347.703C83.5475 347.304 82 345.981 82 343.531H112ZM354.852 319.615C345.462 323.137 338 332.189 338 343.531H368C368 345.981 366.453 347.304 365.389 347.703L354.852 319.615Z" fill="black" />
+                        <rect x="144" y="285" width="40" height="80" rx="15" fill="#FFAE00" />
+                        <rect x="260" y="285" width="40" height="80" rx="15" fill="#FFAE00" />
+                    </svg>
+                    Cooking
+                    </h1>
+                </a>
+                <!--img src="icons/cooking.png" alt="Cooking" class="navbar-logo"-->
             </div>
         </div>
-    </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Meu Aplicativo ASP.NET</p>
-        </footer>
-    </div>
+        @if (Request.IsAuthenticated)
+        {
+            using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="nav-right">
 
+                    <script>
+                        function logOff() {
+                            document.getElementById('logoutForm').submit()
+                        }
+                    </script>
+                    <div class="nav-item">
+                        <div class="username">
+                            <a class="heyuser" for="Account" href="@Url.Action("Index", "Manage")">@user.UserName</a>
+                        </div>
+                    </div>
+                    <div class="nav-item">
+                        <a onclick="logOff()" title="Logout" style="transform: rotateY(90)">
+                            <svg class="img profile logoff" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                                <path fill="currentColor" d="m24,12c0,6.617-5.383,12-12,12-.552,0-1-.447-1-1s.448-1,1-1c5.514,0,10-4.486,10-10S17.514,2,12,2c-.552,0-1-.447-1-1s.448-1,1-1c6.617,0,12,5.383,12,12Zm-21.538,1.116c-.036-.036-.064-.078-.096-.116h13.633c.552,0,1-.447,1-1s-.448-1-1-1H2.367c.033-.04.061-.082.098-.119l5.134-5.177c.389-.392.386-1.025-.006-1.414-.392-.39-1.026-.387-1.414.006L1.047,9.47c-.675.677-1.047,1.575-1.047,2.53s.372,1.854,1.045,2.527l5.134,5.177c.195.197.453.296.71.296.254,0,.509-.097.704-.29.392-.389.395-1.022.006-1.414l-5.137-5.18Z" />
+                            </svg>
+                        </a>
+
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="nav-right">
+                <a href="@Url.Action("Login", "Account")" title="Login">
+                    <svg class="img profile" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512">
+                        <path fill="currentColor" xmlns="http://www.w3.org/2000/svg" d="m24,12c0,.553-.448,1-1,1h-13.633c.032.039.06.08.096.116l5.137,5.18c.389.392.386,1.025-.006,1.414-.195.193-.45.29-.704.29-.257,0-.515-.099-.71-.296l-5.134-5.177c-.673-.674-1.045-1.572-1.045-2.527s.372-1.854,1.047-2.53l5.132-5.174c.388-.393,1.021-.396,1.414-.006.392.389.395,1.022.006,1.414l-5.134,5.177c-.037.037-.065.079-.098.119h13.633c.552,0,1,.447,1,1Zm-12,10c-5.514,0-10-4.486-10-10S6.486,2,12,2c.552,0,1-.447,1-1s-.448-1-1-1C5.383,0,0,5.383,0,12s5.383,12,12,12c.552,0,1-.447,1-1s-.448-1-1-1Z" />
+                    </svg>
+                </a>
+            </div>
+        }
+    </div>
+    <contents>
+        <div class="container">
+            @if (Request.IsAuthenticated)
+            {
+                if (userI.Type == TypeUser.Admin)
+                {
+                    <div class="admin">
+                        <a href="@Url.Action("Index", "Admin")">
+                            Admin Control Center
+                        </a>
+                    </div>
+                    <br />
+                    <hr class="div-200px" />
+                    <br />
+                }
+            }
+            @RenderBody()
+            <br />
+            <div class="footer-div">
+                <div></div>
+            </div>
+
+            <footer style="justify-content:space-around; display:flex;" class="footer">
+                <p>&copy; @DateTime.Now.Year - Cooking Service - ASP.NET</p>
+                <a href="@Url.Action("Contact", "Home")" class="pretty">
+                    Contactos
+                </a>
+            </footer>
+        </div>
+    </contents>
+    <script src="~/Scripts/bootstrap.bundle.js"></script>
     @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
+    <!--Poopper.js-->
     @RenderSection("scripts", required: false)
 </body>
 </html>

@@ -1,9 +1,88 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Sobre";
 }
 <main aria-labelledby="title">
-    <h2 id="title">@ViewBag.Title.</h2>
-    <h3>@ViewBag.Message</h3>
+    <br />
+    <h1 id="title">@ViewBag.Title</h1>
+    <br />
+    <h3>Objetivo</h3>
+    <p style="font-size: 20px;">
+        Este projeto serve para permitir a criação de receitas culinárias, bem como a partilha das mesmas com outros utilizadores.
+        Sendo um dos principais problemas de projetos ou aplicações como esta o facto de serem pagas, este projeto permite a criação de receitas de forma gratuita apenas com limites maiores.
+    </p>
+    <br />
+    <br />
+    <br />
 
-    <p>Use this area to provide additional information.</p>
+    <h3>Motivo</h3>
+    <p style="font-size: 20px;">
+        Um dos principais motivos para a criação deste projeto foi o pedido de um familiar para a criação de algo que permitisse a criação de receitas para guardar sem perder.
+        Isso permitiu a que eu desenvolvesse mais ideias que podessem fazer melhorar a experiência do utilizador.
+    </p>
+    <br />
+    <br />
+    <br />
+
+    <h3>Desenvolvedor & Programador</h3>
+    <p style="font-size: 20px;">
+        Este projeto está a ser desenvolvido por apenas uma pessoa, isto pode levar a que surjam problemas não detetados, para isso pesso que sejam reportados quaisquer problemas encontrados.
+    </p>
+    <br />
+
+    <h2>Informações dos cargos</h2>
+    <br />
+    <div class="accordion" id="accordionExample" style="font-size: 20px;">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne" style="font-size: 20px;">
+                    Utilizador
+                </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>Caso pretenda ter conta neste serviço para poder guardar as suas receitas e listas de compras na núvem, registe-se para usufruir desses benifícios.</p>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" style="font-size: 20px;">
+                    Cozinheiro Certificado
+                </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>Para ser um chefe de cozinha certificado nos nossos serviços, por favor, preencha este formulário para que lhe possamos dar os previlégios adequados.</p>
+                    <p>Um cozinheiro, aqui, é quase como uma celebridade que pode publicar as suas receitas para que todas as outras pessoas possam fazer também.</p>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" style="font-size: 20px;">
+                    Administradores
+                </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>Um utilizador com este cargo, tem permissões e deveres muito complicados, uma pessoa, para ter este cargo, terá que ter as competências necessárias para o mesmo, como também, tem que ser confiado pelos proprietários dos site.</p>
+                </div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" style="font-size: 20px;">
+                    Staff
+                </button>
+            </h2>
+            <div id="collapseFour" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <p>
+                        A staff é um grupo de pessoas que ajudam a manter o site e a aplicação para telemóvel a funcionar corretamente, bem como a ajudar os utilizadores com problemas.
+                        São estes que ajudam a prevenir situações de menos conforto para os utilizadores. Como também abuso de problemas no site ou na aplicação.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
