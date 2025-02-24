@@ -550,9 +550,13 @@ namespace Cooking_Service.Controllers
                     recipe.Bridges = new List<IngredientBridge>();
                     ingredientBridges = new List<IngredientBridge>();
 
+                    // For each ingredient Id in the list of ingredient Ids
                     foreach (var ing in ingIDs)
                     {
+                        // Get the index of the ingredient in the list
                         int index = ingIDs.IndexOf(ing);
+
+                        // Prepare a string for the custom unit
                         string customUnit; 
                         try {
                             customUnit = customIngs[index].Split(':')[1];
@@ -564,11 +568,15 @@ namespace Cooking_Service.Controllers
                         } catch {
                             customUnit = null;
                         }
+
+                        // Get the ingredient from the database
                         Ingredient _ingredient = db.Ingredients.FirstOrDefault(i => i.GUID == ing);
                         if (string.IsNullOrEmpty(ing) || _ingredient == null)
                         {
                             continue;
                         }
+
+                        // Prepare a new bridge to be saved
                         var _bridge = new IngredientBridge
                         {
                             Recipe = recipe,
