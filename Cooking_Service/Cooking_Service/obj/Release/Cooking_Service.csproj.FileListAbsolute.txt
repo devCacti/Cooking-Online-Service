@@ -224,7 +224,6 @@ C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Co
 C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\System.Net.Http.Formatting.resources.dll
 C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\System.Web.Helpers.resources.dll
-C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\System.Web.Http.resources.dll
 C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\System.Web.Http.WebHost.resources.dll
 C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\System.Web.Mvc.resources.dll
 C:\Users\CloudDev\OneDrive - Contoso\Documentos\GitHub\Cooking-Online-Service\Cooking_Service\Cooking_Service\bin\pt-br\System.Web.Razor.resources.dll
